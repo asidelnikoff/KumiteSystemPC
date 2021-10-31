@@ -944,6 +944,7 @@ namespace KumiteSystemPC
             {
                 DisplayMessageDialog("Info", "Match reseted");
             }
+            catch { }
         }
 
         void ResetFouls()
