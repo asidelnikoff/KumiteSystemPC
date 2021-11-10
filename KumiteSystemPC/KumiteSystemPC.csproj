@@ -84,6 +84,9 @@
       <DependentUpon>CategoryViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="ContentDialogMaker.cs" />
+    <Compile Include="ExternalBoard.xaml.cs">
+      <DependentUpon>ExternalBoard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Repechage.cs" />
     <Compile Include="Round.cs" />
     <Page Include="AddCompetitorDialog.xaml">
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CategoryViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExternalBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

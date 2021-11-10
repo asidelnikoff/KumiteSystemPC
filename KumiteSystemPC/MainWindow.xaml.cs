@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TournamentTree;
 using Excel = Microsoft.Office.Interop.Excel;
+using WpfScreenHelper;
 
 namespace KumiteSystemPC
 {
@@ -1005,6 +1006,44 @@ namespace KumiteSystemPC
             Console.WriteLine("Closing...");
             if (GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.Close(); }
             if (MainExApp != null) { MainExApp.Quit(); }
+        }
+        ExternalBoard externalBoard;
+        private void openExt_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (externalBoard == null)
+            {
+                List<Screen> sc = new List<Screen>();
+                sc.AddRange(Screen.AllScreens);
+                externalBoard = new ExternalBoard();
+
+                /*if (Category != null)
+                {
+                    externalBoard.SetCategory($"{CategoryName}: {groups_List.SelectedItem}");
+
+
+
+                    if (Category.GetCurComp() != null)
+                    {
+                        externalBoard.SetCompetitorName(Category.GetCurComp().ToString());
+                        externalBoard.SetColor(Category.GetColor());
+                    }
+                }*/
+                externalBoard.WindowStyle = WindowStyle.None;
+                externalBoard.Left = sc[1].Bounds.Left;
+                externalBoard.Top = sc[1].Bounds.Top;
+                externalBoard.Show();
+                externalBoard.Owner = this;
+                externalBoard.WindowState = WindowState.Maximized;
+
+                this.Focus();
+                this.Activate();
+            }
+            else
+            {
+                externalBoard.Close();
+                externalBoard = null;
+            }
+
         }
 
         private void AKA_curTXT_KeyDown(object sender, KeyEventArgs e)
