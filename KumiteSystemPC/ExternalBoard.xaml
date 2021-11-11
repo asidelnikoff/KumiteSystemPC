@@ -33,12 +33,12 @@
             <Style x:Key="AKAfoulBorder" TargetType="Border" BasedOn="{StaticResource AKAborder}">
                 <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="Margin" Value="5,2"/>
-                <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="Opacity" Value="0"/>
             </Style>
             <Style x:Key="AOfoulBorder" TargetType="Border" BasedOn="{StaticResource AOborder}">
                 <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="Margin" Value="5,2"/>
-                <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="Opacity" Value="0"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -143,10 +143,10 @@
             <Viewbox>
                 <Label Content="C1" Foreground="Red" FontSize="48"/>
             </Viewbox>
-            <Border Grid.Column="1" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="2" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="3" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="4" Style="{StaticResource AKAfoulBorder}"/>
+            <Border Grid.Column="1" Style="{StaticResource AKAfoulBorder}" x:Name="c1AKA"/>
+            <Border Grid.Column="2" Style="{StaticResource AKAfoulBorder}" x:Name="k1AKA"/>
+            <Border Grid.Column="3" Style="{StaticResource AKAfoulBorder}" x:Name="hc1AKA"/>
+            <Border Grid.Column="4" Style="{StaticResource AKAfoulBorder}" x:Name="h1AKA"/>
             <Image x:Name="akaC1" Source="akaZam.png" Grid.Column="1" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="1" Margin="7">
                 <Label Content="C" Foreground="White" FontSize="18"/>
@@ -170,10 +170,10 @@
             <Viewbox Grid.Column="6" Margin="7">
                 <Label Content="C2" Foreground="Red" FontSize="48"/>
             </Viewbox>
-            <Border Grid.Column="7" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="8" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="9" Style="{StaticResource AKAfoulBorder}"/>
-            <Border Grid.Column="10" Style="{StaticResource AKAfoulBorder}"/>
+            <Border Grid.Column="7" Style="{StaticResource AKAfoulBorder}" x:Name="c2AKA"/>
+            <Border Grid.Column="8" Style="{StaticResource AKAfoulBorder}" x:Name="k2AKA"/>
+            <Border Grid.Column="9" Style="{StaticResource AKAfoulBorder}" x:Name="hc2AKA"/>
+            <Border Grid.Column="10" Style="{StaticResource AKAfoulBorder}" x:Name="h2AKA"/>
             <Image x:Name="akaC2" Source="akaZam.png" Grid.Column="7" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="7" Margin="7">
                 <Label Content="C" Foreground="White" FontSize="18"/>
@@ -213,10 +213,10 @@
                 <Label Content="C1" Foreground="#FF009FFD" FontSize="48"/>
             </Viewbox>
             <Image x:Name="aoC1" Source="aoZam.png" Grid.Column="1" Margin="5" Stretch="Fill" Opacity="0"/>
-            <Border Grid.Column="1" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="2" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="3" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="4" Style="{StaticResource AOfoulBorder}"/>
+            <Border Grid.Column="1" Style="{StaticResource AOfoulBorder}"  x:Name="c1AO"/>
+            <Border Grid.Column="2" Style="{StaticResource AOfoulBorder}" x:Name="k1AO"/>
+            <Border Grid.Column="3" Style="{StaticResource AOfoulBorder}" x:Name="hc1AO"/>
+            <Border Grid.Column="4" Style="{StaticResource AOfoulBorder}" x:Name="h1AO"/>
             <Viewbox Grid.Column="1" Margin="7">
                 <Label Content="C" Foreground="White" FontSize="18"/>
             </Viewbox>
@@ -239,10 +239,10 @@
             <Viewbox Grid.Column="6">
                 <Label Content="C2" Foreground="#FF009FFD" FontSize="48"/>
             </Viewbox>
-            <Border Grid.Column="7" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="8" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="9" Style="{StaticResource AOfoulBorder}"/>
-            <Border Grid.Column="10" Style="{StaticResource AOfoulBorder}"/>
+            <Border Grid.Column="7" Style="{StaticResource AOfoulBorder}" x:Name="c2AO"/>
+            <Border Grid.Column="8" Style="{StaticResource AOfoulBorder}" x:Name="k2AO"/>
+            <Border Grid.Column="9" Style="{StaticResource AOfoulBorder}" x:Name="hc2AO"/>
+            <Border Grid.Column="10" Style="{StaticResource AOfoulBorder}" x:Name="h2AO"/>
             <Image x:Name="aoC2" Source="aoZam.png" Grid.Column="7" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="7" Margin="7">
                 <Label Content="C" Foreground="White" FontSize="18"/>

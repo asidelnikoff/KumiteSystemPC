@@ -60,6 +60,9 @@ namespace TournamentTree
                     //isFinished = true;
                     HaveWinner?.Invoke();
                     break;
+                default:
+                    HaveWinner?.Invoke();
+                    break;
             }
         }
 
@@ -79,8 +82,8 @@ namespace TournamentTree
             Competitor Aka = AKA;
             Competitor Ao = AO;
 
-            if (Aka.Status == 2 || Aka.Status == 3) { SetWinner(2,false); }
-            else if (Ao.Status == 2 || Ao.Status == 3) { SetWinner(1,false); }
+            if (Aka.Status == 2 || Aka.Status == 3) { SetWinner(2, false); }
+            else if (Ao.Status == 2 || Ao.Status == 3) { SetWinner(1, false); }
             //
             else if (Aka.Fouls_C1 >= 4 || Aka.Fouls_C2 >= 4) { SetWinner(2); }
             else if (Ao.Fouls_C1 >= 4 || Ao.Fouls_C2 >= 4) { SetWinner(1); }
@@ -88,13 +91,13 @@ namespace TournamentTree
             else if (Aka.Score - 8 >= Ao.Score && Aka.Fouls_C1 < 4 && Aka.Fouls_C2 < 4) { SetWinner(1); }
             else if (Ao.Score - 8 >= Aka.Score && Ao.Fouls_C1 < 4 && Ao.Fouls_C2 < 4) { SetWinner(2); }
             //
-            else if (isTimeUP && Aka.Score > Ao.Score && Aka.Fouls_C1<4 && Aka.Fouls_C2<4) { SetWinner(1);}
-            else if (isTimeUP && Ao.Score > Aka.Score && Ao.Fouls_C1 < 4 && Ao.Fouls_C2 < 4) { SetWinner(2);}
+            else if (isTimeUP && Aka.Score > Ao.Score && Aka.Fouls_C1 < 4 && Aka.Fouls_C2 < 4) { SetWinner(1); }
+            else if (isTimeUP && Ao.Score > Aka.Score && Ao.Fouls_C1 < 4 && Ao.Fouls_C2 < 4) { SetWinner(2); }
             //
             else if (isTimeUP && Aka.Score == Ao.Score && Aka.Senshu) { SetWinner(1); }
             else if (isTimeUP && Aka.Score == Ao.Score && Ao.Senshu) { SetWinner(2); }
             //
-            
+
             //
             //TODO: All conditions to Set winner
             

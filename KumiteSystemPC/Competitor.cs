@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TournamentTree
 {
-    public class Competitor
+    public class Competitor : System.ComponentModel.INotifyPropertyChanged
     {
         /// <Fouls>
         /// 1 - C,
@@ -25,10 +26,21 @@ namespace TournamentTree
 
         public delegate void CheckWinnerDelegate(bool isTimeUp=false);
         public event CheckWinnerDelegate Check_Winner;
+        
+
         public int ID { get; set; } //TODO: Competitor ID
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int Score { get; set; }
+        public int Score;
+        public int ScoreProperty
+        { get { return Score; }
+            set
+            {
+                Score = value;
+                OnPropertyChanged("ScoreProperty");
+            }
+        }
+
         List<int> AllScores { get; set; }
         public bool Senshu { get; set; }
         public int Fouls_C1 { get; set; }
@@ -37,10 +49,23 @@ namespace TournamentTree
 
         public bool IsBye { get; set; }
 
+        #region FOR BINDING
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+
         public Competitor() { AllScores = new List<int>(); }
 
         public Competitor(Competitor competitor)
         {
+            ID = competitor.ID;
             FirstName = competitor.FirstName;
             LastName = competitor.LastName;
             Score = competitor.Score;
@@ -68,7 +93,7 @@ namespace TournamentTree
 
         public void AddPoints(int points)
         {
-            Score += points;
+            ScoreProperty += points;
             AllScores.Add(points);
            // Check_Winner?.Invoke();
         }
@@ -127,6 +152,14 @@ namespace TournamentTree
         {
             if (!IsBye) return $"{FirstName} {LastName}";
             else return "BYE";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Competitor comp = (Competitor)obj;
+            return (FirstName == comp.FirstName) &&
+                    (LastName == comp.LastName) &&
+                    (ID == comp.ID);
         }
     }
 }
