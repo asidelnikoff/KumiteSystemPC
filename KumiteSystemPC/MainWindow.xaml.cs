@@ -1193,6 +1193,7 @@ namespace KumiteSystemPC
             if (MainExApp != null) { MainExApp.Quit(); }
         }
         ExternalBoard externalBoard;
+        ExternalBoard ext;
         private void openExt_btn_Click(object sender, RoutedEventArgs e)
         {
             if (externalBoard == null)
@@ -1221,9 +1222,9 @@ namespace KumiteSystemPC
                 aoScoreBind.Source = GlobalMatchNow.AO;
                 externalBoard.AoScoreL.SetBinding(Label.ContentProperty, aoScoreBind);
 
-                //externalBoard.WindowStyle = WindowStyle.None;
-                //externalBoard.Left = sc[1].Bounds.Left;
-               // externalBoard.Top = sc[1].Bounds.Top;
+                externalBoard.WindowStyle = WindowStyle.None;
+                externalBoard.Left = sc[1].Bounds.Left;
+                externalBoard.Top = sc[1].Bounds.Top;
                 externalBoard.Owner = this;
                 externalBoard.Show();
                 externalBoard.WindowState = WindowState.Maximized;
