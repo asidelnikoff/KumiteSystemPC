@@ -265,8 +265,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="AKA_curTXT" Margin="10,0" VerticalAlignment="Center" KeyDown="AKA_curTXT_KeyDown" IsReadOnly="True"/>
-                        <TextBox x:Name="AO_curTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2" KeyDown="AO_curTXT_KeyDown" IsReadOnly="True"/>
+                        <TextBox x:Name="AKA_curTXT" Margin="10,0" VerticalAlignment="Center" KeyDown="AKA_curTXT_KeyDown" />
+                        <TextBox x:Name="AO_curTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2" KeyDown="AO_curTXT_KeyDown"/>
                         <Label FontSize="16" Content="Cuurent match" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -275,8 +275,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="AKA_nxtTXT" Margin="10,0" VerticalAlignment="Center" IsReadOnly="True"/>
-                        <TextBox x:Name="AO_nxtTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2" IsReadOnly="True"/>
+                        <TextBox x:Name="AKA_nxtTXT" Margin="10,0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="AO_nxtTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2"/>
                         <Label FontSize="16" Content="Next match" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>

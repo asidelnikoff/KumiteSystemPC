@@ -84,7 +84,19 @@ namespace KumiteSystemPC
                 GlobalCategoryViewer.Show();
                 MainExApp.DisplayAlerts = false;
                 MainExApp.Visible = true;
-                
+
+                AKA_curTXT.IsReadOnly = true;
+                AO_curTXT.IsReadOnly = true;
+
+                AKA_nxtTXT.IsReadOnly = true;
+                AO_nxtTXT.IsReadOnly = true;
+
+                if (externalBoard!=null)
+                {
+                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
+                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                }
+
             }
         }
         private void GlobalCategory_HaveNxtMatch(int round, int match)
@@ -265,7 +277,7 @@ namespace KumiteSystemPC
         void showTime(string time)
         {
             TimerL.Content = time;
-            if (externalBoard != null) { externalBoard.TimerEXT.Content = time; }
+            //if (externalBoard != null) { externalBoard.TimerEXT.Content = time; }
         }
         public async void controlTime()
         {
@@ -284,7 +296,7 @@ namespace KumiteSystemPC
                 //ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
                 if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
-                await Task.Delay(500);
+                await Task.Delay(1000);
             } while (stopWatch.IsRunning);
 
         }
@@ -301,7 +313,7 @@ namespace KumiteSystemPC
             atoshibaraku = true;
             //if (Properties.Settings.Default.warningPlayer != null) Properties.Settings.Default.warningPlayer.Play();
             
-            if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
+            //if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
             TimerL.Foreground = Brushes.DarkRed;
         }
 
@@ -316,9 +328,10 @@ namespace KumiteSystemPC
             TimerL.Foreground = Brushes.DarkRed;
             if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
             IsTimerEnabled = true;
+            
             if (!stopWatch.IsRunning) { startTimeBTN.Content = "Stop"; stopWatch.Start(); }
-            controlTime();
             //  timer.Start();
+            controlTime();
         }
 
         private void startTimerBtn_Click(object sender, RoutedEventArgs e)
@@ -382,7 +395,7 @@ namespace KumiteSystemPC
             {
                 TimerL.Foreground = Brushes.White;
                 TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
-               if (externalBoard != null) { externalBoard.TimerText(sec, min); }
+               //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
                 TimeM.Text = String.Format("{0:d2}", min);
                 TimeS.Text = String.Format("{0:d2}", sec);
                 //timer.SetTime(min, sec);
@@ -396,7 +409,7 @@ namespace KumiteSystemPC
                 sec -= min * 60;
                 TimerL.Foreground = Brushes.White;
                 TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
-                if (externalBoard != null) { externalBoard.TimerText(sec, min); }
+                //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
                 TimeM.Text = String.Format("{0:d2}", min);
                 TimeS.Text = String.Format("{0:d2}", sec);
                 //  timer.SetTime(min, sec);
@@ -513,14 +526,14 @@ namespace KumiteSystemPC
                 AddInfo("AO senshu");
                 AO_SenshuL.Visibility = Visibility.Visible;
                 AKA_SenshuL.Visibility = Visibility.Collapsed;
-                //if (kumiteExternal != null) { kumiteExternal.SanctionAnimation(kumiteExternal.aoSenshu, 1); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
             }
             else
             {
                 GlobalMatchNow.AO.Senshu = false;
                 AddInfo("AO senshu remove");
                 AO_SenshuL.Visibility = Visibility.Collapsed;
-                //if (kumiteExternal != null) { kumiteExternal.SanctionAnimation(kumiteExternal.aoSenshu, 0); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
             }
         }
 
@@ -585,14 +598,14 @@ namespace KumiteSystemPC
                 AddInfo("AKA senshu");
                 AKA_SenshuL.Visibility = Visibility.Visible;
                 AO_SenshuL.Visibility = Visibility.Collapsed;
-                //if (kumiteExternal != null) { kumiteExternal.SanctionAnimation(kumiteExternal.aoSenshu, 1); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
             }
             else
             {
                 GlobalMatchNow.AKA.Senshu = false;
                 AddInfo("AKA senshu remove");
                 AKA_SenshuL.Visibility = Visibility.Collapsed;
-                //if (kumiteExternal != null) { kumiteExternal.SanctionAnimation(kumiteExternal.aoSenshu, 0); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
             }
         }
         #endregion
@@ -1214,6 +1227,13 @@ namespace KumiteSystemPC
                         externalBoard.SetColor(Category.GetColor());
                     }
                 }*/
+
+                if (GlobalCategoryViewer != null && GlobalCategoryViewer.CategoryName != null) 
+                {
+                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
+                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                }
+
                 Binding akaScoreBind = new Binding("ScoreProperty");
                 akaScoreBind.Source = GlobalMatchNow.AKA;
                 externalBoard.AkaScoreL.SetBinding(Label.ContentProperty, akaScoreBind);
@@ -1221,6 +1241,31 @@ namespace KumiteSystemPC
                 Binding aoScoreBind = new Binding("ScoreProperty");
                 aoScoreBind.Source = GlobalMatchNow.AO;
                 externalBoard.AoScoreL.SetBinding(Label.ContentProperty, aoScoreBind);
+
+                Binding akaNowName = new Binding("Text");
+                akaNowName.Source = AKA_curTXT;
+                externalBoard.AkaNowNameL.SetBinding(Label.ContentProperty, akaNowName);
+
+                Binding aoNowName = new Binding("Text");
+                aoNowName.Source = AO_curTXT;
+                externalBoard.AoNowNameL.SetBinding(Label.ContentProperty, aoNowName);
+
+                Binding akaNxtName = new Binding("Text");
+                akaNxtName.Source = AKA_nxtTXT;
+                externalBoard.AkaNextNameL.SetBinding(Label.ContentProperty, akaNxtName);
+
+                Binding aoNxtName = new Binding("Text");
+                aoNxtName.Source = AO_nxtTXT;
+                externalBoard.AoNextNameL.SetBinding(Label.ContentProperty, aoNxtName);
+
+                Binding timerTxt = new Binding("Content");
+                timerTxt.Source = TimerL;
+                externalBoard.TimerEXT.SetBinding(Label.ContentProperty, timerTxt);
+
+               Binding timerColor = new Binding("Foreground");
+                timerColor.Source = TimerL;
+                externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
+
 
                 externalBoard.WindowStyle = WindowStyle.None;
                 externalBoard.Left = sc[1].Bounds.Left;

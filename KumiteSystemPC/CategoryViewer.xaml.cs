@@ -25,7 +25,7 @@ namespace KumiteSystemPC
 
         List<Competitor> CompetitorsList;
         Category GlobalCategory;
-        string CategoryName;
+        public string CategoryName;
         Excel.Application exApp;
         Excel.Workbook workbook;
         public delegate void GetMatchHandler(int mID, int rID);
