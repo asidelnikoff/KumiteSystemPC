@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +9,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TournamentTree;
 using Excel = Microsoft.Office.Interop.Excel;
 using WpfScreenHelper;
@@ -34,6 +30,9 @@ namespace KumiteSystemPC
         Excel.Application MainExApp;
         Excel.Worksheet VisualBracket;
         CategoryViewer GlobalCategoryViewer;
+
+        System.Media.SoundPlayer end_of_m_sound;
+        System.Media.SoundPlayer warn_sound;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,6 +41,8 @@ namespace KumiteSystemPC
             GlobalMatchNow = new Match(_Aka, _Ao, 0);
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
             NxtMatch = new List<int>() { -1,-1};
+            if (Properties.Settings.Default.EndOfMatch != "") { end_of_m_sound = new System.Media.SoundPlayer(Properties.Settings.Default.EndOfMatch); }
+            if (Properties.Settings.Default.WarningSound != "") { warn_sound = new System.Media.SoundPlayer(Properties.Settings.Default.WarningSound); }
         }
         DateTime dateTime;
         void AddInfo(string information)
@@ -190,6 +191,7 @@ namespace KumiteSystemPC
                 if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA)) externalBoard.ShowWinner(externalBoard.AkaScoreL);
                 else if(GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO)) externalBoard.ShowWinner(externalBoard.AoScoreL);
             }
+            try { end_of_m_sound.Play(); } catch { }
             try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
             catch { }
         }
@@ -244,8 +246,8 @@ namespace KumiteSystemPC
         {
             string fileName;
             fileName = DateTime.Now.ToShortDateString();
-            //if (saveLog($"{Properties.Settings.Default.DataDir}\\LOG-{fileName}.txt", LogTB)) { MessageBox.Show("Log save completed", "Infornmation", MessageBoxButton.OK, MessageBoxImage.Information); }
-            //else { MessageBox.Show("Something went wrong"); }
+            if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB)) { DisplayMessageDialog("Info", "Log saved"); }
+            else { DisplayMessageDialog("Info", "Can't save log"); }
         }
         bool saveLog(string _fileName, RichTextBox log)
         {
@@ -311,9 +313,7 @@ namespace KumiteSystemPC
         void AtoshiBaraku()
         {
             atoshibaraku = true;
-            //if (Properties.Settings.Default.warningPlayer != null) Properties.Settings.Default.warningPlayer.Play();
-            
-            //if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
+            try { warn_sound.Play(); } catch { }
             TimerL.Foreground = Brushes.DarkRed;
         }
 
@@ -1172,10 +1172,14 @@ namespace KumiteSystemPC
         private void FinishMatchBTN_Click(object sender, RoutedEventArgs e)
         {
             GlobalCategory.FinishCurMatch();
-            //TODO: Save Log data
+            //TODO: Save Log data (ON CHECK)
             if (GlobalCategory.isCurMFinished())
             {
                 if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook); }
+
+                string fileName = $"{_Aka}_{_Ao}";
+                if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB)) { DisplayMessageDialog("Info", "Log saved"); }
+                else { DisplayMessageDialog("Info", "Can't save log"); }
                 DisplayMessageDialog("Info", "Match finished");
             }
         }
@@ -1268,8 +1272,8 @@ namespace KumiteSystemPC
 
 
                 externalBoard.WindowStyle = WindowStyle.None;
-                externalBoard.Left = sc[1].Bounds.Left;
-                externalBoard.Top = sc[1].Bounds.Top;
+                externalBoard.Left = sc[Properties.Settings.Default.ScreenNR].Bounds.Left;
+                externalBoard.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Top;
                 externalBoard.Owner = this;
                 externalBoard.Show();
                 externalBoard.WindowState = WindowState.Maximized;
@@ -1283,6 +1287,21 @@ namespace KumiteSystemPC
                 externalBoard = null;
             }
 
+        }
+        ExtTimerSet extTimerSet;
+        private void openExtTimerSet_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (extTimerSet == null)
+            {
+                extTimerSet = new ExtTimerSet();
+                extTimerSet.Owner = this;
+                extTimerSet.Show();
+            }
+            else
+            {
+                extTimerSet.Close();
+                extTimerSet = null;
+            }
         }
 
         private void AKA_curTXT_KeyDown(object sender, KeyEventArgs e)

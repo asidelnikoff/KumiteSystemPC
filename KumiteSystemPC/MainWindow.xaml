@@ -29,7 +29,10 @@
                 <MenuItem Header="Reset Timer" x:Name="ResetTimerBtn" Click="ResetTimerBtn_Click"/>
                 <MenuItem Header="Reset Category" x:Name="ResetCatBtn"/>
             </MenuItem>
-            <MenuItem Header="Ext.board" x:Name="openExt_btn" Click="openExt_btn_Click"/>
+            <MenuItem Header="Externals">
+                <MenuItem Header="Ext.board" x:Name="openExt_btn" Click="openExt_btn_Click"/>
+                <MenuItem Header="Ext.Timer" x:Name="openExtTimerSet_btn" Click="openExtTimerSet_btn_Click"/>
+            </MenuItem>
         </Menu>
         <Grid Grid.ColumnSpan="2" Margin="0,39,-0.4,0.4" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
