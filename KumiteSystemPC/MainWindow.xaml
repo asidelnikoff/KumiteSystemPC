@@ -23,7 +23,7 @@
                 <MenuItem Header="Category Generator" Click="CategoryGenBTN_Click"/>
                 <MenuItem Header="Open Category" Click="openCategoryBTN_Click"/>
             </MenuItem>
-            <MenuItem Header="Settings" Height="Auto"/>
+            <MenuItem Header="Settings" Height="Auto" x:Name="SettingsBTN" Click="SettingsBTN_Click"/>
             <MenuItem Header="Resets" Height="Auto" Foreground="White">
                 <MenuItem Header="Reset Match" x:Name="ResetMatchBtn" Click="ResetMatchBtn_Click"/>
                 <MenuItem Header="Reset Timer" x:Name="ResetTimerBtn" Click="ResetTimerBtn_Click"/>
@@ -215,15 +215,15 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox Margin="10,0" Content="H" x:Name="AKA_H1_CB" HorizontalAlignment="Left" Click="AKA_H1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC1_CB" HorizontalAlignment="Left" Click="AKA_HC1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K1_CB" HorizontalAlignment="Left" Click="AKA_K1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C1_CB" HorizontalAlignment="Left" Click="AKA_C1_CB_Checked"/>
+                        <CheckBox Margin="10,0" Content="H" x:Name="AKA_H1_CB" HorizontalAlignment="Left" Unchecked="AKA_H1_CB_Unchecked" Checked="AKA_H1_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC1_CB" HorizontalAlignment="Left" Unchecked="AKA_HC1_CB_Unchecked" Checked="AKA_HC1_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K1_CB" HorizontalAlignment="Left" Checked="AKA_K1_CB_Checked" Unchecked="AKA_K1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C1_CB" HorizontalAlignment="Left" Checked="AKA_C1_CB_Checked" Unchecked="AKA_C1_CB_Uncheked"/>
                         <Label FontSize="24" Grid.Column="4" Content="C1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H1_CB" HorizontalAlignment="Left" Click="AO_H1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC1_CB" HorizontalAlignment="Left" Click="AO_HC1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K1_CB" HorizontalAlignment="Left" Click="AO_K1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C1_CB" HorizontalAlignment="Left" Click="AO_C1_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H1_CB" HorizontalAlignment="Left" Checked="AO_H1_CB_Checked" Unchecked="AO_H1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC1_CB" HorizontalAlignment="Left" Checked="AO_HC1_CB_Checked" Unchecked="AO_HC1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K1_CB" HorizontalAlignment="Left" Checked="AO_K1_CB_Checked" Unchecked="AO_K1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C1_CB" HorizontalAlignment="Left" Unchecked="AO_C1_CB_Unchecked" Checked="AO_C1_CB_Checked"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="#72000000">
@@ -238,15 +238,15 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox Margin="10,0" Content="H" x:Name="AKA_H2_CB" HorizontalAlignment="Left" Click="AKA_H2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC2_CB" HorizontalAlignment="Left" Click="AKA_HC2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K2_CB" HorizontalAlignment="Left" Click="AKA_K2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C2_CB" HorizontalAlignment="Left" Click="AKA_C2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Content="H" x:Name="AKA_H2_CB" HorizontalAlignment="Left" Unchecked="AKA_H2_CB_Unchecked" Checked="AKA_H2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC2_CB" HorizontalAlignment="Left" Checked="AKA_HC2_CB_Checked" Unchecked="AKA_HC2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K2_CB" HorizontalAlignment="Left" Checked="AKA_K2_CB_Checked" Unchecked="AKA_K2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C2_CB" HorizontalAlignment="Left" Checked="AKA_C2_CB_Checked" Unchecked="AKA_C2_CB_Unchecked"/>
                         <Label FontSize="24" Grid.Column="4" Content="C2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H2_CB" HorizontalAlignment="Left" Click="AO_H2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC2_CB" HorizontalAlignment="Left" Click="AO_HC2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K2_CB" HorizontalAlignment="Left" Click="AO_K2_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C2_CB" HorizontalAlignment="Left" Click="AO_C2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H2_CB" HorizontalAlignment="Left" Unchecked="AO_H2_CB_Unchecked" Checked="AO_H2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC2_CB" HorizontalAlignment="Left" Unchecked="AO_HC2_CB_Unchecked" Checked="AO_HC2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K2_CB" HorizontalAlignment="Left" Unchecked="AO_K2_CB_Unchecked" Checked="AO_K2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C2_CB" HorizontalAlignment="Left" Checked="AO_C2_CB_Checked" Unchecked="AO_C2_CB_Unchecked"/>
                     </Grid>
                     <Grid Grid.Row="3" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
@@ -256,7 +256,46 @@
                         <Button x:Name="AKA_WinnerBTN" Margin="10,10,10,10" Content="Winner AKA" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKA_WinnerBTN_Click" />
                         <Button x:Name="AO_WinnerBTN" Margin="10,10,10,10" Content="Winner AO" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AO_WinnerBTN_Click"/>
                     </Grid>
+                    <Grid Grid.Row="6" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Margin="10">
+                            <Label Content="Round" Foreground="White"/>
+                        </Viewbox>
+
+                        <Viewbox Grid.Column="6" Margin="10">
+                            <Label Content="Rounds:" Foreground="White"/>
+                        </Viewbox>
+
+                        <TextBox Grid.Column="7" Margin="10" x:Name="roundTB" KeyDown="roundTB_KeyDown"/>
+
+
+
+                        <Button HorizontalAlignment="Stretch" Grid.Column="1" Margin="5,2" x:Name="roundWinAka" Click="roundWinAka_Click">
+                            <TextBlock TextAlignment="Center">Winner<LineBreak/>AKA</TextBlock>
+                        </Button>
+                        <Button Grid.Column="2" HorizontalAlignment="Stretch" Margin="5,2" x:Name="roundWinAo" Click="roundWinAo_Click">
+                            <TextBlock TextAlignment="Center">Winner<LineBreak/>AO</TextBlock>
+                        </Button>
+                        <Button Grid.Column="3" Margin="5,2" Content="Draw" x:Name="roundDraw" Click="roundDraw_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <Button Grid.Column="4" Margin="5,2" HorizontalAlignment="Stretch" x:Name="roundPlus" Click="roundPlus_Click">
+                            <TextBlock TextAlignment="Center">Round<LineBreak/>+</TextBlock>
+                        </Button>
+                        <Button Grid.Column="5" Margin="5,2" HorizontalAlignment="Stretch" x:Name="roundMinus" Click="roundMinus_Click">
+                            <TextBlock TextAlignment="Center">Round<LineBreak/>-</TextBlock>
+                        </Button>
+                    </Grid>
+
                 </Grid>
+                
                 <Grid Grid.Row="2" Margin="0,0,0,15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -268,8 +307,22 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="AKA_curTXT" Margin="10,0" VerticalAlignment="Center" KeyDown="AKA_curTXT_KeyDown" />
-                        <TextBox x:Name="AO_curTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2" KeyDown="AO_curTXT_KeyDown"/>
+                        <TextBox x:Name="AKA_curTXT" Margin="10,0" VerticalAlignment="Center" KeyDown="AKA_curTXT_KeyDown" >
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Set KIKEN" x:Name="akaKikenBTN" Click="akaKikenBTN_Click"/>
+                                    <MenuItem Header="Set SHIKAKU" x:Name="akaShikakuBTN" Click="akaShikakuBTN_Click"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                        <TextBox x:Name="AO_curTXT" Margin="10,0" VerticalAlignment="Center" Grid.Column="2" KeyDown="AO_curTXT_KeyDown">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Set KIKEN" x:Name="aoKikenBTN" Click="aoKikenBTN_Click"/>
+                                    <MenuItem Header="Set SHIKAKU" x:Name="aoShikakuBTN" Click="aoShikakuBTN_Click"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
                         <Label FontSize="16" Content="Cuurent match" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="1">

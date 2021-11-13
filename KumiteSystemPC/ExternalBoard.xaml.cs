@@ -35,25 +35,39 @@ namespace KumiteSystemPC
             }
         }
 
-        DoubleAnimation opactityAnim = new DoubleAnimation();
+        
         public void ShowSanction(Border santion, int to)
         {
+            DoubleAnimation opactityAnim = new DoubleAnimation();
             opactityAnim.From = santion.Opacity;
             opactityAnim.To = to;
             opactityAnim.Duration = TimeSpan.FromSeconds(0.6);
             santion.BeginAnimation(Border.OpacityProperty, opactityAnim);
         }
 
-
-        public void ShowWinner(Label winner)
+        public void GridOpacityAnim(Grid grid,double to)
         {
+            AKA_Grid.BeginAnimation(OpacityProperty, null);
+            AO_Grid.BeginAnimation(OpacityProperty, null);
+
+            DoubleAnimation opactityAnim = new DoubleAnimation();
+            opactityAnim.From = grid.Opacity;
+            opactityAnim.To = to;
+            opactityAnim.Duration = TimeSpan.FromSeconds(0.4);
+            grid.BeginAnimation(OpacityProperty, opactityAnim);
+        }
+
+        public void ShowWinner(Label winner, Grid looserGrid)
+        {
+            DoubleAnimation opactityAnim = new DoubleAnimation();
             AkaScoreL.BeginAnimation(OpacityProperty, null);
             AoScoreL.BeginAnimation(OpacityProperty, null);
+            GridOpacityAnim(looserGrid, 0.5);
             opactityAnim.From = 1;
             opactityAnim.To = 0;
             opactityAnim.AutoReverse = true;
             opactityAnim.Duration = TimeSpan.FromSeconds(1);
-            opactityAnim.RepeatBehavior = new RepeatBehavior(5);
+            opactityAnim.RepeatBehavior = new RepeatBehavior(3);
             opactityAnim.FillBehavior = FillBehavior.Stop;
             winner.BeginAnimation(Label.OpacityProperty, opactityAnim);
         }
@@ -61,6 +75,7 @@ namespace KumiteSystemPC
         //TODO: Colors for round winner
         public void addRound(int roundNr, int scoreAka, int scoreAo, int winner)
         {
+            LinearGradientBrush myLinearGradientBrush;
             switch (winner)
             {
 
@@ -72,7 +87,7 @@ namespace KumiteSystemPC
 
                         Label label = new Label();
                         label.Foreground = Brushes.White;
-                        label.Background = Brushes.Gray;
+                        label.Background = (SolidColorBrush)new BrushConverter().ConvertFromString("#FF4E5059"); ;
                         label.Content = $"R{roundNr} {scoreAka}:{scoreAo}";
 
                         dynamicViewbox.Child = label;
@@ -82,13 +97,21 @@ namespace KumiteSystemPC
 
                 case 1:
                     {
+                        myLinearGradientBrush =
+               new LinearGradientBrush();
+                        myLinearGradientBrush.StartPoint = new Point(0, 0);
+                        myLinearGradientBrush.EndPoint = new Point(1, 1);
+                        myLinearGradientBrush.GradientStops.Add(
+                            new GradientStop((Color)ColorConverter.ConvertFromString("#FF0000"), 0.0));
+                        myLinearGradientBrush.GradientStops.Add(
+                            new GradientStop((Color)ColorConverter.ConvertFromString("#990000"), 1.0));
                         Viewbox dynamicViewbox = new Viewbox();
                         dynamicViewbox.StretchDirection = StretchDirection.Both;
                         dynamicViewbox.Stretch = Stretch.Fill;
 
                         Label label = new Label();
                         label.Foreground = Brushes.White;
-                        label.Background = Brushes.DarkRed;
+                        label.Background = myLinearGradientBrush;
                         label.Content = $"R{roundNr} {scoreAka}:{scoreAo}";
 
                         dynamicViewbox.Child = label;
@@ -97,13 +120,21 @@ namespace KumiteSystemPC
                     }
                 case 2:
                     {
+                        myLinearGradientBrush =
+               new LinearGradientBrush();
+                        myLinearGradientBrush.StartPoint = new Point(0, 0);
+                        myLinearGradientBrush.EndPoint = new Point(1, 1);
+                        myLinearGradientBrush.GradientStops.Add(
+                            new GradientStop((Color)ColorConverter.ConvertFromString("#FF009FFD"), 0.0));
+                        myLinearGradientBrush.GradientStops.Add(
+                            new GradientStop((Color)ColorConverter.ConvertFromString("#FF2A2A72"), 1.0));
                         Viewbox dynamicViewbox = new Viewbox();
                         dynamicViewbox.StretchDirection = StretchDirection.Both;
                         dynamicViewbox.Stretch = Stretch.Fill;
 
                         Label label = new Label();
                         label.Foreground = Brushes.White;
-                        label.Background = Brushes.DarkBlue;
+                        label.Background = myLinearGradientBrush;
                         label.Content = $"R{roundNr} {scoreAka}:{scoreAo}";
 
                         dynamicViewbox.Child = label;

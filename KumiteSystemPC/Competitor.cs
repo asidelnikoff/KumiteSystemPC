@@ -43,9 +43,9 @@ namespace TournamentTree
 
         List<int> AllScores { get; set; }
         public bool Senshu { get; set; }
-        public int Fouls_C1 { get; set; }
-        public int Fouls_C2 { get; set; }
-        public int Status { get; set; }
+        public int Fouls_C1 { get; private set; }
+        public int Fouls_C2 { get; private set; }
+        public int Status { get; private set; }
 
         public bool IsBye { get; set; }
 
@@ -97,6 +97,8 @@ namespace TournamentTree
             AllScores.Add(points);
            // Check_Winner?.Invoke();
         }
+
+        public void SetStatus(int status) { Status = status; Check_Winner?.Invoke(); }
 
         public void SetFoulsC1(int fouls) { Fouls_C1 = fouls; Check_Winner?.Invoke(); }
         public void SetFoulsC2(int fouls) { Fouls_C2 = fouls; Check_Winner?.Invoke(); }

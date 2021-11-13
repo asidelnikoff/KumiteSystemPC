@@ -58,7 +58,7 @@
             </StackPanel.Resources>
         </StackPanel>
 
-        <Grid Margin="0,20,0,5" >
+        <Grid Margin="0,20,0,5" x:Name="AKA_Grid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="45*"/>
                 <ColumnDefinition Width="8*"/>
@@ -85,12 +85,12 @@
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
                     <Label Content="00" x:Name="AkaScoreL" FontSize="150" Foreground="White"/>
                 </Viewbox>
-                <Border BorderBrush="White" BorderThickness="5" Margin="5,0,10,0" Opacity="0" x:Name="akaSenshu"/>
+                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="akaSenshu"/>
             </Grid>
         </Grid>
 
 
-        <Grid Grid.Row="2" Margin="0,20,0,5" >
+        <Grid Grid.Row="2" Margin="0,20,0,5" x:Name="AO_Grid" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="45*"/>
                 <ColumnDefinition Width="8*"/>
@@ -118,7 +118,7 @@
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
                     <Label Content="00" x:Name="AoScoreL" FontSize="150" Foreground="White"/>
                 </Viewbox>
-                <Border BorderBrush="White" BorderThickness="5" Margin="5,0,10,0" Opacity="0" x:Name="aoSenshu"/>
+                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="aoSenshu"/>
             </Grid>
         </Grid>
 
