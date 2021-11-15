@@ -15,6 +15,9 @@ namespace TournamentTree
         public delegate void RepechageGeneratedHandler();
         public event RepechageGeneratedHandler RepechageGen;
 
+        public delegate void CategoryResultsHandler(List<Competitor> winners);
+        public event CategoryResultsHandler HaveCategoryResults;
+
         public delegate void NxtMatchHandler(int round, int match);
         public event NxtMatchHandler HaveNxtMatch;
 
@@ -212,6 +215,8 @@ namespace TournamentTree
             Console.WriteLine($"2: {Winners[1]}");
             if (Winners.Count() > 2) Console.WriteLine($"3: {Winners[2]}");
             if (Winners.Count() > 3) Console.WriteLine($"3: {Winners[3]}");
+
+            HaveCategoryResults?.Invoke(Winners);
         }
         void GenerateBronze()
         {

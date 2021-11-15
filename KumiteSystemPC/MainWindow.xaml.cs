@@ -79,6 +79,8 @@ namespace KumiteSystemPC
 
                 GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
                 GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
+                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
+
                 CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, MainExApp.ActiveWorkbook.Name, MainExApp.ActiveWorkbook);
                 CategoryViewer.GetMatchEv += GetMatch;
                 GlobalCategoryViewer = CategoryViewer;
@@ -100,6 +102,37 @@ namespace KumiteSystemPC
 
             }
         }
+
+
+
+        private async void GlobalCategory_HaveCategoryResults(List<Competitor> winners)
+        {
+            try
+            {
+                string s_winners="";
+                s_winners+=$"1: {winners[0]}\n";
+                s_winners += $"2: {winners[1]}\n";
+                if (winners.Count() > 2) s_winners += $"3: {winners[2]}\n";
+                if (winners.Count() > 3) s_winners += $"3: {winners[3]}\n";
+                ContentDialog CategoryResults = new ContentDialog
+                {
+                    Title = "Info",
+                    CloseButtonText = "Close",
+                    PrimaryButtonText = "Show Results",
+                    Content = $"Have category results:\n{s_winners}----------------------------\nShow external board with results?",
+                };
+
+                await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
+
+                if(ContentDialogMaker.Result == ContentDialogResult.Primary)
+                {
+                    //Show External Results
+                    Console.WriteLine("Got you");
+                }
+            }
+            catch { }
+        }
+
         private void GlobalCategory_HaveNxtMatch(int round, int match)
         {
             if (round == -1 && match == -1)
@@ -203,9 +236,9 @@ namespace KumiteSystemPC
         }
         #endregion
 
-        private async void DisplayMessageDialog(string caption, string message, bool wait = false)
+        private async void DisplayMessageDialog(string caption, string message)
         {
-            try
+            /*try
             {
                 ContentDialog ServerDialog = new ContentDialog
                 {
@@ -215,13 +248,14 @@ namespace KumiteSystemPC
                 };
                 ContentDialogResult result = await ServerDialog.ShowAsync();
             }
-            catch { }
-            /*await ContentDialogMaker.CreateContentDialogAsync(new ContentDialog
+            catch { }*/
+            await ContentDialogMaker.CreateContentDialogAsync(new ContentDialog
             {
                 Title = caption,
                 Content = message,
                 PrimaryButtonText = "OK"
-            }, awaitPreviousDialog: wait);*/
+            }, awaitPreviousDialog: true);
+
         }
 
         void GetMatch(int mID, int rID)
@@ -244,7 +278,7 @@ namespace KumiteSystemPC
 
             GlobalCategory.GetNext();
             Console.WriteLine(GlobalMatchNow.ToString());
-            DisplayMessageDialog("Info", "Match loaded", false);
+            DisplayMessageDialog("Info", "Match loaded");
         }
 
         #region LOG
