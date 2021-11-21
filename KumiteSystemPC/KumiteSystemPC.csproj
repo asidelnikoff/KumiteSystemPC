@@ -81,6 +81,9 @@
     <Compile Include="CategoryGenerator.xaml.cs">
       <DependentUpon>CategoryGenerator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CategoryResults.xaml.cs">
+      <DependentUpon>CategoryResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CategoryViewer.xaml.cs">
       <DependentUpon>CategoryViewer.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CategoryGenerator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CategoryResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

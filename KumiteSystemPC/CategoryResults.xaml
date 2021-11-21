@@ -1,0 +1,116 @@
+﻿<Window x:Class="KumiteSystemPC.CategoryResults"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KumiteSystemPC"
+        mc:Ignorable="d"
+        Title="CategoryResults" Height="720" Width="1280">
+    <Grid Background="#FF212329">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="207*"/>
+            <RowDefinition Height="482*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="45,40,45,30" Background="#FF15171D">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="40" Direction="360" Color="#FF363B46"/>
+            </Grid.Effect>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Viewbox HorizontalAlignment="Left" Grid.Row="1" Margin="35,0,0,0" VerticalAlignment="Center">
+                <Label Content="" Foreground="White" VerticalAlignment="Center" x:Name="CategoryNameEXT" Margin="0,0,0,3"/>
+            </Viewbox>
+        </Grid >
+        <Grid Grid.Row="1" Margin="45,30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="125*"/>
+                    <RowDefinition Height="110*"/>
+                    <RowDefinition Height="90*"/>
+                    <RowDefinition Height="90*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="0,0,0,15" Background="#FF705F13" x:Name="FirstGrid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="366*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="Category + round + group" Foreground="White" x:Name="firstComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="1" Foreground="White" VerticalAlignment="Center" />
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,15" Grid.Row="1" Background="#FF686868" x:Name="SecondGrid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="366*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="Category + round + group" Foreground="White" x:Name="secondComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="2" Foreground="White" VerticalAlignment="Center" />
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,15" Grid.Row="2" Background="#FF554027" x:Name="ThirdGrid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="366*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="Category + round + group" Foreground="White" x:Name="thirdComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="3" Foreground="White" VerticalAlignment="Center" />
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,15" Grid.Row="3" Background="#FF554027" x:Name="FourthGrid" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85*"/>
+                            <ColumnDefinition Width="366*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="Category + round + group" Foreground="White" x:Name="fourthComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="3" Foreground="White" VerticalAlignment="Center" />
+                        </Viewbox>
+                    </Grid>
+
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

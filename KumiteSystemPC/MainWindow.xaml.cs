@@ -58,6 +58,7 @@ namespace KumiteSystemPC
         {
             OpenCategory();
         }
+        string CategoryName = "";
         void OpenCategory()
         {
             Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
@@ -80,6 +81,8 @@ namespace KumiteSystemPC
                 GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
                 GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
                 GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
+
+                CategoryName = MainExApp.ActiveWorkbook.Name;
 
                 CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, MainExApp.ActiveWorkbook.Name, MainExApp.ActiveWorkbook);
                 CategoryViewer.GetMatchEv += GetMatch;
@@ -104,7 +107,7 @@ namespace KumiteSystemPC
         }
 
 
-
+        CategoryResults CategoryResultsEXT;
         private async void GlobalCategory_HaveCategoryResults(List<Competitor> winners)
         {
             try
@@ -127,11 +130,64 @@ namespace KumiteSystemPC
                 if(ContentDialogMaker.Result == ContentDialogResult.Primary)
                 {
                     //Show External Results
+                    ShowResultsEXT(winners);
+                    if (externalBoard != null) externalBoard.Close();
                     Console.WriteLine("Got you");
                 }
             }
             catch { }
         }
+
+
+        void ShowResultsEXT(List<Competitor> Winners)
+        {
+            CategoryResultsEXT = new CategoryResults();
+            CategoryResultsEXT.SetCategory(CategoryName);
+            switch (Winners.Count())
+            {
+                case 1:
+                    CategoryResultsEXT.SetFirst(Winners[Winners.Count - 1]);
+                    break;
+                case 2:
+                    CategoryResultsEXT.SetFirst(Winners[Winners.Count - 1]);
+                    CategoryResultsEXT.SetSecond(Winners[Winners.Count - 2]);
+                    break;
+                case 3:
+                    CategoryResultsEXT.SetFirst(Winners[Winners.Count - 1]);
+                    CategoryResultsEXT.SetSecond(Winners[Winners.Count - 2]);
+                    CategoryResultsEXT.SetThird(Winners[Winners.Count - 3]);
+                    break;
+                case 4:
+                    CategoryResultsEXT.SetFirst(Winners[Winners.Count - 1]);
+                    CategoryResultsEXT.SetSecond(Winners[Winners.Count - 2]);
+                    CategoryResultsEXT.SetThird(Winners[Winners.Count - 3]);
+                    CategoryResultsEXT.SetThird1(Winners[Winners.Count - 4]);
+                    break;
+
+            }
+
+            List<Screen> sc = new List<Screen>();
+            sc.AddRange(Screen.AllScreens);
+            CategoryResultsEXT.WindowStyle = WindowStyle.None;
+            CategoryResultsEXT.Left = sc[Properties.Settings.Default.ScreenNR].Bounds.Left;
+            CategoryResultsEXT.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Top;
+            CategoryResultsEXT.Show();
+            CategoryResultsEXT.Owner = this;
+            CategoryResultsEXT.WindowState = WindowState.Maximized;
+
+            this.Focus();
+            this.Activate();
+
+            /*if (externalBoard != null)
+            {
+                externalBoard.ResetScreen();
+            }*/
+
+            /*extResCL.Header = "Close ext. category results";
+            extResCL.Visibility = Visibility.Visible;*/
+
+        }
+
 
         private void GlobalCategory_HaveNxtMatch(int round, int match)
         {
