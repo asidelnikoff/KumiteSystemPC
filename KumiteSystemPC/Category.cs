@@ -52,21 +52,21 @@ namespace TournamentTree
             {
                 curRound = rID;
                 curMatch = mID;
-                GetNext();
+                //GetNext();
                 return Rounds[curRound].Matches[curMatch];
             }
             else if (rID == Rounds.Count())
             {
                 curRound = rID;
                 curMatch = mID;
-                GetNext();
+                //GetNext();
                 return RepechageAKA.Matches[curMatch];
             }
             else if (rID == Rounds.Count() + 1)
             {
                 curRound = rID;
                 curMatch = mID;
-                GetNext();
+                //GetNext();
                 return RepechageAO.Matches[curMatch];
             }
             else return null;
@@ -127,7 +127,8 @@ namespace TournamentTree
             }
 
             if (curRound + 2 == Rounds.Count() && Rounds[curRound].IsFinished())
-            { if (RepechageAKA == null && RepechageAO == null) GenerateBronze();
+            { 
+                if (RepechageAKA == null && RepechageAO == null) GenerateBronze();
                 GetNext();
             }
 
@@ -136,8 +137,8 @@ namespace TournamentTree
             {
                 if (!r.IsFinished()) { isAll = false; break; }
             }
-            if (RepechageAKA != null && RepechageAKA.Winner == null) { isAll = false; }
-            if (RepechageAO != null && RepechageAO.Winner == null) { isAll = false; }
+            if (RepechageAKA != null && RepechageAKA.Matches.Count > 0 && RepechageAKA.Winner == null) { isAll = false; }
+            if (RepechageAO != null &&  RepechageAO.Matches.Count > 0 && RepechageAO.Winner == null) { isAll = false; }
 
             if (curRound + 1 == Rounds.Count() && isAll)
             {
@@ -163,15 +164,15 @@ namespace TournamentTree
                     if (nxtMatch[0] != -1 && nxtMatch[1] != -1)
                     {
                         Console.WriteLine($"{nxtMatch[0]} {nxtMatch[1]}");
-                        HaveNxtMatch?.Invoke(nxtMatch[0], nxtMatch[1]);
+                        //HaveNxtMatch?.Invoke(nxtMatch[0], nxtMatch[1]);
                     }
                 }
-                else
+                else if(curRound != Rounds.Count() - 1 && curMatch!=0)
                 {
                     nxtMatch[0] = Rounds.Count() - 1;
                     nxtMatch[1] = 0;
                     Console.WriteLine($"{nxtMatch[0]} {nxtMatch[1]}");
-                    HaveNxtMatch?.Invoke(nxtMatch[0], nxtMatch[1]);
+                    //HaveNxtMatch?.Invoke(nxtMatch[0], nxtMatch[1]);
                 }
             }
             HaveNxtMatch?.Invoke(nxtMatch[0], nxtMatch[1]);
@@ -288,6 +289,7 @@ namespace TournamentTree
             if (round < Rounds.Count())
             {
                 comp = Rounds[round].Matches[curMatch].Winner;
+                comp.ResetCompetitor();
                 if (round + 1 < Rounds.Count())
                 {
                     if (curMatch % 2 == 0)
@@ -320,10 +322,10 @@ namespace TournamentTree
                     if (iM >= Rounds[iR].Matches.Count()) { iR++; iM = 0; }
                     if (iR >= Rounds.Count()) { iR = curRound; iM = 0; }
 
-                    match = Rounds[iR].Matches[iM];
-                    res[0] = iR; res[1] = iM;
+                    match = Rounds[iR].Matches[iM];   
                 }
-                if (Rounds[curRound].Matches[curMatch] == Rounds[iR].Matches[iM]) { return new List<int>() { -1, -1 }; }
+                res[0] = iR; res[1] = iM;
+                if (Rounds[curRound].Matches[curMatch] == Rounds[iR].Matches[iM] || Rounds[iR].Matches[iM].isFinished) { return new List<int>() { -1, -1 }; }
                 return res;
             }
             else return new List<int>() { -1, -1 };

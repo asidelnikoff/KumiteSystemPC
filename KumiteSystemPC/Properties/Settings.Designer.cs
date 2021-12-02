@@ -70,5 +70,17 @@ namespace KumiteSystemPC.Properties {
                 this["WarningSound"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoNextLoad {
+            get {
+                return ((bool)(this["AutoNextLoad"]));
+            }
+            set {
+                this["AutoNextLoad"] = value;
+            }
+        }
     }
 }

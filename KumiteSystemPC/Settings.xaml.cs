@@ -89,5 +89,17 @@ namespace KumiteSystemPC
                 sound.Dispose();
             }
         }
+
+        private void AutoLoadNextCB_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.AutoNextLoad = true;
+            Properties.Settings.Default.Save();
+        }
+
+        private void AutoLoadNextCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.AutoNextLoad = false;
+            Properties.Settings.Default.Save();
+        }
     }
 }

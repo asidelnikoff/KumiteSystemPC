@@ -28,6 +28,7 @@
             <StackPanel Orientation="Horizontal" Margin="20,10">
                 <ComboBox SelectionChanged="screenC_SelectionChanged" x:Name="screenC" ui:ControlHelper.Header="Extrenal screen:"/>
             </StackPanel>
+            <CheckBox Margin="20,10" Content="Auto Load Next Match" x:Name="AutoLoadNextCB" Checked="AutoLoadNextCB_Checked" Unchecked="AutoLoadNextCB_Unchecked"/>
         </StackPanel>
     </Grid>
 </Window>

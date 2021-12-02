@@ -109,6 +109,7 @@ namespace TournamentTree
             Fouls_C2 = 0;
             Fouls_C1 = 0;
             Score = 0;
+            Senshu = false;
         }
         public string GetName()
         {
@@ -158,10 +159,16 @@ namespace TournamentTree
 
         public override bool Equals(object obj)
         {
-            Competitor comp = (Competitor)obj;
-            return (FirstName == comp.FirstName) &&
-                    (LastName == comp.LastName) &&
-                    (ID == comp.ID);
+            if (obj.GetType().ToString() != "MS.Internal.NamedObject")
+            {
+                
+                Competitor comp = (Competitor)obj;
+                Console.WriteLine($"{comp}");
+                    return (FirstName == comp.FirstName) &&
+                            (LastName == comp.LastName) &&
+                            (ID == comp.ID);
+            }
+            return false;
         }
     }
 }

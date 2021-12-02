@@ -23,6 +23,7 @@ namespace KumiteSystemPC
         public ExternalBoard()
         {
             InitializeComponent();
+            if (!Properties.Settings.Default.AutoNextLoad) { nextMGrid.Visibility = Visibility.Hidden; }
         }
 
         public void TimerText(int sec, int min)
