@@ -34,6 +34,8 @@ namespace KumiteSystemPC
             screenC.SelectedIndex = Properties.Settings.Default.ScreenNR;
             endOfMTXT.Text = Properties.Settings.Default.EndOfMatch;
             dataPathTXT.Text = Properties.Settings.Default.DataPath;
+            if (Properties.Settings.Default.AutoNextLoad) { AutoLoadNextCB.IsChecked = true; }
+            if (Properties.Settings.Default.ShowNextMatchEXT) { ShoNextEXTCB.IsChecked = true; }
         }
 
         private void endOfMatch_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -99,6 +101,18 @@ namespace KumiteSystemPC
         private void AutoLoadNextCB_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoNextLoad = false;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ShoNextEXTCB_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ShowNextMatchEXT = true;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ShoNextEXTCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ShowNextMatchEXT = false;
             Properties.Settings.Default.Save();
         }
     }

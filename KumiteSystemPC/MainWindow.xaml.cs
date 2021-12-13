@@ -109,7 +109,9 @@ namespace KumiteSystemPC
             {
                 DisplaySaveDialog();
             }
-            if (CanOpen && openFile.ShowDialog() == true)
+            TreeTypeDialog treeTypeDialog = new TreeTypeDialog();
+            treeTypeDialog.Owner = this;
+            if (CanOpen && treeTypeDialog.ShowDialog() == true && openFile.ShowDialog() == true)
             {
                 //Category = new Category();
                 MainExApp = new Excel.Application();
@@ -124,6 +126,8 @@ namespace KumiteSystemPC
 
 
                 GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
+                if (Properties.Settings.Default.DefaultTreeType == 0) { GlobalCategory.is1third = false; }
+                else if (Properties.Settings.Default.DefaultTreeType == 1) { GlobalCategory.is1third = true; }
                 GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
                 GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
 
@@ -141,112 +145,31 @@ namespace KumiteSystemPC
 
                 AKA_nxtTXT.IsReadOnly = true;
                 AO_nxtTXT.IsReadOnly = true;
-
-                if (externalBoard != null)
+                try
                 {
                     string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
                     externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
                 }
+                catch { }
                 CanOpen = false;
             }
-        }
-
-
-        CategoryResults CategoryResultsEXT;
-        private async void GlobalCategory_HaveCategoryResults(List<Competitor> winners)
-        {
-            try
-            {
-                string s_winners = "";
-                s_winners += $"1: {winners[0]}\n";
-                s_winners += $"2: {winners[1]}\n";
-                if (winners.Count() > 2) s_winners += $"3: {winners[2]}\n";
-                if (winners.Count() > 3) s_winners += $"3: {winners[3]}\n";
-                ContentDialog CategoryResults = new ContentDialog
-                {
-                    Title = "Info",
-                    CloseButtonText = "Close",
-                    PrimaryButtonText = "Show Results",
-                    Content = $"Have category results:\n{s_winners}----------------------------\nShow external board with results?",
-                };
-
-                await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
-
-                if (ContentDialogMaker.Result == ContentDialogResult.Primary)
-                {
-                    //Show External Results
-                    ShowResultsEXT(winners);
-                    if (externalBoard != null) externalBoard.Close();
-                    Console.WriteLine("Got you");
-                }
-            }
-            catch { }
-        }
-
-
-        void ShowResultsEXT(List<Competitor> Winners)
-        {
-            CategoryResultsEXT = new CategoryResults();
-            CategoryResultsEXT.SetCategory(CategoryName);
-            if (Winners[0] != null) CategoryResultsEXT.SetFirst(Winners[0]);
-            if (Winners[1] != null) CategoryResultsEXT.SetSecond(Winners[1]);
-            if (Winners[2] != null) CategoryResultsEXT.SetThird(Winners[2]);
-            if (Winners[3] != null) CategoryResultsEXT.SetThird1(Winners[3]);
-
-            List<Screen> sc = new List<Screen>();
-            sc.AddRange(Screen.AllScreens);
-            CategoryResultsEXT.WindowStyle = WindowStyle.None;
-            CategoryResultsEXT.Left = sc[Properties.Settings.Default.ScreenNR].Bounds.Left;
-            CategoryResultsEXT.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Top;
-            CategoryResultsEXT.Show();
-            CategoryResultsEXT.Owner = this;
-            CategoryResultsEXT.WindowState = WindowState.Maximized;
-
-            this.Focus();
-            this.Activate();
-
-            /*if (externalBoard != null)
-            {
-                externalBoard.ResetScreen();
-            }*/
-
-            /*extResCL.Header = "Close ext. category results";
-            extResCL.Visibility = Visibility.Visible;*/
-
-        }
-
-
-        private void GlobalCategory_HaveNxtMatch(int round, int match)
-        {
-            if (round == -1 && match == -1)
-            {
-                GlobalMatchNxt = new Match(new Competitor(), new Competitor(), 1);
-            }
-            else if (round < GlobalCategory.Rounds.Count())
-            {
-                GlobalMatchNxt = GlobalCategory.Rounds[round].Matches[match];
-            }
-            else if (round == GlobalCategory.Rounds.Count())
-            {
-                GlobalMatchNxt = GlobalCategory.RepechageAKA.Matches[match];
-            }
-            else if (round == GlobalCategory.Rounds.Count() + 1)
-            {
-                GlobalMatchNxt = GlobalCategory.RepechageAO.Matches[match];
-            }
-            AKA_nxtTXT.Text = $"{GlobalMatchNxt.AKA.FirstName} {GlobalMatchNxt.AKA.LastName}";
-            AO_nxtTXT.Text = $"{GlobalMatchNxt.AO.FirstName} {GlobalMatchNxt.AO.LastName}";
-            NxtMatch[0] = round; NxtMatch[1] = match;
         }
 
         Category ReadCategory(Excel.Workbook wb)
         {
             int count = wb.Worksheets.Count - 1;
             Category category = new Category();
+            Match Bronze;
+            Repechage repAo;
+            Repechage repAka;
             for (int i = 1; i <= count; i++)
             {
-                Round round = new Round();
                 Excel.Worksheet ws = wb.Worksheets[i];
+                Round round = new Round();
+
+                /*if (ws.Name == "Repechage 1") { repAka = new Repechage(); }
+                if (ws.Name == "Repechage 2") { repAo = new Repechage(); }
+                if (ws.Name == "Bronze Match") { Bronze = new Match(); }*/
                 for (int j = 2; j <= ws.UsedRange.Rows.Count; j++)
                 {
                     int AkaId = Convert.ToInt32(ws.Cells[j, 1].Value);
@@ -274,7 +197,9 @@ namespace KumiteSystemPC
                     /*match.HaveWinner += Match_HaveWinner;*/
                     if (Convert.ToString(ws.Cells[j, 7].Value) == "X") { match.SetWinner(1); }
                     else if (Convert.ToString(ws.Cells[j, 8].Value) == "X") { match.SetWinner(2); }
-                    round.Matches.Add(match);
+
+
+                    if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) round.Matches.Add(match);
                 }
 
                 category.Rounds.Add(round);
@@ -292,58 +217,81 @@ namespace KumiteSystemPC
                         }
                     }
                 }
+
             }
             VisualBracket = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count];
 
             return category;
         }
-
-
-        private void Match_HaveWinner()
-        {
-            if (GlobalCategoryViewer != null) { GlobalCategoryViewer.CompetitorsGrid.Items.Refresh(); }
-            if (externalBoard != null)
-            {
-                if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
-                {
-                    externalBoard.ShowWinner(externalBoard.AkaScoreL, externalBoard.AO_Grid);
-                }
-                else if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO))
-                {
-                    externalBoard.ShowWinner(externalBoard.AoScoreL, externalBoard.AKA_Grid);
-                }
-            }
-            try { end_of_m_sound.Play(); } catch { }
-            try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
-            catch { }
-        }
         #endregion
 
-        private async void DisplayMessageDialog(string caption, string message)
+        #region Category Results
+        CategoryResults CategoryResultsEXT;
+        private async void GlobalCategory_HaveCategoryResults(List<Competitor> winners)
         {
-            /*try
-            {
-                ContentDialog ServerDialog = new ContentDialog
-                {
-                    Title = caption,
-                    CloseButtonText = "Ok",
-                    Content = message,
-                };
-                ContentDialogResult result = await ServerDialog.ShowAsync();
-            }
-            catch { }*/
             try
             {
+                string s_winners = "";
+                s_winners += $"1: {winners[0]}\n";
+                s_winners += $"2: {winners[1]}\n";
+                if (winners[2] != null) s_winners += $"3: {winners[2]}\n";
+                if (winners[3] != null) s_winners += $"3: {winners[3]}\n";
                 ContentDialog CategoryResults = new ContentDialog
                 {
-                    Title = $"{caption}",
-                    PrimaryButtonText = "Ok",
-                    Content = $"{message}",
+                    Title = "Info",
+                    CloseButtonText = "Close",
+                    PrimaryButtonText = "Show Results",
+                    Content = $"Have category results:\n{s_winners}----------------------------\nShow external board with results?",
                 };
+
                 await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
+
+                if (ContentDialogMaker.Result == ContentDialogResult.Primary)
+                {
+                    //Show External Results
+                    ShowResultsEXT(winners);
+                    if (externalBoard != null) externalBoard.Close();
+
+                    closeExtRes.Visibility = Visibility.Visible;
+                }
             }
             catch { }
         }
+
+        private void closeExtRes_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CategoryResultsEXT.Close();
+                CategoryResultsEXT = null;
+                closeExtRes.Visibility = Visibility.Collapsed;
+            }
+            catch { }
+        }
+        void ShowResultsEXT(List<Competitor> Winners)
+        {
+            if (CategoryResultsEXT == null) CategoryResultsEXT = new CategoryResults();
+            CategoryResultsEXT.SetCategory(CategoryName);
+            if (Winners[0] != null) CategoryResultsEXT.SetFirst(Winners[0]);
+            if (Winners[1] != null) CategoryResultsEXT.SetSecond(Winners[1]);
+            if (Winners[2] != null) CategoryResultsEXT.SetThird(Winners[2]);
+            if (Winners[3] != null) CategoryResultsEXT.SetThird1(Winners[3]);
+
+            List<Screen> sc = new List<Screen>();
+            sc.AddRange(Screen.AllScreens);
+            CategoryResultsEXT.WindowStyle = WindowStyle.None;
+            CategoryResultsEXT.Left = sc[Properties.Settings.Default.ScreenNR].Bounds.Left;
+            CategoryResultsEXT.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Top;
+            CategoryResultsEXT.Show();
+            CategoryResultsEXT.Owner = this;
+            CategoryResultsEXT.WindowState = WindowState.Maximized;
+
+            this.Focus();
+            this.Activate();
+
+        }
+
+        #endregion
 
         void GetMatch(int mID, int rID)
         {
@@ -364,10 +312,66 @@ namespace KumiteSystemPC
                 GlobalCategoryViewer.MatchesGrid.SelectedIndex = mID;
             }
 
-            if (Properties.Settings.Default.AutoNextLoad) GlobalCategory.GetNext();
+            //if (Properties.Settings.Default.AutoNextLoad) GlobalCategory.GetNext();
             Console.WriteLine(GlobalMatchNow.ToString());
             DisplayMessageDialog("Info", "Match loaded");
         }
+
+        private void GlobalCategory_HaveNxtMatch(int round, int match, Match nxtMatch)
+        {
+            if (round == -1 && match == -1)
+            {
+                GlobalMatchNxt = new Match(new Competitor(), new Competitor(), 1);
+            }
+            else if (round < GlobalCategory.Rounds.Count())
+            {
+                GlobalMatchNxt = nxtMatch;
+            }
+            else if (round == GlobalCategory.Rounds.Count())
+            {
+                GlobalMatchNxt = nxtMatch;
+            }
+            AKA_nxtTXT.Text = $"{GlobalMatchNxt.AKA.FirstName} {GlobalMatchNxt.AKA.LastName}";
+            AO_nxtTXT.Text = $"{GlobalMatchNxt.AO.FirstName} {GlobalMatchNxt.AO.LastName}";
+            NxtMatch[0] = round; NxtMatch[1] = match;
+        }
+
+        private void Match_HaveWinner()
+        {
+            if (GlobalCategoryViewer != null) { GlobalCategoryViewer.CompetitorsGrid.Items.Refresh(); }
+            if (externalBoard != null)
+            {
+                if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
+                {
+                    externalBoard.ShowWinner(externalBoard.AkaScoreL, externalBoard.AO_Grid);
+                }
+                else if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO))
+                {
+                    externalBoard.ShowWinner(externalBoard.AoScoreL, externalBoard.AKA_Grid);
+                }
+            }
+            try { end_of_m_sound.Play(); } catch { }
+            try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
+            catch { }
+        }
+
+
+        private async void DisplayMessageDialog(string caption, string message)
+        {
+            try
+            {
+                ContentDialog CategoryResults = new ContentDialog
+                {
+                    Title = $"{caption}",
+                    PrimaryButtonText = "Ok",
+                    Content = $"{message}",
+                };
+                await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
+            }
+            catch { }
+        }
+
+
 
         #region LOG
         private void SaveLogBtn_Click(object sender, RoutedEventArgs e)
@@ -1124,6 +1128,28 @@ namespace KumiteSystemPC
         }
         #endregion
 
+        #region KIKEN and SHIKAKU set
+        private void akaKikenBTN_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AKA.SetStatus(1);
+        }
+
+        private void akaShikakuBTN_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AKA.SetStatus(2);
+        }
+
+        private void aoKikenBTN_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.SetStatus(1);
+        }
+
+        private void aoShikakuBTN_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.SetStatus(2);
+        }
+        #endregion
+
         private void AO_curTXT_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -1131,6 +1157,16 @@ namespace KumiteSystemPC
                 string[] name = AO_curTXT.Text.Split(new char[] { ' ' });
                 try { GlobalMatchNow.AO.FirstName = name[0]; } catch { GlobalMatchNow.AO.FirstName = "AO"; Console.WriteLine("No first name found"); }
                 try { GlobalMatchNow.AO.LastName = name[1]; } catch { GlobalMatchNow.AO.LastName = ""; Console.WriteLine("No second name found"); }
+                this.Focus();
+            }
+        }
+        private void AKA_curTXT_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string[] name = AKA_curTXT.Text.Split(new char[] { ' ' });
+                try { GlobalMatchNow.AKA.FirstName = name[0]; } catch { GlobalMatchNow.AKA.FirstName = "AKA"; Console.WriteLine("No first name found"); }
+                try { GlobalMatchNow.AKA.LastName = name[1]; } catch { GlobalMatchNow.AKA.LastName = ""; Console.WriteLine("No second name found"); }
                 this.Focus();
             }
         }
@@ -1165,8 +1201,6 @@ namespace KumiteSystemPC
             AKA_ScoreL.Content = GlobalMatchNow.AKA.ScoreProperty;
             AO_ScoreL.Content = GlobalMatchNow.AO.ScoreProperty;
 
-            TextLog.Blocks.Clear();
-
             ResetFouls();
 
             if (externalBoard != null)
@@ -1176,6 +1210,9 @@ namespace KumiteSystemPC
                 externalBoard.ShowSanction(externalBoard.akaSenshu, 0);
                 externalBoard.ShowSanction(externalBoard.aoSenshu, 0);
             }
+
+            TextLog.Blocks.Clear();
+
             try
             {
                 DisplayMessageDialog("Info", "Match reseted");
@@ -1228,6 +1265,10 @@ namespace KumiteSystemPC
                     else { DisplayMessageDialog("Info", "Can't save log"); }
 
                     //ResetMatch();
+
+                    if (GlobalCategoryViewer != null) { GlobalCategoryViewer.MatchesGrid.Items.Refresh(); }
+                    GlobalMatchNow.HaveWinner -= Match_HaveWinner;
+
                     DisplayMessageDialog("Info", "Match finished");
                 }
             }
@@ -1243,18 +1284,7 @@ namespace KumiteSystemPC
             {
                 ResetMatch();
                 GetMatch(NxtMatch[1], NxtMatch[0]);
-
-                //if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
-                //{
-                //    GlobalCategoryViewer.groups_List.SelectedIndex = NxtMatch[0];
-                //    GlobalCategoryViewer.MatchesGrid.SelectedIndex = NxtMatch[1];
-                //}
             }
-        }
-
-        private void NextMatchBTN_Unloaded(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void MainWindow1_Unloaded(object sender, RoutedEventArgs e)
@@ -1263,8 +1293,9 @@ namespace KumiteSystemPC
             if (GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.Close(); }
             if (MainExApp != null) { MainExApp.Quit(); }
         }
+
+
         ExternalBoard externalBoard;
-        ExternalBoard ext;
         private void openExt_btn_Click(object sender, RoutedEventArgs e)
         {
             if (externalBoard == null)
@@ -1272,19 +1303,6 @@ namespace KumiteSystemPC
                 List<Screen> sc = new List<Screen>();
                 sc.AddRange(Screen.AllScreens);
                 externalBoard = new ExternalBoard();
-
-                /*if (Category != null)
-                {
-                    externalBoard.SetCategory($"{CategoryName}: {groups_List.SelectedItem}");
-
-
-
-                    if (Category.GetCurComp() != null)
-                    {
-                        externalBoard.SetCompetitorName(Category.GetCurComp().ToString());
-                        externalBoard.SetColor(Category.GetColor());
-                    }
-                }*/
 
                 if (GlobalCategoryViewer != null && GlobalCategoryViewer.CategoryName != null)
                 {
@@ -1296,12 +1314,12 @@ namespace KumiteSystemPC
                     catch { }
                 }
 
-                Binding akaScoreBind = new Binding("ScoreProperty");
-                akaScoreBind.Source = GlobalMatchNow.AKA;
+                Binding akaScoreBind = new Binding("Content");
+                akaScoreBind.Source = AKA_ScoreL;
                 externalBoard.AkaScoreL.SetBinding(Label.ContentProperty, akaScoreBind);
 
-                Binding aoScoreBind = new Binding("ScoreProperty");
-                aoScoreBind.Source = GlobalMatchNow.AO;
+                Binding aoScoreBind = new Binding("Content");
+                aoScoreBind.Source = AO_ScoreL;
                 externalBoard.AoScoreL.SetBinding(Label.ContentProperty, aoScoreBind);
 
                 Binding akaNowName = new Binding("Text");
@@ -1346,6 +1364,7 @@ namespace KumiteSystemPC
             }
 
         }
+
         ExtTimerSet extTimerSet;
         private void openExtTimerSet_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -1361,27 +1380,7 @@ namespace KumiteSystemPC
                 extTimerSet = null;
             }
         }
-        #region KIKEN and SHIKAKU set
-        private void akaKikenBTN_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AKA.SetStatus(1);
-        }
 
-        private void akaShikakuBTN_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AKA.SetStatus(2);
-        }
-
-        private void aoKikenBTN_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AO.SetStatus(1);
-        }
-
-        private void aoShikakuBTN_Click(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AO.SetStatus(2);
-        }
-        #endregion
 
         Settings settings;
         private void SettingsBTN_Click(object sender, RoutedEventArgs e)
@@ -1393,16 +1392,6 @@ namespace KumiteSystemPC
             }
         }
 
-        private void AKA_curTXT_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string[] name = AKA_curTXT.Text.Split(new char[] { ' ' });
-                try { GlobalMatchNow.AKA.FirstName = name[0]; } catch { GlobalMatchNow.AKA.FirstName = "AKA"; Console.WriteLine("No first name found"); }
-                try { GlobalMatchNow.AKA.LastName = name[1]; } catch { GlobalMatchNow.AKA.LastName = ""; Console.WriteLine("No second name found"); }
-                this.Focus();
-            }
-        }
 
 
         #region TeamKumite
@@ -1576,6 +1565,8 @@ namespace KumiteSystemPC
                 roundCounter--;
             }*/
         }
+
+
 
         private void roundTB_KeyDown(object sender, KeyEventArgs e)
         {

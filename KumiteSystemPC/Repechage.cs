@@ -18,6 +18,10 @@ namespace TournamentTree
         {
             Competitors = new List<Competitor>(competitors);
         }
+        public Repechage()
+        {
+            Competitors = new List<Competitor>();
+        }
         public void Generate()
         {
             Rounds = new List<Round>();

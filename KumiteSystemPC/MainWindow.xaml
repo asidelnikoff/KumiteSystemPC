@@ -33,6 +33,7 @@
                 <MenuItem Header="Ext.board" x:Name="openExt_btn" Click="openExt_btn_Click"/>
                 <MenuItem Header="Ext.Timer" x:Name="openExtTimerSet_btn" Click="openExtTimerSet_btn_Click"/>
             </MenuItem>
+            <MenuItem Header="Close ext. category results" Visibility="Collapsed" x:Name="closeExtRes" Click="closeExtRes_Click"/>
         </Menu>
         <Grid Grid.ColumnSpan="2" Margin="0,39,-0.4,0.4" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>

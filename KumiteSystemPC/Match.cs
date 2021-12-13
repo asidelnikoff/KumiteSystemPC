@@ -82,8 +82,8 @@ namespace TournamentTree
             Competitor Aka = AKA;
             Competitor Ao = AO;
 
-            if (Aka.Status == 2 || Aka.Status == 3) { SetWinner(2, false); }
-            else if (Ao.Status == 2 || Ao.Status == 3) { SetWinner(1, false); }
+            if (Aka.Status == 1 || Aka.Status == 2) { SetWinner(2, false); }
+            else if (Ao.Status == 1 || Ao.Status == 2) { SetWinner(1, false); }
             //
             else if (Aka.Fouls_C1 >= 4 || Aka.Fouls_C2 >= 4) { SetWinner(2); }
             else if (Ao.Fouls_C1 >= 4 || Ao.Fouls_C2 >= 4) { SetWinner(1); }

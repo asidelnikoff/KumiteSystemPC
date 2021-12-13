@@ -50,6 +50,7 @@ namespace KumiteSystemPC
             InitializeComponent();
             GlobalCategory = category;
             GlobalCategory.RepechageGen += GlobalCategory_RepechageGen;
+            GlobalCategory.BronzeGen += GlobalCategory_BronzeGen;
             //GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
             CategoryName = categoryName;
             workbook = wb;
@@ -62,6 +63,25 @@ namespace KumiteSystemPC
             //CompetitorsGrid.IsReadOnly = true;
             NxtMatch = new List<int>() { -1,-1};
         }
+
+        private void GlobalCategory_BronzeGen()
+        {
+            Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
+            ws.Name = "Bronze Match";
+            AddRows(ws, new List<Match>() { GlobalCategory.BronzeMatch });
+
+            Excel.Worksheet ws_ = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
+            ws_.Name = "Bronze Match(Visual)";
+            int row = 3;
+            int col = 1;
+            ws.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AKA}";
+            SetCellStyle(row, col, ws);
+            row += 2;
+            ws.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AO}";
+            SetCellStyle(row, col, ws);
+            if (GlobalCategory.BronzeMatch.Winner != null) { UpdateExcelTree(workbook); }
+        }
+
         public List<int> NxtMatch;
         private void GlobalCategory_HaveNxtMatch(int round, int match)
         {
@@ -133,7 +153,7 @@ namespace KumiteSystemPC
                 Winner = GlobalCategory.RepechageAKA.Matches[curMatch].Winner;
                 AO = GlobalCategory.RepechageAKA.Matches[curMatch].AO;
             }
-            else if(curRound == r_count)
+            else if(curRound == r_count + 1)
             {
                 AKA = GlobalCategory.RepechageAO.Matches[curMatch].AKA;
                 Winner = GlobalCategory.RepechageAO.Matches[curMatch].Winner;
@@ -184,7 +204,7 @@ namespace KumiteSystemPC
             {
                 Excel.Worksheet wsVisual = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count - 1];
                 int col = 2 * (curMatch + 2)-1;
-                int row = 3 + (curMatch - 1);
+                int row = 3 + (curMatch + 1);
                 wsVisual.Cells[row, col].Value = $"{Winner}";
                 SetCellStyle(row, col, wsVisual);
             }

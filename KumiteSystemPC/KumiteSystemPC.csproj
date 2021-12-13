@@ -102,6 +102,9 @@
     <Compile Include="TimerExt.xaml.cs">
       <DependentUpon>TimerExt.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TreeTypeDialog.xaml.cs">
+      <DependentUpon>TreeTypeDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddCompetitorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimerExt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TreeTypeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
