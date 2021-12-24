@@ -257,8 +257,8 @@ namespace TournamentTree
             Console.WriteLine("-----------------------\nCATEGORY RESULTS\n-----------------------");
             Console.WriteLine($"1: {Winners[0]}");
             Console.WriteLine($"2: {Winners[1]}");
-            if (Winners[2]!=null) Console.WriteLine($"3: {Winners[2]}");
-            if (Winners[3] != null) Console.WriteLine($"3: {Winners[3]}");
+            if (Winners.Count()>2 &&Winners[2]!=null) Console.WriteLine($"3: {Winners[2]}");
+            if (Winners.Count()>3 &&Winners[3] != null) Console.WriteLine($"3: {Winners[3]}");
 
             HaveCategoryResults?.Invoke(Winners);
         }

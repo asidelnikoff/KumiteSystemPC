@@ -67,6 +67,7 @@ namespace KumiteSystemPC
                 Title = "Info",
                 Content = $"Save changes in {CategoryName}",
                 PrimaryButtonText = "Save",
+                DefaultButton = ContentDialogButton.Primary,
                 SecondaryButtonText = "Don't save",
                 CloseButtonText = "Cancel"
             };
@@ -234,13 +235,26 @@ namespace KumiteSystemPC
                 string s_winners = "";
                 s_winners += $"1: {winners[0]}\n";
                 s_winners += $"2: {winners[1]}\n";
-                if (winners[2] != null) s_winners += $"3: {winners[2]}\n";
-                if (winners[3] != null) s_winners += $"3: {winners[3]}\n";
+                if (winners.Count()>2 && winners[2] != null) s_winners += $"3: {winners[2]}\n";
+                if (winners.Count() > 3 && winners[3] != null) s_winners += $"3: {winners[3]}\n";
+
+                Excel.Workbook wb = (Excel.Workbook)MainExApp.ActiveWorkbook;
+                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.Add(wb.Worksheets[wb.Worksheets.Count]);
+                ws.Name = "Results";
+                ws.Cells[1, 2] = $"{CategoryName}";
+                ws.Cells[2, 1] = "1.";
+                ws.Cells[2, 2] = winners[0];
+                ws.Cells[3, 1] = "2.";
+                ws.Cells[3, 2] = winners[1];
+                if (winners.Count() > 2 && winners[2] != null) { ws.Cells[4, 1] = "3."; ws.Cells[4, 2] = winners[2]; }
+                if (winners.Count() > 3 && winners[3] != null) { ws.Cells[5, 1] = "3."; ws.Cells[5, 2] = winners[3]; }
+
                 ContentDialog CategoryResults = new ContentDialog
                 {
                     Title = "Info",
                     CloseButtonText = "Close",
                     PrimaryButtonText = "Show Results",
+                    DefaultButton = ContentDialogButton.Primary,
                     Content = $"Have category results:\n{s_winners}----------------------------\nShow external board with results?",
                 };
 
@@ -254,6 +268,8 @@ namespace KumiteSystemPC
 
                     closeExtRes.Visibility = Visibility.Visible;
                 }
+
+
             }
             catch { }
         }
@@ -364,6 +380,7 @@ namespace KumiteSystemPC
                 {
                     Title = $"{caption}",
                     PrimaryButtonText = "Ok",
+                    DefaultButton = ContentDialogButton.Primary,
                     Content = $"{message}",
                 };
                 await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);

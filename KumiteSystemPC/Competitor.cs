@@ -98,6 +98,13 @@ namespace TournamentTree
            // Check_Winner?.Invoke();
         }
 
+        public void SetScore(int score)
+        {
+            ScoreProperty = score;
+            AllScores.Clear();
+            AllScores.Add(score);
+        }
+
         public void SetStatus(int status) { Status = status; Check_Winner?.Invoke(); }
 
         public void SetFoulsC1(int fouls) { Fouls_C1 = fouls; Check_Winner?.Invoke(); }

@@ -66,6 +66,9 @@ namespace KumiteSystemPC
 
         private void GlobalCategory_BronzeGen()
         {
+
+            groups_List.Items.Add("Bronze Match");
+
             Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
             ws.Name = "Bronze Match";
             AddRows(ws, new List<Match>() { GlobalCategory.BronzeMatch });
@@ -74,12 +77,18 @@ namespace KumiteSystemPC
             ws_.Name = "Bronze Match(Visual)";
             int row = 3;
             int col = 1;
-            ws.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AKA}";
-            SetCellStyle(row, col, ws);
+            ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AKA}";
+            SetCellStyle(row, col, ws_);
             row += 2;
-            ws.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AO}";
-            SetCellStyle(row, col, ws);
-            if (GlobalCategory.BronzeMatch.Winner != null) { UpdateExcelTree(workbook); }
+            ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AO}";
+            SetCellStyle(row, col, ws_);
+            if (GlobalCategory.BronzeMatch.Winner != null) 
+            {
+                col = 3;
+                row = 4;
+                ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.Winner}";
+                SetCellStyle(row, col, ws_);
+            }
         }
 
         public List<int> NxtMatch;
@@ -149,9 +158,18 @@ namespace KumiteSystemPC
             }
             else if(curRound == r_count)
             {
-                AKA = GlobalCategory.RepechageAKA.Matches[curMatch].AKA;
-                Winner = GlobalCategory.RepechageAKA.Matches[curMatch].Winner;
-                AO = GlobalCategory.RepechageAKA.Matches[curMatch].AO;
+                if (!GlobalCategory.is1third)
+                {
+                    AKA = GlobalCategory.RepechageAKA.Matches[curMatch].AKA;
+                    Winner = GlobalCategory.RepechageAKA.Matches[curMatch].Winner;
+                    AO = GlobalCategory.RepechageAKA.Matches[curMatch].AO;
+                }
+                else
+                {
+                    AKA = GlobalCategory.BronzeMatch.AKA;
+                    Winner = GlobalCategory.BronzeMatch.Winner;
+                    AO = GlobalCategory.BronzeMatch.AO;
+                }
             }
             else if(curRound == r_count + 1)
             {
@@ -194,7 +212,9 @@ namespace KumiteSystemPC
             }
             else if(curRound==r_count)
             {
-                Excel.Worksheet wsVisual = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count - 2];
+                Excel.Worksheet wsVisual;
+                if (!GlobalCategory.is1third) wsVisual = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count - 2];
+                else wsVisual = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count - 1];
                 int col = 2 * (curMatch + 2) - 1;
                 int row = 3 + (curMatch + 1);
                 wsVisual.Cells[row, col].Value = $"{Winner}";
@@ -450,8 +470,16 @@ namespace KumiteSystemPC
                 }
                 else if(groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
-                    comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AKA);
-                    comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AO);
+                    if (!GlobalCategory.is1third)
+                    {
+                        comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AKA);
+                        comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AO);
+                    }
+                    else
+                    {
+                        comps.Add(GlobalCategory.BronzeMatch.AKA);
+                        comps.Add(GlobalCategory.BronzeMatch.AO);
+                    }
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
                 {
@@ -482,7 +510,8 @@ namespace KumiteSystemPC
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
-                    MatchesGrid.ItemsSource = GlobalCategory.RepechageAKA.Matches;
+                    if (!GlobalCategory.is1third) MatchesGrid.ItemsSource = GlobalCategory.RepechageAKA.Matches;
+                    else MatchesGrid.ItemsSource = new List<Match>() { GlobalCategory.BronzeMatch };
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
                 {

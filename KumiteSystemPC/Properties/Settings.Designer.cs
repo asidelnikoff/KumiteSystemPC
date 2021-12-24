@@ -106,5 +106,17 @@ namespace KumiteSystemPC.Properties {
                 this["DefaultTreeType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DefaultJudjesNumber {
+            get {
+                return ((int)(this["DefaultJudjesNumber"]));
+            }
+            set {
+                this["DefaultJudjesNumber"] = value;
+            }
+        }
     }
 }

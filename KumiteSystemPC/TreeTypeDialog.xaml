@@ -17,7 +17,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Content="Select" x:Name="selectBTN" Click="selectBTN_Click" HorizontalAlignment="Stretch" Margin="5,0,0,0"/>
+            <Button Grid.Column="1" Content="Select" x:Name="selectBTN" Click="selectBTN_Click" HorizontalAlignment="Stretch" Margin="5,0,0,0" Background="#7F3072FF" />
             <Button Content="Cancel" HorizontalAlignment="Stretch" Margin="0,0,5,0" x:Name="cancelBTN" Click="cancelBTN_Click"/>
         </Grid>
     </StackPanel>

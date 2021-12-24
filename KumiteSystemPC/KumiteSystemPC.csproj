@@ -94,6 +94,12 @@
     <Compile Include="ExtTimerSet.xaml.cs">
       <DependentUpon>ExtTimerSet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="KataInternal.xaml.cs">
+      <DependentUpon>KataInternal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Kata_ExternalBoard.xaml.cs">
+      <DependentUpon>Kata_ExternalBoard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Repechage.cs" />
     <Compile Include="Round.cs" />
     <Compile Include="Settings.xaml.cs">
@@ -126,6 +132,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExtTimerSet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="KataInternal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Kata_ExternalBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
