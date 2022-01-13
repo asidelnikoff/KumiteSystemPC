@@ -59,6 +59,9 @@ namespace KumiteSystemPC
             {
                 groups_List.Items.Add($"1/{g.ToString()}");
             }
+            if (GlobalCategory.BronzeMatch != null) { groups_List.Items.Add("Bronze Match"); }
+            if(GlobalCategory.RepechageAKA != null) { groups_List.Items.Add("Repechage 1"); }
+            if (GlobalCategory.RepechageAO != null) { groups_List.Items.Add("Repechage 2"); }
             groups_List.SelectedIndex = 0;
             //CompetitorsGrid.IsReadOnly = true;
             NxtMatch = new List<int>() { -1,-1};

@@ -160,8 +160,8 @@ namespace KumiteSystemPC
                 for (int i = 1; i <= 7; i++) { ws.Cells[1,i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red); }
                 ws.Cells[1, 8].Value = "Winner AO";
                 ws.Cells[1, 14].Value = "ID_AO";
-                ws.Cells[1, 13].Value = "AO First_Name";
-                ws.Cells[1, 12].Value = "AO Last_Name";
+                ws.Cells[1, 12].Value = "AO First_Name";
+                ws.Cells[1, 13].Value = "AO Last_Name";
                 ws.Cells[1, 11].Value = "AO Fouls C1";
                 ws.Cells[1, 10].Value = "AO Fouls C2";
                 ws.Cells[1, 9].Value = "AO Score";
@@ -180,8 +180,8 @@ namespace KumiteSystemPC
                     if (m.AO != null)
                     {
                         ws.Cells[row, 14].Value = m.AO.ID;
-                        ws.Cells[row, 13].Value = m.AO.FirstName;
-                        ws.Cells[row, 12].Value = m.AO.LastName;
+                        ws.Cells[row, 12].Value = m.AO.FirstName;
+                        ws.Cells[row, 13].Value = m.AO.LastName;
                         ws.Cells[row, 11].Value = m.AO.GetFoulsC1();
                         ws.Cells[row, 10].Value = m.AO.GetFoulsC2();
                         ws.Cells[row, 9].Value = m.AO.Score;

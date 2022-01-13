@@ -161,17 +161,14 @@ namespace KumiteSystemPC
         {
             int count = wb.Worksheets.Count - 1;
             Category category = new Category();
-            Match Bronze;
-            Repechage repAo;
-            Repechage repAka;
+            Match Bronze = new Match();
+            Repechage repAo = new Repechage();
+            Repechage repAka = new Repechage();
             for (int i = 1; i <= count; i++)
             {
                 Excel.Worksheet ws = wb.Worksheets[i];
                 Round round = new Round();
 
-                /*if (ws.Name == "Repechage 1") { repAka = new Repechage(); }
-                if (ws.Name == "Repechage 2") { repAo = new Repechage(); }
-                if (ws.Name == "Bronze Match") { Bronze = new Match(); }*/
                 for (int j = 2; j <= ws.UsedRange.Rows.Count; j++)
                 {
                     int AkaId = Convert.ToInt32(ws.Cells[j, 1].Value);
@@ -182,8 +179,8 @@ namespace KumiteSystemPC
                     int Akascore = Convert.ToInt32(ws.Cells[j, 6].Value);
 
                     int AoId = Convert.ToInt32(ws.Cells[j, 14].Value);
-                    string AoFName = Convert.ToString(ws.Cells[j, 13].Value);
-                    string AoLName = Convert.ToString(ws.Cells[j, 12].Value);
+                    string AoFName = Convert.ToString(ws.Cells[j, 12].Value);
+                    string AoLName = Convert.ToString(ws.Cells[j, 13].Value);
                     int AoF1 = Convert.ToInt32(ws.Cells[j, 11].Value);
                     int AoF2 = Convert.ToInt32(ws.Cells[j, 10].Value);
                     int Aoscore = Convert.ToInt32(ws.Cells[j, 9].Value);
@@ -202,9 +199,15 @@ namespace KumiteSystemPC
 
 
                     if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) round.Matches.Add(match);
+                    else if (ws.Name == "Repechage 1") repAka.Matches.Add(match);
+                    else if (ws.Name == "Repechage 2") repAo.Matches.Add(match);
+                    else if (ws.Name == "Bronze match") Bronze = new Match(match);
                 }
 
-                category.Rounds.Add(round);
+                if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) category.Rounds.Add(round);
+                else if (ws.Name == "Repechage 1") category.RepechageAKA = repAka;
+                else if (ws.Name == "Repechage 2") category.RepechageAO = repAo;
+                else if (ws.Name == "Bronze match") category.BronzeMatch = Bronze;
 
                 if (category.Rounds.Count() > 1)
                 {
@@ -579,11 +582,12 @@ namespace KumiteSystemPC
 
                 this.Focus();
                 this.Activate();
+                openExt_btn.Header = "Close ext. board";
             }
             else
             {
+                openExt_btn.Header = "Open ext. board";
                 externalBoard.Close();
-                externalBoard = null;
             }
 
         }
@@ -591,16 +595,11 @@ namespace KumiteSystemPC
         ExtTimerSet extTimerSet;
         private void openExtTimerSet_btn_Click(object sender, RoutedEventArgs e)
         {
-            if (extTimerSet == null)
+            if (extTimerSet == null || !extTimerSet.IsLoaded )
             {
                 extTimerSet = new ExtTimerSet();
                 extTimerSet.Owner = this;
                 extTimerSet.Show();
-            }
-            else
-            {
-                extTimerSet.Close();
-                extTimerSet = null;
             }
         }
 
@@ -608,7 +607,7 @@ namespace KumiteSystemPC
         Settings settings;
         private void SettingsBTN_Click(object sender, RoutedEventArgs e)
         {
-            if (settings == null)
+            if (settings == null || !settings.IsLoaded )
             {
                 settings = new Settings();
                 settings.Show();

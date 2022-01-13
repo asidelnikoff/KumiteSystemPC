@@ -19,6 +19,20 @@ namespace TournamentTree
         public Competitor Winner { get; set; }
         public Competitor Looser { get; set; }
 
+        public Match() { }
+        public Match(Match match)
+        {
+            AKA = match.AKA;
+            AO = match.AO;
+            /*AKA = _AKA;
+            AO = _AO;*/
+            if (AKA != null && AKA.IsBye) { Winner = new Competitor(AO); Looser = new Competitor(AKA); }
+            else if (AO != null && AO.IsBye) { Winner = new Competitor(AKA); Looser = new Competitor(AO); }
+            //else { Winner = new Competitor(); Looser = new Competitor(); }
+            if (AKA != null) AKA.Check_Winner += CheckWinner;
+            if (AO != null) AO.Check_Winner += CheckWinner;
+            ID = match.ID;
+        }
         public Match(Competitor _AKA,Competitor _AO, int id)
         {
             //Competitors = new List<Competitor>();

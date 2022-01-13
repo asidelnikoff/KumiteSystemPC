@@ -49,7 +49,7 @@
                 <MenuItem Header="Reset Category" x:Name="ResetCatBtn"/>
             </MenuItem>
             <MenuItem Header="Externals">
-                <MenuItem Header="Ext.board" x:Name="openExt_btn" Click="openExt_btn_Click"/>
+                <MenuItem Header="Open ext.board" x:Name="openExt_btn" Click="openExt_btn_Click"/>
                 <MenuItem Header="Ext.Timer" x:Name="openExtTimerSet_btn" Click="openExtTimerSet_btn_Click"/>
             </MenuItem>
             <MenuItem Header="Close ext. category results" Visibility="Collapsed" x:Name="closeExtRes" Click="closeExtRes_Click"/>
