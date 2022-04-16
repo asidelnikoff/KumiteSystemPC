@@ -8,8 +8,8 @@ namespace TournamentTree
 {
     public class Repechage
     {
-        List<Competitor> Competitors { get; set; }
-        List<Round> Rounds { get; set; }
+        public List<Competitor> Competitors { get; set; }
+        List<Round> Rounds { get; set; } //Not needed probably
         public List<Match> Matches { get; set; }
         public Competitor Winner { get; set; }
         int curRound=0;
@@ -21,6 +21,7 @@ namespace TournamentTree
         public Repechage()
         {
             Competitors = new List<Competitor>();
+            Matches = new List<Match>();
         }
         public void Generate()
         {
@@ -31,7 +32,7 @@ namespace TournamentTree
                 Round round1 = new Round();
                 Competitor aka1 = Competitors[0];
                 Competitor ao1 = new Competitor(true);
-                Matches.Add(new Match(aka1, ao1, 0));
+                Matches.Add(new Match(aka1, ao1, Matches.Count()+1));
                 round1.Matches.Add(new Match(aka1, ao1, 0));
                 
                 Rounds.Add(round1);
@@ -42,8 +43,8 @@ namespace TournamentTree
                     Competitor ao = Competitors[count];
                     Competitor aka = Matches[count-1].Winner;
                     Round res = new Round();
-                    Matches.Add(new Match(aka, ao, 0));
-                    res.Matches.Add(new Match(aka, ao, 0));
+                    Matches.Add(new Match(aka, ao, Matches.Count()+1));
+                    res.Matches.Add(new Match(aka, ao, Matches.Count()+1));
                     res.ID = count;
                     Rounds.Add(res);
                 }
@@ -52,10 +53,10 @@ namespace TournamentTree
         }
         public bool IsFinished()
         {
-                foreach(var m in Matches)
-                {
-                    if (m.Winner == null) return false;
-                }
+            /*foreach(var m in Matches)
+            {
+                if (m.Winner == null) return false;
+            }*/
             if (Winner == null) { return false; }
             return true;
         }

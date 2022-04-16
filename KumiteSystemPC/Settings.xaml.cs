@@ -115,5 +115,18 @@ namespace KumiteSystemPC
             Properties.Settings.Default.ShowNextMatchEXT = false;
             Properties.Settings.Default.Save();
         }
+
+        private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog opf = new OpenFileDialog();
+            opf.Filter = "SQLite Databases(*.sqlite)|*.sqlite";
+            opf.Title = "Select default database";
+            if (opf.ShowDialog() == true)
+            {
+                defaultDB.Text = opf.FileName;
+                Properties.Settings.Default.DefaultDBPath = opf.FileName;
+                Properties.Settings.Default.Save();
+            }
+        }
     }
 }

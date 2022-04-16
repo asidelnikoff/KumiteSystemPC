@@ -42,8 +42,8 @@ namespace TournamentTree
             AO = _AO;
             /*AKA = _AKA;
             AO = _AO;*/
-            if (AKA!= null && AKA.IsBye) { Winner = new Competitor(AO); Looser = new Competitor(AKA); }
-            else if (AO != null && AO.IsBye) { Winner = new Competitor(AKA); Looser = new Competitor(AO); }
+            if (AKA!= null && AKA.IsBye) { Winner = new Competitor(AO); Looser = new Competitor(AKA); isFinished = true; }
+            else if (AO != null && AO.IsBye) { Winner = new Competitor(AKA); Looser = new Competitor(AO); isFinished = true; }
             //else { Winner = new Competitor(); Looser = new Competitor(); }
             if(AKA!=null) AKA.Check_Winner += CheckWinner;
             if (AO != null) AO.Check_Winner += CheckWinner;
@@ -52,7 +52,7 @@ namespace TournamentTree
         public bool isAllCompetitors()
         {
             //TODO: All Conditions to check fullness of match
-            if ((AKA.FirstName == null && AKA.LastName == null && AKA.ID == 0) ||
+            if (AKA == null || AO == null || (AKA.FirstName == null && AKA.LastName == null && AKA.ID == 0) ||
                 (AO.FirstName == null && AO.LastName == null && AO.ID == 0) || AKA.IsBye || AO.IsBye) return false;
             else return true;
         }

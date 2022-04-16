@@ -31,7 +31,7 @@ namespace TournamentTree
         public Repechage RepechageAO { get; set; }
 
        public Match BronzeMatch { get; set; }
-        public bool is1third { get; set; }
+       public bool is1third { get; set; }
 
         public Category(List<Competitor> competitors,bool _is1third=false)
         {
@@ -53,6 +53,21 @@ namespace TournamentTree
             else if (curMatch >= 0 && curRound == Rounds.Count() && is1third) return BronzeMatch.isFinished;
             else if (curMatch >= 0 && curRound == Rounds.Count() + 1) return RepechageAO.Matches[curMatch].isFinished;
             else return true;
+        }
+
+        public bool isCategoryFinished()
+        {
+            foreach(var r in Rounds)
+            {
+                foreach(var m in r.Matches)
+                {
+                    if (!m.isFinished) return false;
+                }
+            }
+            
+            if (!is1third) return RepechageAKA.IsFinished() && RepechageAO.IsFinished();
+            else return BronzeMatch.isFinished;
+
         }
 
         public Match GetCurMatch(int mID, int rID)
@@ -88,8 +103,75 @@ namespace TournamentTree
         List<int> GetNxtRep()
         {
             List<int> res = new List<int>() { -1, -1 };
-
             int r_count = Rounds.Count();
+            int tmp_r = -1;
+            if (curRound == r_count) { tmp_r = r_count + 1; }
+            else if (curRound == r_count + 1 || curRound+2==r_count) { tmp_r = r_count; }
+
+            int iM = 0;
+            Match match;
+
+            if (tmp_r == r_count) match = RepechageAKA.Matches[iM];
+            else if (tmp_r == r_count + 1) match = RepechageAO.Matches[iM];
+            else match = null;
+            iM++;
+            if(match!=null)
+            {
+                try
+                {
+                    if (tmp_r == r_count + 1)
+                    {
+                        while (match.Winner != null && iM < RepechageAKA.Matches.Count)
+                        {
+                            match = RepechageAKA.Matches[iM];
+                            res[0] = tmp_r-1; res[1] = iM;
+                            iM++;
+                        }
+                        if(iM == RepechageAKA.Matches.Count)
+                        {
+                            iM = 0;
+                            while (match.Winner != null && iM < RepechageAO.Matches.Count)
+                            {
+                                match = RepechageAO.Matches[iM];
+                                res[0] = tmp_r; res[1] = iM;
+                                iM++;
+                            }
+                        }
+                        if(res[0] == curRound)
+                        {
+                            if (res[0] == r_count && res[1]+ 1 == RepechageAKA.Matches.Count) { res[0] = r_count-1;res[1] = 0; }
+                            if (res[0] == r_count + 1 && res[1] + 1 == RepechageAO.Matches.Count) { res[0] = r_count-1; res[1] = 0; }
+                        }
+                    }
+                    else if(tmp_r == r_count)
+                    {
+                        while (match.Winner != null && iM < RepechageAO.Matches.Count)
+                        {
+                            match = RepechageAO.Matches[iM];
+                            res[0] = tmp_r+1; res[1] = iM;
+                            iM++;
+                        }
+                        if (iM == RepechageAO.Matches.Count)
+                        {
+                            iM = 0;
+                            while (match.Winner != null && iM < RepechageAKA.Matches.Count)
+                            {
+                                match = RepechageAKA.Matches[iM];
+                                res[0] = tmp_r; res[1] = iM;
+                                iM++;
+                            }
+                        }
+                        if (res[0] == curRound)
+                        {
+                            if (res[0] == r_count && res[1]+ 1 == RepechageAKA.Matches.Count) { res[0] = r_count - 1; res[1] = 0; }
+                            if (res[0] == r_count + 1 && res[1] + 1 == RepechageAO.Matches.Count) { res[0] = r_count - 1; res[1] = 0; }
+                        }
+                    }
+                }
+                catch { res[0] = -1; res[1] = -1; }
+            }
+
+            /*int r_count = Rounds.Count();
             int iR = r_count + 1;
             if (iR == r_count) { iR = r_count + 1; }
             else if (iR == r_count + 1) { iR = r_count; }
@@ -112,7 +194,7 @@ namespace TournamentTree
                 }
                 try
                 {
-                   /* while (match.Winner != null)
+                    /*while (match.Winner != null && (RepechageAKA.Winner == null || RepechageAO.Winner == null))
                     {
                         iM++;
                         if (iR == r_count) { match = RepechageAKA.Matches[iM]; }
@@ -120,10 +202,11 @@ namespace TournamentTree
                         res[0] = iR; res[1] = iM;
                         if (iR == r_count) { iR = r_count + 1; iM = 0; }
                         else if (iR == r_count + 1) { iR = r_count; iM = 0; }
-                    }*/
+                    }
+
                 }
                 catch { res[0] = -1; res[1] = -1; }
-            }
+            }*/
             return res;
         }
 
@@ -262,7 +345,7 @@ namespace TournamentTree
 
             HaveCategoryResults?.Invoke(Winners);
         }
-        void GenerateBronze()
+        public void GenerateBronze()
         {
             if (!is1third)
             {
@@ -438,6 +521,11 @@ namespace TournamentTree
         {
             if (curRound >= 0) return Rounds[curRound].ToString();
             else return "";
+        }
+
+        public int GetCurRoundID()
+        {
+            return curRound;
         }
 
         public void ShowTree()

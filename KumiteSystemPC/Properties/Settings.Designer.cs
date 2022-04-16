@@ -118,5 +118,29 @@ namespace KumiteSystemPC.Properties {
                 this["DefaultJudjesNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultDBPath {
+            get {
+                return ((string)(this["DefaultDBPath"]));
+            }
+            set {
+                this["DefaultDBPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int LastSelectedTournament {
+            get {
+                return ((int)(this["LastSelectedTournament"]));
+            }
+            set {
+                this["LastSelectedTournament"] = value;
+            }
+        }
     }
 }

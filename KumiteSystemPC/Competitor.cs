@@ -28,9 +28,11 @@ namespace TournamentTree
         public event CheckWinnerDelegate Check_Winner;
         
 
-        public int ID { get; set; } //TODO: Competitor ID
+        public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Club { get; set; }
+
         public int Score;
         public int ScoreProperty
         { get { return Score; }
@@ -41,7 +43,7 @@ namespace TournamentTree
             }
         }
 
-        List<int> AllScores { get; set; }
+        public List<int> AllScores { get; set; }
         public bool Senshu { get; set; }
         public int Fouls_C1 { get; private set; }
         public int Fouls_C2 { get; private set; }
@@ -74,9 +76,10 @@ namespace TournamentTree
             Status = competitor.Status;
             IsBye = competitor.IsBye;
             AllScores = competitor.AllScores;
+            Club = competitor.Club;
         }
 
-        public Competitor(bool isBye=false,int id=0,string FName="", string LName="", int score=0,int fc1=0,int fc2=0, int status =0)
+        public Competitor(bool isBye=false,int id=0,string FName="", string LName="", string _Club="",int score=0,int fc1=0,int fc2=0, int status =0)
         {
             IsBye = isBye;
             
@@ -89,6 +92,7 @@ namespace TournamentTree
             Status = status;
             ID = id;
             AllScores = new List<int>();
+            Club = _Club;
         }
 
         public void AddPoints(int points)

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -12,6 +11,9 @@ using System.Windows.Media;
 using TournamentTree;
 using Excel = Microsoft.Office.Interop.Excel;
 using WpfScreenHelper;
+using System.Data.SQLite;
+using System.Windows.Controls;
+
 
 namespace KumiteSystemPC
 {
@@ -151,13 +153,20 @@ namespace KumiteSystemPC
                     string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
                     externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
                 }
-                catch { }
+                catch 
+                { 
+                    if(externalBoard!= null && externalBoard.IsLoaded)
+                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName; 
+                }
                 CanOpen = false;
+
+
             }
         }
 
         Category ReadCategory(Excel.Workbook wb)
         {
+            //TODO: Read competitor's club
             int count = wb.Worksheets.Count - 1;
             Category category = new Category();
             Match Bronze = new Match();
@@ -173,28 +182,30 @@ namespace KumiteSystemPC
                     int AkaId = Convert.ToInt32(ws.Cells[j, 1].Value);
                     string AkaFName = Convert.ToString(ws.Cells[j, 2].Value);
                     string AkaLName = Convert.ToString(ws.Cells[j, 3].Value);
-                    int AkaF1 = Convert.ToInt32(ws.Cells[j, 4].Value);
-                    int AkaF2 = Convert.ToInt32(ws.Cells[j, 5].Value);
-                    int Akascore = Convert.ToInt32(ws.Cells[j, 6].Value);
+                    string AkaClub = Convert.ToString(ws.Cells[j, 4].Value);
+                    int AkaF1 = Convert.ToInt32(ws.Cells[j, 5].Value);
+                    int AkaF2 = Convert.ToInt32(ws.Cells[j, 6].Value);
+                    int Akascore = Convert.ToInt32(ws.Cells[j, 7].Value);
 
-                    int AoId = Convert.ToInt32(ws.Cells[j, 14].Value);
-                    string AoFName = Convert.ToString(ws.Cells[j, 12].Value);
-                    string AoLName = Convert.ToString(ws.Cells[j, 13].Value);
-                    int AoF1 = Convert.ToInt32(ws.Cells[j, 11].Value);
-                    int AoF2 = Convert.ToInt32(ws.Cells[j, 10].Value);
-                    int Aoscore = Convert.ToInt32(ws.Cells[j, 9].Value);
+                    int AoId = Convert.ToInt32(ws.Cells[j, 16].Value);
+                    string AoFName = Convert.ToString(ws.Cells[j, 15].Value);
+                    string AoLName = Convert.ToString(ws.Cells[j, 14].Value);
+                    string AoClub = Convert.ToString(ws.Cells[j, 13].Value);
+                    int AoF1 = Convert.ToInt32(ws.Cells[j, 12].Value);
+                    int AoF2 = Convert.ToInt32(ws.Cells[j, 11].Value);
+                    int Aoscore = Convert.ToInt32(ws.Cells[j, 10].Value);
 
                     Competitor _aka;
-                    if (AkaFName != "BYE") { _aka = new Competitor(false, AkaId, AkaFName, AkaLName, Akascore, AkaF1, AkaF2); }
+                    if (AkaFName != "BYE") { _aka = new Competitor(false, AkaId, AkaFName, AkaLName, AkaClub,Akascore, AkaF1, AkaF2); }
                     else { _aka = new Competitor(true); }
 
                     Competitor _ao;
-                    if (AoFName != "BYE") { _ao = new Competitor(false, AoId, AoFName, AoLName, Aoscore, AoF1, AoF2); }
+                    if (AoFName != "BYE") { _ao = new Competitor(false, AoId, AoFName, AoLName, AoClub,Aoscore, AoF1, AoF2); }
                     else { _ao = new Competitor(true); }
                     Match match = new Match(_aka, _ao, j - 1);
                     /*match.HaveWinner += Match_HaveWinner;*/
-                    if (Convert.ToString(ws.Cells[j, 7].Value) == "X") { match.SetWinner(1); }
-                    else if (Convert.ToString(ws.Cells[j, 8].Value) == "X") { match.SetWinner(2); }
+                    if (Convert.ToString(ws.Cells[j, 8].Value) == "X") { match.SetWinner(1); }
+                    else if (Convert.ToString(ws.Cells[j, 9].Value) == "X") { match.SetWinner(2); }
 
 
                     if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) round.Matches.Add(match);
@@ -215,7 +226,6 @@ namespace KumiteSystemPC
                         int c = (category.Rounds[category.Rounds.Count() - 2].Matches.Count() / 2) - category.Rounds[category.Rounds.Count() - 1].Matches.Count();
                         for (int k = 0; k < c; k++)
                         {
-
                             Match m = new Match(new Competitor(), new Competitor(), category.Rounds[category.Rounds.Count() - 1].Matches.Count());
                             category.Rounds[category.Rounds.Count() - 1].Matches.Add(m);
                         }
@@ -241,16 +251,6 @@ namespace KumiteSystemPC
                 if (winners.Count()>2 && winners[2] != null) s_winners += $"3: {winners[2]}\n";
                 if (winners.Count() > 3 && winners[3] != null) s_winners += $"3: {winners[3]}\n";
 
-                Excel.Workbook wb = (Excel.Workbook)MainExApp.ActiveWorkbook;
-                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.Add(wb.Worksheets[wb.Worksheets.Count]);
-                ws.Name = "Results";
-                ws.Cells[1, 2] = $"{CategoryName}";
-                ws.Cells[2, 1] = "1.";
-                ws.Cells[2, 2] = winners[0];
-                ws.Cells[3, 1] = "2.";
-                ws.Cells[3, 2] = winners[1];
-                if (winners.Count() > 2 && winners[2] != null) { ws.Cells[4, 1] = "3."; ws.Cells[4, 2] = winners[2]; }
-                if (winners.Count() > 3 && winners[3] != null) { ws.Cells[5, 1] = "3."; ws.Cells[5, 2] = winners[3]; }
 
                 ContentDialog CategoryResults = new ContentDialog
                 {
@@ -357,7 +357,11 @@ namespace KumiteSystemPC
 
         private void Match_HaveWinner()
         {
-            if (GlobalCategoryViewer != null) { GlobalCategoryViewer.CompetitorsGrid.Items.Refresh(); }
+            if (GlobalCategoryViewer != null)
+            { 
+                GlobalCategoryViewer.CompetitorsGrid.Items.Refresh();
+                GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GlobalMatchNow.Winner}";
+            }
             if (externalBoard != null)
             {
                 if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
@@ -414,6 +418,11 @@ namespace KumiteSystemPC
                 return true;
             }
             catch { return false; }
+        }
+
+        private void clearLogBtn_Click(object sender, RoutedEventArgs e)
+        {
+            TextLog.Blocks.Clear();
         }
         #endregion
         #region Timer
@@ -676,15 +685,18 @@ namespace KumiteSystemPC
                 GlobalMatchNow.AKA.Senshu = false;
                 AKAsenshuCB.IsChecked = false;
                 AddInfo("AO senshu");
-                AO_SenshuL.Visibility = Visibility.Visible;
-                AKA_SenshuL.Visibility = Visibility.Collapsed;
+                //AO_SenshuL.Visibility = Visibility.Visible;
+                AoSenshuBorder.Visibility = Visibility.Visible;
+                AkaSenshuBorder.Visibility = Visibility.Collapsed;
+                //AKA_SenshuL.Visibility = Visibility.Collapsed;
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
             }
             else
             {
                 GlobalMatchNow.AO.Senshu = false;
                 AddInfo("AO senshu remove");
-                AO_SenshuL.Visibility = Visibility.Collapsed;
+                //AO_SenshuL.Visibility = Visibility.Collapsed;
+                AoSenshuBorder.Visibility = Visibility.Collapsed;
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
             }
         }
@@ -748,15 +760,18 @@ namespace KumiteSystemPC
                 GlobalMatchNow.AKA.Senshu = true;
                 AOsenshuCB.IsChecked = false;
                 AddInfo("AKA senshu");
-                AKA_SenshuL.Visibility = Visibility.Visible;
-                AO_SenshuL.Visibility = Visibility.Collapsed;
+                //AKA_SenshuL.Visibility = Visibility.Visible;
+               // AO_SenshuL.Visibility = Visibility.Collapsed;
+                AoSenshuBorder.Visibility = Visibility.Collapsed;
+                AkaSenshuBorder.Visibility = Visibility.Visible;
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
             }
             else
             {
                 GlobalMatchNow.AKA.Senshu = false;
                 AddInfo("AKA senshu remove");
-                AKA_SenshuL.Visibility = Visibility.Collapsed;
+                //AKA_SenshuL.Visibility = Visibility.Collapsed;
+                AkaSenshuBorder.Visibility = Visibility.Collapsed;
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
             }
         }
@@ -1278,7 +1293,9 @@ namespace KumiteSystemPC
                 //TODO: Save Log data (ON CHECK)
                 if (GlobalCategory.isCurMFinished())
                 {
-                    if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook); }
+                    if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
+                        GlobalCategoryViewer.UpdateTree();
+                    }
 
                     string fileName = $"{DateTime.Now.ToShortDateString()}-{GlobalMatchNow.AKA}_{GlobalMatchNow.AO}";
                     if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB)) { DisplayMessageDialog("Info", "Log saved"); }
@@ -1582,6 +1599,67 @@ namespace KumiteSystemPC
             }*/
         }
 
+        string dbFileName = "tournaments.sqlite";
+        SQLiteConnection m_dbConn;
+        SQLiteCommand m_sqlCmd;
+
+        private void DBOpenCategory_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (Properties.Settings.Default.DefaultDBPath == "")
+            {
+                Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
+                openFile.Title = "Open Categroy";
+                openFile.Filter = "SQLite Databases(*.sqlite)|*.sqlite";
+                if (openFile.ShowDialog() == true)
+                {
+                    dbFileName = openFile.FileName;
+                    Properties.Settings.Default.DefaultDBPath = dbFileName;
+                    Properties.Settings.Default.Save();
+                }
+            }
+            else dbFileName = Properties.Settings.Default.DefaultDBPath;
+
+            m_dbConn = new SQLiteConnection("Data Source=" + dbFileName + ";Version=3;");
+            m_dbConn.Open();
+            m_sqlCmd = new SQLiteCommand();
+            m_sqlCmd.Connection = m_dbConn;
+
+            OpenCategoryDialog openCategoryDialog = new OpenCategoryDialog(m_dbConn);
+            openCategoryDialog.Owner = this;
+            openCategoryDialog.ShowDialog();
+            if (openCategoryDialog.DialogResult == true)
+            {
+                GlobalCategory = openCategoryDialog.GlobalCategory;
+                GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
+                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
+
+                CategoryName = (string)openCategoryDialog.cateogryCB.SelectedItem;
+
+                CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, m_dbConn,
+                    openCategoryDialog.CategoryID);
+                CategoryViewer.GetMatchEv += GetMatch;
+                GlobalCategoryViewer = CategoryViewer;
+                GlobalCategoryViewer.Show();
+
+                AKA_curTXT.IsReadOnly = true;
+                AO_curTXT.IsReadOnly = true;
+
+                AKA_nxtTXT.IsReadOnly = true;
+                AO_nxtTXT.IsReadOnly = true;
+                try
+                {
+                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
+                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                }
+                catch
+                {
+                    if (externalBoard != null && externalBoard.IsLoaded)
+                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
+                }
+
+            }
+        }
 
 
         private void roundTB_KeyDown(object sender, KeyEventArgs e)

@@ -31,25 +31,29 @@ namespace KumiteSystemPC
         }
         public void SetFirst(Competitor comp)
         {
-            firstComp.Text = comp.ToString();
+            if (comp.Club != "") firstComp.Text = $"{comp} ({comp.Club})";
+            else firstComp.Text = $"{comp}";
             //firstScore.Text = comp.FinalScore.ToString();
             FirstGrid.Visibility = Visibility.Visible;
         }
         public void SetSecond(Competitor comp)
         {
-            secondComp.Text = comp.ToString();
+            if (comp.Club != "") secondComp.Text = $"{comp} ({comp.Club})";
+            else secondComp.Text = $"{comp}";
             //secondScore.Text = comp.FinalScore.ToString();
             SecondGrid.Visibility = Visibility.Visible;
         }
         public void SetThird(Competitor comp)
         {
-            thirdComp.Text = comp.ToString();
+            if (comp.Club != "") thirdComp.Text = $"{comp} ({comp.Club})";
+            else thirdComp.Text = $"{comp}";
             //thirdScore.Text = comp.FinalScore.ToString();
             ThirdGrid.Visibility = Visibility.Visible;
         }
         public void SetThird1(Competitor comp)
         {
-            fourthComp.Text = comp.ToString();
+            if (comp.Club != "") fourthComp.Text = $"{comp} ({comp.Club})";
+            else fourthComp.Text = $"{comp}";
             //fourthScore.Text = comp.FinalScore.ToString();
             FourthGrid.Visibility = Visibility.Visible;
         }

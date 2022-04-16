@@ -8,6 +8,30 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="MainWindow" Height="580" Width="900" Unloaded="MainWindow1_Unloaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="AOborder" TargetType="Border">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF009FFD" Offset="0"/>
+                            <GradientStop Color="#FF363685" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="AKAborder" TargetType="Border">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Red" Offset="0"/>
+                            <GradientStop Color="#FF990000" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="353*"/>
@@ -18,12 +42,15 @@
             <RowDefinition Height="395*"/>
         </Grid.RowDefinitions>
         <Border Grid.ColumnSpan="2" Background="{DynamicResource BorderBrush}" Margin="0,0,-0.4,0.2"/>
+        <Menu Height="Auto" FontSize="14" Margin="0,-2,10,0" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right">
+            <MenuItem Header="Settings"  x:Name="SettingsBTN" Click="SettingsBTN_Click"/>
+        </Menu>
         <Menu Height="Auto" FontSize="14" Margin="10,-2,0,0" VerticalAlignment="Center">
-            <MenuItem Header="Category" Height="Auto" Foreground="White" HorizontalContentAlignment="Center">
+            <MenuItem Header="Open cateogry" Click="DBOpenCategory_Click"/>
+            <MenuItem Header="Category" Height="Auto" Foreground="White" HorizontalContentAlignment="Center" Visibility="Collapsed">
                 <MenuItem Header="Category Generator" Click="CategoryGenBTN_Click"/>
                 <MenuItem Header="Open Category" Click="openCategoryBTN_Click"/>
             </MenuItem>
-            <MenuItem Header="Settings" Height="Auto" x:Name="SettingsBTN" Click="SettingsBTN_Click"/>
             <MenuItem Header="Resets" Height="Auto" Foreground="White">
                 <MenuItem Header="Reset Match" x:Name="ResetMatchBtn" Click="ResetMatchBtn_Click"/>
                 <MenuItem Header="Reset Timer" x:Name="ResetTimerBtn" Click="ResetTimerBtn_Click"/>
@@ -54,7 +81,7 @@
                         </Grid.RowDefinitions>
                         <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="2" BorderBrush="White"/>
                         <Viewbox Grid.Column="1" Margin="10">
-                            <Label Content="0:00" Foreground="white" x:Name="TimerL" FontSize="40" />
+                            <Label Content="00:00" Foreground="white" x:Name="TimerL" FontSize="40" />
                         </Viewbox>
                         <Grid Grid.Column="1" Grid.Row="3">
                             <Grid.ColumnDefinitions>
@@ -65,6 +92,10 @@
                             </Grid.ColumnDefinitions>
                             <Rectangle Fill="#FF230000" Grid.ColumnSpan="2"/>
                             <Rectangle Fill="#FF000323" Grid.Column="2" Grid.ColumnSpan="2"/>
+                            <Border Style="{DynamicResource AKAborder}" Grid.ColumnSpan="2" Opacity="0.5"/>
+                            <Border Style="{DynamicResource AOborder}" Grid.ColumnSpan="2" Opacity="0.5" Grid.Column="2"/>
+                            <Border Background="White" Margin="10,0" x:Name="AkaSenshuBorder" Visibility="Collapsed"/>
+                            <Border Background="White" Margin="10,0" x:Name="AoSenshuBorder" Grid.Column="3" Visibility="Collapsed"/>
                             <Viewbox Grid.Column="2" Margin="10">
                                 <Label Content="0" Foreground="white" x:Name="AO_ScoreL" FontSize="24"/>
                             </Viewbox>
@@ -75,7 +106,6 @@
                             <Viewbox Margin="10">
                                 <Label Content="°" Visibility="Collapsed" Foreground="white" x:Name="AKA_SenshuL" FontSize="24" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                             </Viewbox>
-
                             <Viewbox Grid.Column="3" Margin="10">
                                 <Label Visibility="Collapsed" Content="°" Foreground="white" x:Name="AO_SenshuL" FontSize="24" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                             </Viewbox>
@@ -86,6 +116,7 @@
                         <RichTextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Save Log" x:Name="saveLogBtn" Click="SaveLogBtn_Click" />
+                                <MenuItem Header="Clear Log" x:Name="clearLogBtn" Click="clearLogBtn_Click"/>
                             </ContextMenu>
                         </RichTextBox.ContextMenu>
                         <FlowDocument x:Name="TextLog" FontSize="12"/>
@@ -95,6 +126,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
+                        <Border Margin="0,10" BorderBrush="White" BorderThickness="2" Opacity="0"/>
                         <Button Margin="0,10" x:Name="FinishMatchBTN" Content="Finish match" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="FinishMatchBTN_Click"/>
                         <Button Margin="0,10" Grid.Row="1" x:Name="NextMatchBTN" Content="Next match" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="NextMatchBTN_Click"/>
                     </Grid>
@@ -112,7 +144,9 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Border Background="#FF230000"/>
+                    <!--<Border Style="{DynamicResource AKAborder}" Opacity="0.1"/>-->
                     <Border Grid.Column="1" Background="#FF000323"/>
+                    <!--<Border Grid.Column="1" Style="{DynamicResource AOborder}" Opacity="0.1"/>-->
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -121,7 +155,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click"/>
+                    <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click" Background="#66FFFFFF"/>
                     <Grid Grid.Column="1" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -130,7 +164,7 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content=":" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBox Margin="2" x:Name="TimeM" TextAlignment="Center" Text="0" VerticalContentAlignment="Center" KeyDown="TimeM_KeyDown"/>
+                        <TextBox Margin="2" x:Name="TimeM" TextAlignment="Center" Text="00" VerticalContentAlignment="Center" KeyDown="TimeM_KeyDown"/>
                         <TextBox Margin="2" x:Name="TimeS" Grid.Column="2" TextAlignment="Center" Text="00" VerticalContentAlignment="Center" KeyDown="TimeS_KeyDown"/>
                         <Button Grid.Column="3" Content="Set" FontSize="16" x:Name="setTimeBTN" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="6,0,0,0" Click="SetTime_Click"/>
                     </Grid>
@@ -173,7 +207,7 @@
                                 <Button x:Name="AKAipponBTN" Margin="10,5,5,10" Content="Ippon" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAipponBTN_Click"/>
                                 <Button x:Name="AKAwazariBTN" Grid.Column="1" Margin="5,5,5,10" Content="Wazari" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAwazariBTN_Click"/>
                                 <Button x:Name="AKAyukoBTN" Grid.Column="2" Margin="5,5,5,10" Content="Yuko" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAyukoBTN_Click"/>
-                                <CheckBox x:Name="AKAsenshuCB" Grid.Column="3" Content="Senshu" HorizontalAlignment="Right" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Margin="0,0,5,0" Click="AKAsenshuCB_Click" Checked="AKAsenshuCB_Click"/>
+                                <CheckBox x:Name="AKAsenshuCB" Grid.Column="3" Content="Senshu" HorizontalAlignment="Right" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Margin="0,0,5,0" Click="AKAsenshuCB_Click"/>
                             </Grid>
                         </Grid>
 
@@ -200,7 +234,7 @@
                                 <Button x:Name="AOipponBTN" Grid.Column="3" Margin="5,5,10,10" Content="Ippon" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOipponBTN_Click"/>
                                 <Button x:Name="AOwazariBTN" Grid.Column="2" Margin="5,5,5,10" Content="Wazari" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOwazariBTN_Click"/>
                                 <Button x:Name="AOyukoBTN" Grid.Column="1" Margin="5,5,5,10" Content="Yuko" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOyukoBTN_Click"/>
-                                <CheckBox x:Name="AOsenshuCB" Grid.Column="0" Content="Senshu" VerticalContentAlignment="Center" Margin="5,0,0,0" Click="AOsenshuCB_Click" Checked="AOsenshuCB_Click" />
+                                <CheckBox x:Name="AOsenshuCB" Grid.Column="0" Content="Senshu" VerticalContentAlignment="Center" Margin="5,0,0,0" Click="AOsenshuCB_Click" />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -324,7 +358,7 @@
                                 </ContextMenu>
                             </TextBox.ContextMenu>
                         </TextBox>
-                        <Label FontSize="16" Content="Cuurent match" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label FontSize="16" Content="Curent match" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
