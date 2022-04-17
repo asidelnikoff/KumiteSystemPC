@@ -71,10 +71,11 @@ namespace KumiteSystemPC
 
             categoryNameL.Content = $"Category: {categoryName}";
 
-            if (GlobalCategory.isCategoryFinished()) 
+            if (GlobalCategory.Winners!=null && GlobalCategory.Winners.Count>0) 
             {
                 categoryComplition.Content = "- Completed";
                 categoryComplition.Foreground = Brushes.Green;
+                groups_List.Items.Add("Results");
             }
             else 
             {
@@ -120,6 +121,7 @@ namespace KumiteSystemPC
             {
                 categoryComplition.Content = "- Completed";
                 categoryComplition.Foreground = Brushes.LightGreen;
+                groups_List.Items.Add("Results");
             }
             else
             {
@@ -222,8 +224,9 @@ namespace KumiteSystemPC
             Winners = new List<Competitor>(winners);
             categoryComplition.Content = "- Completed";
             categoryComplition.Foreground = Brushes.Green;
-        }
 
+            groups_List.Items.Add("Results");
+        }
         /*public List<int> NxtMatch;
         private void GlobalCategory_HaveNxtMatch(int round, int match)
         {
@@ -300,7 +303,7 @@ namespace KumiteSystemPC
             BracketsGrid.Children.Clear();
             BracketsGrid.RowDefinitions.Clear();
             BracketsGrid.ColumnDefinitions.Clear();
-            if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count)
+            if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count || groups_List.SelectedItem.ToString()=="Results")
             {
                 DrawDefaultBrackets(BracketsGrid, GlobalCategory);
             }
@@ -1390,6 +1393,11 @@ namespace KumiteSystemPC
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
                 {
                     MatchesGrid.ItemsSource = GlobalCategory.RepechageAO.Matches;
+                }
+                else if(groups_List.SelectedItem.ToString() == "Results")
+                {
+                    MatchesGrid.ItemsSource = null;
+                    CompetitorsGrid.ItemsSource = GlobalCategory.Winners;
                 }
                 MatchesGrid.Items.Refresh();
                 DrawBrackets(BracketsGrid);

@@ -62,6 +62,71 @@ namespace KumiteSystemPC
         }
         #region OPEN CATEGORY
         bool CanOpen = true;
+
+        string dbFileName = "tournaments.sqlite";
+        SQLiteConnection m_dbConn;
+        SQLiteCommand m_sqlCmd;
+
+        private void DBOpenCategory_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (Properties.Settings.Default.DefaultDBPath == "")
+            {
+                Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
+                openFile.Title = "Open Categroy";
+                openFile.Filter = "SQLite Databases(*.sqlite)|*.sqlite";
+                if (openFile.ShowDialog() == true)
+                {
+                    dbFileName = openFile.FileName;
+                    Properties.Settings.Default.DefaultDBPath = dbFileName;
+                    Properties.Settings.Default.Save();
+                }
+            }
+            else dbFileName = Properties.Settings.Default.DefaultDBPath;
+
+            m_dbConn = new SQLiteConnection("Data Source=" + dbFileName + ";Version=3;");
+            m_dbConn.Open();
+            m_sqlCmd = new SQLiteCommand();
+            m_sqlCmd.Connection = m_dbConn;
+
+            OpenCategoryDialog openCategoryDialog = new OpenCategoryDialog(m_dbConn);
+            openCategoryDialog.Owner = this;
+            openCategoryDialog.ShowDialog();
+            if (openCategoryDialog.DialogResult == true)
+            {
+                GlobalCategory = openCategoryDialog.GlobalCategory;
+                GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
+                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
+
+                CategoryName = (string)openCategoryDialog.cateogryCB.SelectedItem;
+
+                CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, m_dbConn,
+                    openCategoryDialog.CategoryID);
+                CategoryViewer.GetMatchEv += GetMatch;
+                GlobalCategoryViewer = CategoryViewer;
+                GlobalCategoryViewer.Show();
+
+                AKA_curTXT.IsReadOnly = true;
+                AO_curTXT.IsReadOnly = true;
+
+                AKA_nxtTXT.IsReadOnly = true;
+                AO_nxtTXT.IsReadOnly = true;
+                try
+                {
+                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
+                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                }
+                catch
+                {
+                    if (externalBoard != null && externalBoard.IsLoaded)
+                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
+                }
+
+            }
+        }
+
+
+
         async void DisplaySaveDialog()
         {
             ContentDialog deleteFileDialog = new ContentDialog
@@ -1599,67 +1664,7 @@ namespace KumiteSystemPC
             }*/
         }
 
-        string dbFileName = "tournaments.sqlite";
-        SQLiteConnection m_dbConn;
-        SQLiteCommand m_sqlCmd;
 
-        private void DBOpenCategory_Click(object sender, RoutedEventArgs e)
-        {
-
-            if (Properties.Settings.Default.DefaultDBPath == "")
-            {
-                Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-                openFile.Title = "Open Categroy";
-                openFile.Filter = "SQLite Databases(*.sqlite)|*.sqlite";
-                if (openFile.ShowDialog() == true)
-                {
-                    dbFileName = openFile.FileName;
-                    Properties.Settings.Default.DefaultDBPath = dbFileName;
-                    Properties.Settings.Default.Save();
-                }
-            }
-            else dbFileName = Properties.Settings.Default.DefaultDBPath;
-
-            m_dbConn = new SQLiteConnection("Data Source=" + dbFileName + ";Version=3;");
-            m_dbConn.Open();
-            m_sqlCmd = new SQLiteCommand();
-            m_sqlCmd.Connection = m_dbConn;
-
-            OpenCategoryDialog openCategoryDialog = new OpenCategoryDialog(m_dbConn);
-            openCategoryDialog.Owner = this;
-            openCategoryDialog.ShowDialog();
-            if (openCategoryDialog.DialogResult == true)
-            {
-                GlobalCategory = openCategoryDialog.GlobalCategory;
-                GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
-                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
-
-                CategoryName = (string)openCategoryDialog.cateogryCB.SelectedItem;
-
-                CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, m_dbConn,
-                    openCategoryDialog.CategoryID);
-                CategoryViewer.GetMatchEv += GetMatch;
-                GlobalCategoryViewer = CategoryViewer;
-                GlobalCategoryViewer.Show();
-
-                AKA_curTXT.IsReadOnly = true;
-                AO_curTXT.IsReadOnly = true;
-
-                AKA_nxtTXT.IsReadOnly = true;
-                AO_nxtTXT.IsReadOnly = true;
-                try
-                {
-                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
-                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
-                }
-                catch
-                {
-                    if (externalBoard != null && externalBoard.IsLoaded)
-                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
-                }
-
-            }
-        }
 
 
         private void roundTB_KeyDown(object sender, KeyEventArgs e)
