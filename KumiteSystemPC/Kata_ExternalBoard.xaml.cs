@@ -24,6 +24,7 @@ namespace KumiteSystemPC
         {
             InitializeComponent();
             if (!Properties.Settings.Default.ShowNextMatchEXT) { nextMGrid.Visibility = Visibility.Collapsed; }
+            TatamiEXT.Content = $"Tatami {Properties.Settings.Default.TatamiNr}";
         }
 
         public void GridOpacityAnim(Grid grid, double to)

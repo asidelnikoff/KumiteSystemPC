@@ -111,9 +111,9 @@ namespace TournamentTree
             else if (isTimeUP && Aka.Score == Ao.Score && Aka.Senshu) { SetWinner(1); }
             else if (isTimeUP && Aka.Score == Ao.Score && Ao.Senshu) { SetWinner(2); }
             //
-
+            if(isTimeUP) SetWinner(-1); //Call to get end of match sound
             //
-            //TODO: All conditions to Set winner
+            //TODO: All conditions to Set winner???
             
         }
         public void Reset()

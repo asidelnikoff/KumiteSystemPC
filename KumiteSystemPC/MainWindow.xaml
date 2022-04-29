@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="MainWindow" Height="580" Width="900" Unloaded="MainWindow1_Unloaded">
+        Title="MainWindow" Height="580" Width="900" Unloaded="MainWindow1_Unloaded" MouseDown="MainWindow1_MouseDown">
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AOborder" TargetType="Border">
@@ -155,7 +155,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click" Background="#66FFFFFF"/>
+                    <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click"/>
                     <Grid Grid.Column="1" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>

@@ -25,21 +25,33 @@ namespace KumiteSystemPC
 
         Competitor _Aka;
         Competitor _Ao;
+
         Match GlobalMatchNow;
         Match GlobalMatchNxt;
+
         List<int> NxtMatch;
+
         Category GlobalCategory;
+        string CategoryName = "";
+
+        //OLD//
         Excel.Application MainExApp;
         Excel.Worksheet VisualBracket;
+        ////
+
         CategoryViewer GlobalCategoryViewer;
+        ExternalBoard externalBoard;
 
         System.Media.SoundPlayer end_of_m_sound;
         System.Media.SoundPlayer warn_sound;
+
+
+
         public MainWindow()
         {
             InitializeComponent();
-            _Aka = new Competitor(false, 1, "AKA");
-            _Ao = new Competitor(false, 2, "AO");
+            _Aka = new Competitor(false, 1, "");
+            _Ao = new Competitor(false, 2, "");
             GlobalMatchNow = new Match(_Aka, _Ao, 0);
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
             NxtMatch = new List<int>() { -1, -1 };
@@ -51,15 +63,15 @@ namespace KumiteSystemPC
                 AKA_nxtTXT.IsEnabled = false; AO_nxtTXT.IsEnabled = false;
             }
         }
-        DateTime dateTime;
+
         void AddInfo(string information)
         {
-            dateTime = DateTime.Now;
-            TextLog.Blocks.Add(new Paragraph(new Run($"{dateTime}\n[INFO] {information}")));
+            TextLog.Blocks.Add(new Paragraph(new Run($"{DateTime.Now}\n[INFO] {information}")));
             LogTB.ScrollToEnd();
             try { if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.CompetitorsGrid.Items.Refresh(); } }
             catch { }
         }
+
         #region OPEN CATEGORY
         bool CanOpen = true;
 
@@ -69,7 +81,6 @@ namespace KumiteSystemPC
 
         private void DBOpenCategory_Click(object sender, RoutedEventArgs e)
         {
-
             if (Properties.Settings.Default.DefaultDBPath == "")
             {
                 Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
@@ -126,7 +137,7 @@ namespace KumiteSystemPC
         }
 
 
-
+        #region OLD VERSION
         async void DisplaySaveDialog()
         {
             ContentDialog deleteFileDialog = new ContentDialog
@@ -167,7 +178,7 @@ namespace KumiteSystemPC
         {
             OpenCategory();
         }
-        string CategoryName = "";
+        
         void OpenCategory()
         {
             Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
@@ -303,8 +314,10 @@ namespace KumiteSystemPC
             return category;
         }
         #endregion
+        #endregion
 
         #region Category Results
+
         CategoryResults CategoryResultsEXT;
         private async void GlobalCategory_HaveCategoryResults(List<Competitor> winners)
         {
@@ -382,12 +395,14 @@ namespace KumiteSystemPC
             ResetMatch();
 
             GlobalMatchNow = GlobalCategory.GetCurMatch(mID, rID);
+
             AKA_curTXT.Text = $"{GlobalMatchNow.AKA.FirstName} {GlobalMatchNow.AKA.LastName}";
             AO_curTXT.Text = $"{GlobalMatchNow.AO.FirstName} {GlobalMatchNow.AO.LastName}";
             AKA_ScoreL.Content = $"{GlobalMatchNow.AKA.ScoreProperty}";
             AO_ScoreL.Content = $"{GlobalMatchNow.AO.ScoreProperty}";
             if (GlobalMatchNow.AKA.Senshu) { AKAsenshuCB.IsChecked = true; }
             else if (GlobalMatchNow.AO.Senshu) { AOsenshuCB.IsChecked = true; }
+
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
 
             if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
@@ -397,7 +412,7 @@ namespace KumiteSystemPC
             }
 
             //if (Properties.Settings.Default.AutoNextLoad) GlobalCategory.GetNext();
-            Console.WriteLine(GlobalMatchNow.ToString());
+            //Console.WriteLine(GlobalMatchNow.ToString());
             DisplayMessageDialog("Info", "Match loaded");
         }
 
@@ -422,28 +437,34 @@ namespace KumiteSystemPC
 
         private void Match_HaveWinner()
         {
-            if (GlobalCategoryViewer != null)
-            { 
-                GlobalCategoryViewer.CompetitorsGrid.Items.Refresh();
-                GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GlobalMatchNow.Winner}";
-            }
-            if (externalBoard != null)
+            if (GlobalMatchNow.Winner != null &&
+                (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA) || GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO)))
             {
-                if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
+                if (GlobalCategoryViewer != null)
                 {
-                    externalBoard.ShowWinner(externalBoard.AkaScoreL, externalBoard.AO_Grid);
+                    GlobalCategoryViewer.CompetitorsGrid.Items.Refresh();
+                    GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GlobalMatchNow.Winner}";
                 }
-                else if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO))
+                if (externalBoard != null)
                 {
-                    externalBoard.ShowWinner(externalBoard.AoScoreL, externalBoard.AKA_Grid);
+                    if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
+                    {
+                        externalBoard.ShowWinner(externalBoard.AkaScoreL, externalBoard.AO_Grid);
+                    }
+                    else if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO))
+                    {
+                        externalBoard.ShowWinner(externalBoard.AoScoreL, externalBoard.AKA_Grid);
+                    }
                 }
+
+                try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
+                catch { }
             }
+
             try { end_of_m_sound.Play(); } catch { }
-            try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
-            catch { }
         }
 
-
+        #region DIALOGS
         private async void DisplayMessageDialog(string caption, string message)
         {
             try
@@ -460,7 +481,7 @@ namespace KumiteSystemPC
             catch { }
         }
 
-
+        #endregion
 
         #region LOG
         private void SaveLogBtn_Click(object sender, RoutedEventArgs e)
@@ -493,12 +514,12 @@ namespace KumiteSystemPC
         #region Timer
 
         System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
-        string CurTime;
+      //  string CurTime;
         TimeSpan timerTime;
         TimeSpan remainTime = new TimeSpan();
         int min = 0, sec = 0;
 
-        bool IsTimerEnabled;
+       // bool IsTimerEnabled;
         int time;
 
         bool atoshibaraku;
@@ -511,17 +532,14 @@ namespace KumiteSystemPC
         {
             do
             {
-                //TODO: Show milliseconds
+                //TODO: Show milliseconds??
                 TimeSpan ts = stopWatch.Elapsed;
-                string remainTimes;
-                //if (!atoshibaraku) 
-                remainTimes = String.Format("{0:00}:{1:00}",
-                                                     remainTime.Minutes, remainTime.Seconds);
-                //else remainTimes = String.Format("{0:00}:{1:00}.{2:000}", remainTime.Minutes, remainTime.Seconds, remainTime.Milliseconds);
-                showTime(remainTimes);
+
+                showTime(String.Format("{0:00}:{1:00}",
+                                                     remainTime.Minutes, remainTime.Seconds));
+
                 remainTime = timerTime - ts;
-                //CurTime = String.Format("{0:00}:{1:00}:{2:00}",
-                //ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+
                 if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
                 await Task.Delay(1000);
@@ -553,7 +571,7 @@ namespace KumiteSystemPC
             remainTime = timerTime;
             TimerL.Foreground = Brushes.DarkRed;
             if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
-            IsTimerEnabled = true;
+            //IsTimerEnabled = true;
 
             if (!stopWatch.IsRunning) { startTimeBTN.Content = "Stop"; stopWatch.Start(); }
             //  timer.Start();
@@ -564,13 +582,11 @@ namespace KumiteSystemPC
         {
             if (stopWatch.IsRunning)
             {
-
                 stopWatch.Stop();
                 AddInfo($"Stop timer. Time left: {TimerL.Content}");
                 startTimeBTN.Content = "Start";
                 TimerL.IsEnabled = false;
                 //if (externalBoard != null) externalBoard.TimerEXT.IsEnabled = false;
-
             }
             else if (remainTime > TimeSpan.Zero)
             {
@@ -580,7 +596,6 @@ namespace KumiteSystemPC
                 startTimeBTN.Content = "Stop";
                 TimerL.IsEnabled = true;
                 //if (externalBoard != null) externalBoard.TimerEXT.IsEnabled = true;
-
             }
         }
 
@@ -598,13 +613,10 @@ namespace KumiteSystemPC
             else { extTimerSet.Close(); extTimerSet = null; }
         }*/
 
-
-
         private void SetTime_Click(object sender, RoutedEventArgs e)
         {
             SetTimeer();
         }
-
 
         private void ResetTimerBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -698,7 +710,7 @@ namespace KumiteSystemPC
         }
         #endregion
 
-        #region SET WINNER
+        #region SET WINNER BUTTONS
         private void AKA_WinnerBTN_Click(object sender, RoutedEventArgs e)
         {
             AddInfo($"Winner AKA( {GlobalMatchNow.AKA.FirstName} {GlobalMatchNow.AKA.LastName} )");
@@ -1355,7 +1367,7 @@ namespace KumiteSystemPC
             if (GlobalMatchNow.Winner != null)
             {
                 GlobalCategory.FinishCurMatch();
-                //TODO: Save Log data (ON CHECK)
+
                 if (GlobalCategory.isCurMFinished())
                 {
                     if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
@@ -1397,7 +1409,7 @@ namespace KumiteSystemPC
         }
 
 
-        ExternalBoard externalBoard;
+        
         private void openExt_btn_Click(object sender, RoutedEventArgs e)
         {
             if (externalBoard == null || !externalBoard.IsLoaded)
@@ -1490,7 +1502,10 @@ namespace KumiteSystemPC
             }
         }
 
-
+        private void MainWindow1_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
 
         #region TeamKumite
 
@@ -1664,9 +1679,6 @@ namespace KumiteSystemPC
             }*/
         }
 
-
-
-
         private void roundTB_KeyDown(object sender, KeyEventArgs e)
         {
             /*if (e.Key == Key.Enter)
@@ -1682,4 +1694,6 @@ namespace KumiteSystemPC
         }
     }
     #endregion
+
+
 }

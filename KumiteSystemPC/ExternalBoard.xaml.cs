@@ -24,6 +24,7 @@ namespace KumiteSystemPC
         {
             InitializeComponent();
             if (!Properties.Settings.Default.ShowNextMatchEXT) { nextMGrid.Visibility = Visibility.Hidden; }
+            TatamiEXT.Content = $"Tatami {Properties.Settings.Default.TatamiNr}";
         }
 
         public void TimerText(int sec, int min)
@@ -79,7 +80,6 @@ namespace KumiteSystemPC
             LinearGradientBrush myLinearGradientBrush;
             switch (winner)
             {
-
                 case 0:
                     {
                         Viewbox dynamicViewbox = new Viewbox();

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="MainWindow" Height="540" Width="400" Unloaded="MainWindow1_Unloaded">
+        Title="MainWindow" Height="540" Width="400" Unloaded="MainWindow1_Unloaded" MouseDown="Window_MouseDown">
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AOborder" TargetType="Border">

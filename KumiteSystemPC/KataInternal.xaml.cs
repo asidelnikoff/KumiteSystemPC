@@ -25,14 +25,18 @@ namespace KumiteSystemPC
     public partial class KataInternal : Window
     {
         int JudjesCount;
+
         Competitor _Aka;
         Competitor _Ao;
         Match GlobalMatchNow;
         Match GlobalMatchNxt;
+
         List<int> NxtMatch;
         Category GlobalCategory;
+
         Excel.Application MainExApp;
         Excel.Worksheet VisualBracket;
+
         CategoryViewer GlobalCategoryViewer;
 
         System.Media.SoundPlayer end_of_m_sound;
@@ -46,8 +50,8 @@ namespace KumiteSystemPC
             for (int i = 1; i < 8; i++) { judjesCB.Items.Add(i); }
             judjesCB.SelectedIndex = Properties.Settings.Default.DefaultJudjesNumber;
 
-            _Aka = new Competitor(false, 1, "AKA");
-            _Ao = new Competitor(false, 2, "AO");
+            _Aka = new Competitor(false, 1, "");
+            _Ao = new Competitor(false, 2, "");
             GlobalMatchNow = new Match(_Aka, _Ao, 0);
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
             NxtMatch = new List<int>() { -1, -1 };
@@ -709,6 +713,11 @@ namespace KumiteSystemPC
                 flgsAka.Items.Add(i);
                 flgsAo.Items.Add(i);
             }
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
         }
     }
 }

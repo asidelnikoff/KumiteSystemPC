@@ -142,5 +142,17 @@ namespace KumiteSystemPC.Properties {
                 this["LastSelectedTournament"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int TatamiNr {
+            get {
+                return ((int)(this["TatamiNr"]));
+            }
+            set {
+                this["TatamiNr"] = value;
+            }
+        }
     }
 }

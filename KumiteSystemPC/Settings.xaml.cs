@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,17 @@ namespace KumiteSystemPC
                 j++;
                 screenC.Items.Add(j.ToString() + ". | Name: " + screen.DeviceName + "\n | Primary: " + screen.Primary);
             }
+
             screenC.SelectedIndex = Properties.Settings.Default.ScreenNR;
+
             endOfMTXT.Text = Properties.Settings.Default.EndOfMatch;
+
             dataPathTXT.Text = Properties.Settings.Default.DataPath;
+
+            defaultDB.Text = Properties.Settings.Default.DefaultDBPath;
+
+            tatamiNr.Text = Properties.Settings.Default.TatamiNr.ToString();
+
             if (Properties.Settings.Default.AutoNextLoad) { AutoLoadNextCB.IsChecked = true; }
             if (Properties.Settings.Default.ShowNextMatchEXT) { ShoNextEXTCB.IsChecked = true; }
         }
@@ -63,7 +72,6 @@ namespace KumiteSystemPC
                 if (folderData.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     Properties.Settings.Default.DataPath = folderData.SelectedPath;
-                    Properties.Settings.Default.Save();
                     dataPathTXT.Text = Properties.Settings.Default.DataPath;
                     Properties.Settings.Default.Save();
                 }
@@ -83,7 +91,7 @@ namespace KumiteSystemPC
             opf.FileName = "Warning Sound file";
             if (opf.ShowDialog() == true)
             {
-                endOfMTXT.Text = opf.FileName;
+                warningMTXT.Text = opf.FileName;
                 SoundPlayer sound = new SoundPlayer(opf.FileName);
                 Properties.Settings.Default.WarningSound = opf.FileName;
                 Properties.Settings.Default.Save();
@@ -127,6 +135,61 @@ namespace KumiteSystemPC
                 Properties.Settings.Default.DefaultDBPath = opf.FileName;
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
+
+        private void tatamiNr_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                try
+                {
+                    Properties.Settings.Default.TatamiNr = Convert.ToInt32(tatamiNr.Text);
+                    Properties.Settings.Default.Save();
+                }
+                catch
+                {
+                    tatamiNr.Text = Properties.Settings.Default.TatamiNr.ToString();
+                }
+            }
+        }
+
+        private void saveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            try {Properties.Settings.Default.TatamiNr = Convert.ToInt32(tatamiNr.Text);}
+            catch {tatamiNr.Text = Properties.Settings.Default.TatamiNr.ToString();}
+            Properties.Settings.Default.DefaultDBPath = defaultDB.Text;
+            Properties.Settings.Default.ShowNextMatchEXT = Convert.ToBoolean(ShoNextEXTCB.IsChecked);
+            Properties.Settings.Default.AutoNextLoad = Convert.ToBoolean(AutoLoadNextCB.IsChecked);
+            Properties.Settings.Default.WarningSound = warningMTXT.Text;
+            Properties.Settings.Default.DataPath = dataPathTXT.Text;
+            Properties.Settings.Default.ScreenNR = screenC.SelectedIndex;
+            Properties.Settings.Default.EndOfMatch = endOfMTXT.Text;
+
+            Properties.Settings.Default.Save();
+
+            DisplayMessageDialog("Info", "Settings saved");
+        }
+
+
+        private async void DisplayMessageDialog(string caption, string message)
+        {
+            try
+            {
+                ContentDialog CategoryResults = new ContentDialog
+                {
+                    Title = $"{caption}",
+                    PrimaryButtonText = "Ok",
+                    DefaultButton = ContentDialogButton.Primary,
+                    Content = $"{message}",
+                };
+                await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
+            }
+            catch { }
         }
     }
 }
