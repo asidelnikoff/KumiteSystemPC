@@ -169,7 +169,7 @@ namespace KumiteSystemPC
             Properties.Settings.Default.DataPath = dataPathTXT.Text;
             Properties.Settings.Default.ScreenNR = screenC.SelectedIndex;
             Properties.Settings.Default.EndOfMatch = endOfMTXT.Text;
-
+            Properties.Settings.Default.ShowCompetitorClub = Convert.ToBoolean(ShowCompClub.IsChecked);
             Properties.Settings.Default.Save();
 
             DisplayMessageDialog("Info", "Settings saved");
@@ -190,6 +190,18 @@ namespace KumiteSystemPC
                 await ContentDialogMaker.CreateContentDialogAsync(CategoryResults, awaitPreviousDialog: true);
             }
             catch { }
+        }
+
+        private void ShowCompClub_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ShowCompetitorClub = true;
+            Properties.Settings.Default.Save();
+        }
+
+        private void ShowCompClub_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ShowCompetitorClub = false;
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -154,5 +154,17 @@ namespace KumiteSystemPC.Properties {
                 this["TatamiNr"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowCompetitorClub {
+            get {
+                return ((bool)(this["ShowCompetitorClub"]));
+            }
+            set {
+                this["ShowCompetitorClub"] = value;
+            }
+        }
     }
 }

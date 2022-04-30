@@ -641,7 +641,10 @@ namespace KumiteSystemPC
                         string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
                         externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
                     }
-                    catch { externalBoard.CategoryEXT.Text += GlobalCategoryViewer.CategoryName; }
+                    catch {
+                        if (externalBoard != null && externalBoard.IsLoaded)
+                            externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
+                    }
                 }
 
                 MakeBindingExternal();
