@@ -571,6 +571,7 @@ namespace KumiteSystemPC
             atoshibaraku = true;
             try { warn_sound.Play(); } catch { }
             TimerL.Foreground = Brushes.DarkRed;
+            TimerLms.Foreground = Brushes.DarkRed;
             msViewBox.Visibility = Visibility.Visible;
         }
 
@@ -583,6 +584,8 @@ namespace KumiteSystemPC
             timerTime = new TimeSpan(0, min, sec);
             remainTime = timerTime;
             TimerL.Foreground = Brushes.DarkRed;
+            TimerLms.Foreground = Brushes.DarkRed;
+            msViewBox.Visibility = Visibility.Visible;
             if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
             //IsTimerEnabled = true;
 
@@ -642,32 +645,25 @@ namespace KumiteSystemPC
             atoshibaraku = false;
             min = Convert.ToInt32(TimeM.Text);
             sec = Convert.ToInt32(TimeS.Text);
-            if (min < 10 && sec < 60)
-            {
-                TimerL.Foreground = Brushes.White;
-                TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
-                //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
-                TimeM.Text = String.Format("{0:d2}", min);
-                TimeS.Text = String.Format("{0:d2}", sec);
-                //timer.SetTime(min, sec);
-                timerTime = new TimeSpan(0, min, sec);
-                remainTime = timerTime;
-                time = min * 60 + sec;
-            }
-            else if (sec > 60)
+
+            if (sec > 60)
             {
                 min = sec / 60;
                 sec -= min * 60;
-                TimerL.Foreground = Brushes.White;
-                TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
-                //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
-                TimeM.Text = String.Format("{0:d2}", min);
-                TimeS.Text = String.Format("{0:d2}", sec);
-                //  timer.SetTime(min, sec);
-                timerTime = new TimeSpan(0, min, sec);
-                remainTime = timerTime;
-                time = min * 60 + sec;
             }
+
+            TimerL.Foreground = Brushes.White;
+            TimerLms.Foreground = Brushes.White;
+            TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
+            //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
+            TimeM.Text = String.Format("{0:d2}", min);
+            TimeS.Text = String.Format("{0:d2}", sec);
+            //timer.SetTime(min, sec);
+            timerTime = new TimeSpan(0, min, sec);
+            remainTime = timerTime;
+            time = min * 60 + sec;
+            if (time <= 15) { msViewBox.Visibility = Visibility.Visible; }
+
             stopWatch.Reset();
         }
 

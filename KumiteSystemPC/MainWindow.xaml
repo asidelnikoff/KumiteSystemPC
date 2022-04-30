@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="MainWindow" Height="580" Width="900" Unloaded="MainWindow1_Unloaded" MouseDown="MainWindow1_MouseDown">
+        Title="MainWindow" Height="580" Width="900" Unloaded="MainWindow1_Unloaded" MouseDown="MainWindow1_MouseDown"
+        MinWidth="850" MinHeight="550">
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AOborder" TargetType="Border">
@@ -86,7 +87,7 @@
                                 <Label Content="00:00" Foreground="white" x:Name="TimerL" FontSize="40" />
                             </Viewbox>
                             <Viewbox Margin="5,5,0,10" Visibility="Collapsed" VerticalAlignment="Top" x:Name="msViewBox">
-                                <Label Content=".00" x:Name="TimerLms" FontSize="25"  Foreground="DarkRed"/>
+                                <Label Content=".00" x:Name="TimerLms" FontSize="25"  Foreground="White"/>
                             </Viewbox>
                         </StackPanel>
                         <Grid Grid.Column="1" Grid.Row="3">
@@ -161,6 +162,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Border BorderBrush="White" BorderThickness="2" Margin="10" CornerRadius="5"/>
                     <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click"/>
                     <Grid Grid.Column="1" Margin="10">
                         <Grid.ColumnDefinitions>
