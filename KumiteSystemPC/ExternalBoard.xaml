@@ -275,9 +275,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox>
-                    <Label x:Name="TimerEXT" Content="0:00" Foreground="White" FontSize="72"/>
-                </Viewbox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"> 
+                    <Viewbox>
+                        <Label x:Name="TimerEXT" Content="0:00" Foreground="White" FontSize="72"/>
+                    </Viewbox>
+                    <Viewbox Margin="20,25,0,25" x:Name="TimerEXTms_ViewBox" Visibility="Visible">
+                        <Label x:Name="TimerEXTms" Content=".00" Foreground="DarkRed" FontSize="60"/>
+                    </Viewbox>
+                </StackPanel>
                 <Viewbox Grid.Column="1" VerticalAlignment="Top" Margin="0,10,0,75">
                     <Label x:Name="msecEXT" Content=""/>
                 </Viewbox>

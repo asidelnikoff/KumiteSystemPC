@@ -546,14 +546,14 @@ namespace KumiteSystemPC
                 //TODO: Show milliseconds??
                 TimeSpan ts = stopWatch.Elapsed;
 
-                showTime(String.Format("{0:00}:{1:00}",
-                                                     remainTime.Minutes, remainTime.Seconds));
-
+                showTime(String.Format("{0:mm}:{0:ss}", remainTime));
+                TimerLms.Content = String.Format(".{0:ff}", remainTime);
                 remainTime = timerTime - ts;
 
                 if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
-                await Task.Delay(1000);
+                if (!atoshibaraku) await Task.Delay(1000);
+                else await Task.Delay(10);
             } while (stopWatch.IsRunning);
 
         }
@@ -563,6 +563,7 @@ namespace KumiteSystemPC
             showTime(String.Format("{0:00}:{1:00}", remainTime.Minutes, remainTime.Seconds));
             AddInfo($"Stop timer. Time left: {String.Format("{0:00}:{1:00}", remainTime.Minutes, remainTime.Seconds)}");
             GlobalMatchNow.CheckWinner(true);
+            msViewBox.Visibility = Visibility.Collapsed;
             //FinishMatch(CheckWin(0), true);
         }
         void AtoshiBaraku()
@@ -570,6 +571,7 @@ namespace KumiteSystemPC
             atoshibaraku = true;
             try { warn_sound.Play(); } catch { }
             TimerL.Foreground = Brushes.DarkRed;
+            msViewBox.Visibility = Visibility.Visible;
         }
 
 
@@ -690,6 +692,7 @@ namespace KumiteSystemPC
                         SetTimeer();
                     }
                 }
+                Keyboard.ClearFocus();
             }
         }
 
@@ -717,6 +720,7 @@ namespace KumiteSystemPC
                         SetTimeer();
                     }
                 }
+                Keyboard.ClearFocus();
             }
         }
         #endregion
@@ -1453,6 +1457,14 @@ namespace KumiteSystemPC
             Binding timerColor = new Binding("Foreground");
             timerColor.Source = TimerL;
             externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
+
+            Binding timerTxtms = new Binding("Content");
+            timerTxtms.Source = TimerLms;
+            externalBoard.TimerEXTms.SetBinding(Label.ContentProperty, timerTxtms);
+
+            Binding timerVisMs = new Binding("Visibility");
+            timerVisMs.Source = msViewBox;
+            externalBoard.TimerEXTms_ViewBox.SetBinding(Viewbox.VisibilityProperty, timerVisMs);
         }
 
 
