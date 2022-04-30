@@ -20,6 +20,10 @@ namespace KumiteSystemPC
     /// </summary>
     public partial class ExternalBoard : Window
     {
+
+        public delegate void IsOpened(bool status);
+        public event IsOpened Send_Status;
+
         public ExternalBoard()
         {
             InitializeComponent();
@@ -158,6 +162,15 @@ namespace KumiteSystemPC
 
             dynamicViewbox.Child = label;
             roundsExt.Children.Add(dynamicViewbox);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Send_Status?.Invoke(false);
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Send_Status?.Invoke(true);
         }
     }
 }

@@ -1403,13 +1403,48 @@ namespace KumiteSystemPC
 
         private void MainWindow1_Unloaded(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Closing...");
+            //Console.WriteLine("Closing...");
             if (GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.Close(); }
-            if (MainExApp != null) { MainExApp.Quit(); }
+            //if (MainExApp != null) { MainExApp.Quit(); }
         }
 
 
-        
+        void MakeBindingExternalBoard()
+        {
+            Binding akaScoreBind = new Binding("Content");
+            akaScoreBind.Source = AKA_ScoreL;
+            externalBoard.AkaScoreL.SetBinding(Label.ContentProperty, akaScoreBind);
+
+            Binding aoScoreBind = new Binding("Content");
+            aoScoreBind.Source = AO_ScoreL;
+            externalBoard.AoScoreL.SetBinding(Label.ContentProperty, aoScoreBind);
+
+            Binding akaNowName = new Binding("Text");
+            akaNowName.Source = AKA_curTXT;
+            externalBoard.AkaNowNameL.SetBinding(Label.ContentProperty, akaNowName);
+
+            Binding aoNowName = new Binding("Text");
+            aoNowName.Source = AO_curTXT;
+            externalBoard.AoNowNameL.SetBinding(Label.ContentProperty, aoNowName);
+
+            Binding akaNxtName = new Binding("Text");
+            akaNxtName.Source = AKA_nxtTXT;
+            externalBoard.AkaNextNameL.SetBinding(Label.ContentProperty, akaNxtName);
+
+            Binding aoNxtName = new Binding("Text");
+            aoNxtName.Source = AO_nxtTXT;
+            externalBoard.AoNextNameL.SetBinding(Label.ContentProperty, aoNxtName);
+
+            Binding timerTxt = new Binding("Content");
+            timerTxt.Source = TimerL;
+            externalBoard.TimerEXT.SetBinding(Label.ContentProperty, timerTxt);
+
+            Binding timerColor = new Binding("Foreground");
+            timerColor.Source = TimerL;
+            externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
+        }
+
+
         private void openExt_btn_Click(object sender, RoutedEventArgs e)
         {
             if (externalBoard == null || !externalBoard.IsLoaded)
@@ -1417,6 +1452,7 @@ namespace KumiteSystemPC
                 List<Screen> sc = new List<Screen>();
                 sc.AddRange(Screen.AllScreens);
                 externalBoard = new ExternalBoard();
+                externalBoard.Send_Status += ExternalBoard_Send_Status;
 
                 if (GlobalCategoryViewer != null && GlobalCategoryViewer.CategoryName != null)
                 {
@@ -1428,38 +1464,8 @@ namespace KumiteSystemPC
                     catch { }
                 }
 
-                Binding akaScoreBind = new Binding("Content");
-                akaScoreBind.Source = AKA_ScoreL;
-                externalBoard.AkaScoreL.SetBinding(Label.ContentProperty, akaScoreBind);
 
-                Binding aoScoreBind = new Binding("Content");
-                aoScoreBind.Source = AO_ScoreL;
-                externalBoard.AoScoreL.SetBinding(Label.ContentProperty, aoScoreBind);
-
-                Binding akaNowName = new Binding("Text");
-                akaNowName.Source = AKA_curTXT;
-                externalBoard.AkaNowNameL.SetBinding(Label.ContentProperty, akaNowName);
-
-                Binding aoNowName = new Binding("Text");
-                aoNowName.Source = AO_curTXT;
-                externalBoard.AoNowNameL.SetBinding(Label.ContentProperty, aoNowName);
-
-                Binding akaNxtName = new Binding("Text");
-                akaNxtName.Source = AKA_nxtTXT;
-                externalBoard.AkaNextNameL.SetBinding(Label.ContentProperty, akaNxtName);
-
-                Binding aoNxtName = new Binding("Text");
-                aoNxtName.Source = AO_nxtTXT;
-                externalBoard.AoNextNameL.SetBinding(Label.ContentProperty, aoNxtName);
-
-                Binding timerTxt = new Binding("Content");
-                timerTxt.Source = TimerL;
-                externalBoard.TimerEXT.SetBinding(Label.ContentProperty, timerTxt);
-
-                Binding timerColor = new Binding("Foreground");
-                timerColor.Source = TimerL;
-                externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
-
+                MakeBindingExternalBoard();
 
                 externalBoard.WindowStyle = WindowStyle.None;
                 externalBoard.Left = sc[Properties.Settings.Default.ScreenNR].Bounds.Left;
@@ -1471,13 +1477,17 @@ namespace KumiteSystemPC
                 this.Focus();
                 this.Activate();
 
-                openExt_btn.Header = "Close ext.board";
             }
             else
             {
                 externalBoard.Close();
-                openExt_btn.Header = "Open ext.board";
             }
+        }
+
+        private void ExternalBoard_Send_Status(bool status)
+        {
+            if (status) { openExt_btn.Header = "Close ext.board"; }
+            else { openExt_btn.Header = "Open ext.board"; }
         }
 
         ExtTimerSet extTimerSet;

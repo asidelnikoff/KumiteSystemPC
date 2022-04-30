@@ -20,6 +20,8 @@ namespace KumiteSystemPC
     /// </summary>
     public partial class Kata_ExternalBoard : Window
     {
+        public delegate void IsOpened(bool status);
+        public event IsOpened Send_Status;
         public Kata_ExternalBoard()
         {
             InitializeComponent();
@@ -52,6 +54,15 @@ namespace KumiteSystemPC
             opactityAnim.RepeatBehavior = new RepeatBehavior(3);
             opactityAnim.FillBehavior = FillBehavior.Stop;
             winner.BeginAnimation(Label.OpacityProperty, opactityAnim);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Send_Status?.Invoke(false);
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Send_Status?.Invoke(true);
         }
     }
 }
