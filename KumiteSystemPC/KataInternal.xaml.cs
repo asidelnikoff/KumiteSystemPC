@@ -375,14 +375,19 @@ namespace KumiteSystemPC
         }
 
         #endregion
-
+        string GetCompetitorString(Competitor competitor)
+        {
+            string res = competitor.ToString();
+            if (Properties.Settings.Default.ShowCompetitorClub) { res += $" ({competitor.Club})"; }
+            return res;
+        }
         void GetMatch(int mID, int rID)
         {
             ResetMatch();
 
             GlobalMatchNow = GlobalCategory.GetCurMatch(mID, rID);
-            AKA_curTXT.Text = $"{GlobalMatchNow.AKA.FirstName} {GlobalMatchNow.AKA.LastName}";
-            AO_curTXT.Text = $"{GlobalMatchNow.AO.FirstName} {GlobalMatchNow.AO.LastName}";
+            AKA_curTXT.Text = GetCompetitorString(GlobalMatchNow.AKA);
+            AO_curTXT.Text = GetCompetitorString(GlobalMatchNow.AO);
             AKA_ScoreL.Content = $"{GlobalMatchNow.AKA.ScoreProperty}";
             AO_ScoreL.Content = $"{GlobalMatchNow.AO.ScoreProperty}";
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
@@ -412,8 +417,8 @@ namespace KumiteSystemPC
             {
                 GlobalMatchNxt = nxtMatch;
             }
-            AKA_nxtTXT.Text = $"{GlobalMatchNxt.AKA.FirstName} {GlobalMatchNxt.AKA.LastName}";
-            AO_nxtTXT.Text = $"{GlobalMatchNxt.AO.FirstName} {GlobalMatchNxt.AO.LastName}";
+            AKA_nxtTXT.Text = GetCompetitorString(GlobalMatchNxt.AKA);
+            AO_nxtTXT.Text = GetCompetitorString(GlobalMatchNxt.AO);
             NxtMatch[0] = round; NxtMatch[1] = match;
         }
 
@@ -422,7 +427,7 @@ namespace KumiteSystemPC
             if (GlobalCategoryViewer != null) 
             { 
                 GlobalCategoryViewer.CompetitorsGrid.Items.Refresh();
-                GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GlobalMatchNow.Winner}";
+                GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
             }
             if (externalBoard != null)
             {
@@ -436,7 +441,7 @@ namespace KumiteSystemPC
                 }
             }
             try { end_of_m_sound.Play(); } catch { }
-            try { DisplayMessageDialog("Info", $"Match winner: {GlobalMatchNow.Winner.FirstName} {GlobalMatchNow.Winner.LastName}"); }
+            try { DisplayMessageDialog("Info", $"Match winner: {GetCompetitorString(GlobalMatchNow.Winner)}"); }
             catch { }
         }
 
