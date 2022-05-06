@@ -543,7 +543,6 @@ namespace KumiteSystemPC
         {
             do
             {
-                //TODO: Show milliseconds??
                 TimeSpan ts = stopWatch.Elapsed;
 
                 showTime(String.Format("{0:mm}:{0:ss}", remainTime));

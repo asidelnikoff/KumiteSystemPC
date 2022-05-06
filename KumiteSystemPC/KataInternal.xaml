@@ -49,7 +49,7 @@
                     <MenuItem Header="Category Generator" Click="CategoryGenBTN_Click"/>
                     <MenuItem Header="Open Category" Click="openCategoryBTN_Click"/>
                 </MenuItem>
-                <MenuItem Header="Resets" Height="Auto" Foreground="White">
+                <MenuItem Header="Resets" Foreground="White">
                     <MenuItem Header="Reset Match" x:Name="ResetMatchBtn" Click="ResetMatchBtn_Click"/>
                     <MenuItem Header="Reset Category" x:Name="ResetCatBtn"/>
                 </MenuItem>
@@ -145,7 +145,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="FinishM" HorizontalAlignment="Stretch" Content="Finish Match" Margin="20,5" Click="FinishMatchBTN_Click" IsEnabled="False"/>
+                    <Button Style="{StaticResource AccentButtonStyle}" x:Name="FinishM" HorizontalAlignment="Stretch" Content="Finish Match" Margin="20,5" Click="FinishMatchBTN_Click" IsEnabled="False"/>
                     <Button Grid.Column="1" x:Name="NextMatchBTN" HorizontalAlignment="Stretch" Content="Next Match" Margin="20,5" Grid.Row="1" Click="NextMatchBTN_Click" IsEnabled="False"/>
                 </Grid>
 

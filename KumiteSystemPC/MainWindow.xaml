@@ -134,7 +134,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Border Margin="0,10" BorderBrush="White" BorderThickness="2" Opacity="0"/>
-                        <Button Margin="0,10" x:Name="FinishMatchBTN" Content="Finish match" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="FinishMatchBTN_Click"/>
+                        <Button Style="{StaticResource AccentButtonStyle}" Margin="0,10" x:Name="FinishMatchBTN" Content="Finish match" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="FinishMatchBTN_Click"/>
                         <Button Margin="0,10" Grid.Row="1" x:Name="NextMatchBTN" Content="Next match" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="NextMatchBTN_Click"/>
                     </Grid>
                 </Grid>
