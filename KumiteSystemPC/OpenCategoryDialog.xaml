@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:KumiteSystemPC"
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019" 
-        WindowStyle="None"
         WindowStartupLocation="CenterOwner"
-        Title="OpenCateogryDialog" Height="160" Width="250" ResizeMode="NoResize" KeyDown="Window_KeyDown"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="" Height="184" Width="250" ResizeMode="NoResize" KeyDown="Window_KeyDown"
         Background="{DynamicResource GridBrush}">
     <StackPanel VerticalAlignment="Center">
-        <ComboBox  HorizontalAlignment="Stretch" Margin="10,0,10,10" x:Name="tournamentCB" ui:ControlHelper.PlaceholderText="Choose tournament" SelectionChanged="tournamentCB_SelectionChanged" MaxDropDownHeight="200"/>
-        <ComboBox HorizontalAlignment="Stretch" Margin="10,0,10,10" x:Name="cateogryCB" Visibility="Collapsed" ui:ControlHelper.PlaceholderText="Choose category" SelectionChanged="cateogryCB_SelectionChanged" MaxDropDownHeight="200"/>
+        <ComboBox IsTextSearchEnabled="True"  HorizontalAlignment="Stretch" Margin="10,0,10,10" x:Name="tournamentCB" ui:ControlHelper.PlaceholderText="Choose tournament" SelectionChanged="tournamentCB_SelectionChanged" MaxDropDownHeight="200"/>
+        <ComboBox IsTextSearchEnabled="True" HorizontalAlignment="Stretch" Margin="10,0,10,10" x:Name="cateogryCB" Visibility="Collapsed" ui:ControlHelper.PlaceholderText="Choose category" SelectionChanged="cateogryCB_SelectionChanged" MaxDropDownHeight="200"/>
         <Grid HorizontalAlignment="Stretch" Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

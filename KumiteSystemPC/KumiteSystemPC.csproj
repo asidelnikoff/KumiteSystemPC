@@ -8,7 +8,7 @@
     <ProjectGuid>{84554B51-9224-4F2B-AB3F-FA2C035A06EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>KumiteSystemPC</RootNamespace>
-    <AssemblyName>KumiteSystemPC</AssemblyName>
+    <AssemblyName>Kumite System</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,6 +36,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>KuS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -120,8 +123,8 @@
     <Compile Include="OpenCategoryDialog.xaml.cs">
       <DependentUpon>OpenCategoryDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Repechage.cs" />
-    <Compile Include="Round.cs" />
+    <Compile Include="SingleElemination\Repechage.cs" />
+    <Compile Include="SingleElemination\Round.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -171,8 +174,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Category.cs" />
-    <Compile Include="Competitor.cs" />
+    <Compile Include="SingleElemination\Category.cs" />
+    <Compile Include="SingleElemination\Competitor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -195,7 +198,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Match.cs" />
+    <Compile Include="SingleElemination\Match.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -221,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="KuS.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="KaS.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net451\System.Runtime.WindowsRuntime.targets" Condition="Exists('..\packages\System.Runtime.WindowsRuntime.4.7.0\build\net451\System.Runtime.WindowsRuntime.targets')" />

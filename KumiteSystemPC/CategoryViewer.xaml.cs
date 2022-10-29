@@ -1318,51 +1318,36 @@ namespace KumiteSystemPC
         {
             if (GlobalCategory.Rounds.Count() > 0 && MatchesGrid.SelectedIndex>=0)
             {
+                Match match = new Match(null, null, -1);
                 List<Competitor> comps = new List<Competitor>();
                 if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count())
                 {
-                    comps.Add(GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AKA);
-                    comps.Add(GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AO);
-                    if (GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].Winner != null)
-                    {
-                        MatchWinnerLabel.Content = $"Winner: {GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].Winner}";
-                    }
-                    else MatchWinnerLabel.Content = $"Winner: ";
-
+                    match = GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex];
                 }
                 else if(groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
                     if (!GlobalCategory.is1third)
                     {
-                        comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AKA);
-                        comps.Add(GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].AO);
-                        if (GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].Winner != null)
-                        {
-                            MatchWinnerLabel.Content = $"Winner: {GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].Winner}";
-                        }
-                        else MatchWinnerLabel.Content = $"Winner: ";
+                        match = GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex];
                     }
                     else
                     {
-                        comps.Add(GlobalCategory.BronzeMatch.AKA);
-                        comps.Add(GlobalCategory.BronzeMatch.AO);
-                        if (GlobalCategory.BronzeMatch.Winner != null)
-                        {
-                            MatchWinnerLabel.Content = $"Winner: {GlobalCategory.BronzeMatch.Winner}";
-                        }
-                        else MatchWinnerLabel.Content = $"Winner: ";
+                        match = GlobalCategory.BronzeMatch;
                     }
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
                 {
-                    comps.Add(GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex].AKA);
-                    comps.Add(GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex].AO);
-                    if (GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].Winner != null)
-                    {
-                        MatchWinnerLabel.Content = $"Winner: {GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex].Winner}";
-                    }
-                    else MatchWinnerLabel.Content = $"Winner: ";
+                    match = GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex];
                 }
+
+                if(match.AKA != null) comps.Add(match.AKA);
+                if(match.AO != null) comps.Add(match.AO);
+                if (match.Winner != null)
+                {
+                    MatchWinnerLabel.Content = $"Winner: {match.Winner}";
+                }
+                else MatchWinnerLabel.Content = $"Winner: ";
+
                 CompetitorsGrid.ItemsSource = comps;
                 //GetMatchEv?.Invoke(MatchesGrid.SelectedIndex, groups_List.SelectedIndex);
                 CompetitorsGrid.Items.Refresh();
@@ -1372,10 +1357,7 @@ namespace KumiteSystemPC
             
             
         }
-        public void UpdateCompGrid()
-        {
-            CompetitorsGrid.Items.Refresh();
-        }
+
         private void groups_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (groups_List.SelectedIndex >= 0)
@@ -1405,7 +1387,6 @@ namespace KumiteSystemPC
             //CompetitorsGrid.Items.Refresh();
         }
         
-
         void LoadRoundMatch(int round, int match) {
             GetMatchEv?.Invoke(match, round);
             //DisplayMessageDialog("Info", "Match loaded");
@@ -1450,7 +1431,7 @@ namespace KumiteSystemPC
         {
             if(GlobalCategory != null)
             {
-                if(!GlobalCategory.is1third && (GlobalCategory.RepechageAKA!=null && GlobalCategory.RepechageAO != null) )
+                if (!GlobalCategory.is1third && GlobalCategory.RepechageAKA != null && GlobalCategory.RepechageAO != null)
                 {
                     groups_List.Items.RemoveAt(groups_List.Items.Count - 1);
                     groups_List.Items.RemoveAt(groups_List.Items.Count - 1);
@@ -1458,7 +1439,7 @@ namespace KumiteSystemPC
                     GlobalCategory.RepechageAO = null;
                     GlobalCategory.GenerateBronze();
                 }
-                else if(GlobalCategory.is1third && GlobalCategory.BronzeMatch!=null)
+                else if (GlobalCategory.is1third && GlobalCategory.BronzeMatch != null)
                 {
                     groups_List.Items.RemoveAt(groups_List.Items.Count - 1);
                     GlobalCategory.BronzeMatch = null;

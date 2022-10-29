@@ -162,8 +162,13 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="White" BorderThickness="2" Margin="10" CornerRadius="5"/>
-                    <Button Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click"/>
+
+                    <Button Style="{StaticResource AccentButtonStyle}" Content="Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" x:Name="startTimeBTN" Click="startTimerBtn_Click">
+                        <Button.Background>
+                            <SolidColorBrush Color="#FF0D81FF" Opacity="0.5"/>
+                        </Button.Background>
+                    </Button>
+                    <Border BorderBrush="White" BorderThickness="2" Margin="10" CornerRadius="2"/>
                     <Grid Grid.Column="1" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -338,7 +343,7 @@
                     </Grid>
 
                 </Grid>
-                
+
                 <Grid Grid.Row="2" Margin="0,0,0,15">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
