@@ -19,13 +19,8 @@ About Text Here
 
 Documentation Here
 
-## Distribute
-
-- [Service Name](Page Link)
-
-
 ## Developers
 
--[Alexander Sidelnikov](github.com/sidlenikoff)
+- [Alexander Sidelnikov](github.com/sidlenikoff)
 
 ## License
