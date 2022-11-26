@@ -26,6 +26,6 @@ Documentation Here
 
 ## Developers
 
-- Alexander Sidelnikov (github.com/sidlenikoff)
+-[Alexander Sidelnikov](github.com/sidlenikoff)
 
 ## License
