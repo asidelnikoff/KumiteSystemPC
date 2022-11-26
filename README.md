@@ -5,8 +5,6 @@
 
 <p align="center">
    <img src="https://img.shields.io/badge/Version-v1.0(Alpha)-blue" alt="Project Version">
-   <img src="" alt="Game Version">
-   <img src="" alt="License">
 </p>
 
 ## About
