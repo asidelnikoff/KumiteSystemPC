@@ -1,6 +1,6 @@
 
 <p align="center">
-      <img src="https://i.ibb.co/L13gyQ8/Logo-kumite-System-white.png" width="726">
+      <img src="https://i.ibb.co/fHvV5Bh/Logo-kumite-System-white.png" width="726">
 </p>
 
 <p align="center">
