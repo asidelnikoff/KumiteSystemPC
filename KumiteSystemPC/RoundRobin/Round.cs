@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TournamentTree
+namespace RoundRobin
 {
     public class Round : TournamentsBracketsBase.IRound
     {
@@ -33,7 +33,7 @@ namespace TournamentTree
 
         public override string ToString()
         {
-            return $"{Matches.Count()}";
+            return $"{ID}";
         }
     }
 }

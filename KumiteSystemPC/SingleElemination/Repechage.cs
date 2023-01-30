@@ -41,7 +41,7 @@ namespace TournamentTree
                 {
                     int count = Rounds.Count();
                     Competitor ao = Competitors[count];
-                    Competitor aka = Matches[count-1].Winner;
+                    Competitor aka = Matches[count-1].Winner as Competitor;
                     Round res = new Round();
                     Matches.Add(new Match(aka, ao, Matches.Count()+1));
                     res.Matches.Add(new Match(aka, ao, Matches.Count()+1));
@@ -49,7 +49,7 @@ namespace TournamentTree
                     Rounds.Add(res);
                 }
             }
-            if (Matches.Count() == 1) { Winner = Matches[0].Winner; }
+            if (Matches.Count() == 1) { Winner = Matches[0].Winner as Competitor; }
         }
         public bool IsFinished()
         {
@@ -76,7 +76,7 @@ namespace TournamentTree
                     }
                     curRound++;
                 }
-                Winner = Matches[Matches.Count() - 1].Winner;
+                Winner = Matches[Matches.Count() - 1].Winner as Competitor;
             }
             catch { }
         }
@@ -85,9 +85,9 @@ namespace TournamentTree
             if (index < Matches.Count())
             {
                 Matches[index].AKA = (Matches[index - 1].Winner);
-                if (index + 1 == Matches.Count()) { Winner = Matches[index].AKA; }
+                if (index + 1 == Matches.Count()) { Winner = Matches[index].AKA as Competitor; }
             }
-            else if (index == Matches.Count()) { Winner = Matches[index - 1].Winner; }
+            else if (index == Matches.Count()) { Winner = Matches[index - 1].Winner as Competitor; }
         }
 
         public void ShowRepechage()
@@ -100,6 +100,9 @@ namespace TournamentTree
                     }
             }
             catch { }
+
+
+
         }
 
     }

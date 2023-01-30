@@ -4,10 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TournamentsBracketsBase;
 
 namespace TournamentTree
 {
-    public class Competitor : System.ComponentModel.INotifyPropertyChanged
+    public class Competitor : TournamentsBracketsBase.ICompetitor ,System.ComponentModel.INotifyPropertyChanged
     {
         /// <Fouls>
         /// 1 - C,
@@ -24,8 +25,8 @@ namespace TournamentTree
         /// </Status>
 
 
-        public delegate void CheckWinnerDelegate(bool isTimeUp=false);
-        public event CheckWinnerDelegate Check_Winner;
+        //public delegate void CheckWinnerDelegate(bool isTimeUp=false);
+        public event TournamentsBracketsBase.CheckWinnerDelegate Check_Winner;
         
 
         public int ID { get; set; }
@@ -35,7 +36,8 @@ namespace TournamentTree
 
         public int Score;
         public int ScoreProperty
-        { get { return Score; }
+        { 
+            get { return Score; }
             set
             {
                 Score = value;
@@ -180,6 +182,38 @@ namespace TournamentTree
                             (ID == comp.ID);
             }
             return false;
+        }
+        public override int GetHashCode()
+        {
+            return ($"{ID}{FirstName}{LastName}").GetHashCode();
+        }
+
+        public void Swap(ICompetitor competitor)
+        {
+            Competitor temp = new Competitor(this);
+
+            ID = competitor.ID;
+            FirstName = competitor.FirstName;
+            LastName = competitor.LastName;
+            Score = (competitor as Competitor).Score;
+            Fouls_C1 = competitor.Fouls_C1;
+            Fouls_C2 = competitor.Fouls_C2;
+            Status = competitor.Status;
+            IsBye = competitor.IsBye;
+            AllScores = new List<int>(competitor.AllScores);
+            Club = competitor.Club;
+
+
+            (competitor as Competitor).ID = temp.ID;
+            (competitor as Competitor).FirstName = temp.FirstName;
+            (competitor as Competitor).LastName = temp.LastName;
+            (competitor as Competitor).Score = temp.Score;
+            (competitor as Competitor).Fouls_C1 = temp.Fouls_C1;
+            (competitor as Competitor).Fouls_C2 = temp.Fouls_C2;
+            (competitor as Competitor).Status = temp.Status;
+            (competitor as Competitor).IsBye = temp.IsBye;
+            (competitor as Competitor).AllScores = new List<int>(temp.AllScores);
+            (competitor as Competitor).Club = temp.Club;
         }
     }
 }

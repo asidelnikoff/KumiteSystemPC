@@ -175,7 +175,7 @@ namespace KumiteSystemPC
                         ws.Cells[row, 3].Value = m.AKA.LastName;
                         ws.Cells[row, 4].Value = m.AKA.GetFoulsC1();
                         ws.Cells[row, 5].Value = m.AKA.GetFoulsC2();
-                        ws.Cells[row, 6].Value = m.AKA.Score;
+                        ws.Cells[row, 6].Value = (m.AKA as Competitor).Score;
                     }
                     if (m.AO != null)
                     {
@@ -184,7 +184,7 @@ namespace KumiteSystemPC
                         ws.Cells[row, 13].Value = m.AO.LastName;
                         ws.Cells[row, 11].Value = m.AO.GetFoulsC1();
                         ws.Cells[row, 10].Value = m.AO.GetFoulsC2();
-                        ws.Cells[row, 9].Value = m.AO.Score;
+                        ws.Cells[row, 9].Value = (m.AO as Competitor).Score;
                     }
                     if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName) { ws.Cells[row, 7].Value = "X"; }
                     else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) { ws.Cells[row, 8].Value = "X"; }
@@ -230,7 +230,7 @@ namespace KumiteSystemPC
         void GenerateCategory()
         {
             GlobalCategory = new Category(CompetitorsList);
-            GlobalCategory.GenerateTree();
+            GlobalCategory.GenerateBrackets();
             foreach (var g in GlobalCategory.Rounds)
             {
                 groups_List.Items.Add($"1/{g.ToString()}");
@@ -324,8 +324,8 @@ namespace KumiteSystemPC
         {
             if (GlobalCategory.Rounds.Count() > 0)
             {
-                List<Competitor> comps = new List<Competitor>() { GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AKA,
-                GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AO};
+                List<Competitor> comps = new List<Competitor>() { GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AKA as Competitor,
+                GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex].AO as Competitor};
                 CompetitorsGrid.ItemsSource = comps;
                 
             }

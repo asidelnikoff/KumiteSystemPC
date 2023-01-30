@@ -88,7 +88,7 @@ namespace KumiteSystemPC
 
         SQLiteConnection m_dbConn;
         SQLiteCommand m_sqlCmd;
-        List<Competitor> Winners;
+        List<TournamentsBracketsBase.ICompetitor> Winners;
         public CategoryViewer(Category category, string categoryName, SQLiteConnection con, int categoryID)
         {
             InitializeComponent();
@@ -199,7 +199,7 @@ namespace KumiteSystemPC
             }
         }
 
-        void CategoryHaveResultsDB(List<Competitor> winners)
+        void CategoryHaveResultsDB(List<TournamentsBracketsBase.ICompetitor> winners)
         {
 
             if (m_dbConn.State == System.Data.ConnectionState.Open)
@@ -221,7 +221,7 @@ namespace KumiteSystemPC
                 }
             }
 
-            Winners = new List<Competitor>(winners);
+            Winners = new List<TournamentsBracketsBase.ICompetitor>(winners);
             categoryComplition.Content = "- Completed";
             categoryComplition.Foreground = Brushes.Green;
 
@@ -283,7 +283,7 @@ namespace KumiteSystemPC
         void GenerateCategory()
         {
             GlobalCategory = new Category(CompetitorsList);
-            GlobalCategory.GenerateTree();
+            GlobalCategory.GenerateBrackets();
             foreach (var g in GlobalCategory.Rounds)
             {
                 groups_List.Items.Add($"1/{g.ToString()}");
@@ -340,8 +340,8 @@ namespace KumiteSystemPC
                     BracketsGrid.Children.Add(fool);
                     Competitor aka = new Competitor(), ao = new Competitor();
 
-                    if (GlobalCategory.Rounds[i].Matches[j].AKA != null) aka = GlobalCategory.Rounds[i].Matches[j].AKA;
-                    if (GlobalCategory.Rounds[i].Matches[j].AO != null) ao = GlobalCategory.Rounds[i].Matches[j].AO;
+                    if (GlobalCategory.Rounds[i].Matches[j].AKA != null) aka = GlobalCategory.Rounds[i].Matches[j].AKA as Competitor;
+                    if (GlobalCategory.Rounds[i].Matches[j].AO != null) ao = GlobalCategory.Rounds[i].Matches[j].AO as Competitor;
                     Grid match;
                     if (j % 2 == 0)
                     {
@@ -416,8 +416,8 @@ namespace KumiteSystemPC
                 BracketsGrid.Children.Add(fool);
                 Competitor aka = new Competitor(), ao = new Competitor();
 
-                if (_Repechage.Matches[i].AKA != null) aka = _Repechage.Matches[i].AKA;
-                if (_Repechage.Matches[i].AO != null) ao = _Repechage.Matches[i].AO;
+                if (_Repechage.Matches[i].AKA != null) aka = _Repechage.Matches[i].AKA as Competitor;
+                if (_Repechage.Matches[i].AO != null) ao = _Repechage.Matches[i].AO as Competitor;
                 Grid match;
                 if (i % 2 == 0)
                 {
@@ -587,7 +587,7 @@ namespace KumiteSystemPC
 
         #endregion
 
-        void CategoryHaveResults(List<Competitor> winners)
+        void CategoryHaveResults(List<TournamentsBracketsBase.ICompetitor> winners)
         {
 
             Excel.Workbook wb = workbook;
@@ -750,37 +750,37 @@ namespace KumiteSystemPC
             int r_count = GlobalCategory.Rounds.Count();
             if (curRound < r_count)
             {
-                AKA = GlobalCategory.Rounds[curRound].Matches[curMatch].AKA;
-                Winner = GlobalCategory.Rounds[curRound].Matches[curMatch].Winner;
-                AO = GlobalCategory.Rounds[curRound].Matches[curMatch].AO;
-                Looser = GlobalCategory.Rounds[curRound].Matches[curMatch].Looser;
+                AKA = GlobalCategory.Rounds[curRound].Matches[curMatch].AKA as Competitor;
+                Winner = GlobalCategory.Rounds[curRound].Matches[curMatch].Winner as Competitor;
+                AO = GlobalCategory.Rounds[curRound].Matches[curMatch].AO as Competitor;
+                Looser = GlobalCategory.Rounds[curRound].Matches[curMatch].Looser as Competitor;
             }
             else if (curRound == r_count)
             {
                 if (!GlobalCategory.is1third)
                 {
-                    AKA = GlobalCategory.RepechageAKA.Matches[curMatch].AKA;
-                    Winner = GlobalCategory.RepechageAKA.Matches[curMatch].Winner;
-                    AO = GlobalCategory.RepechageAKA.Matches[curMatch].AO;
-                    Looser = GlobalCategory.RepechageAKA.Matches[curMatch].Looser;
+                    AKA = GlobalCategory.RepechageAKA.Matches[curMatch].AKA as Competitor;
+                    Winner = GlobalCategory.RepechageAKA.Matches[curMatch].Winner as Competitor;
+                    AO = GlobalCategory.RepechageAKA.Matches[curMatch].AO as Competitor;
+                    Looser = GlobalCategory.RepechageAKA.Matches[curMatch].Looser as Competitor;
                     repech = 0;
                 }
                 else
                 {
-                    AKA = GlobalCategory.BronzeMatch.AKA;
-                    Winner = GlobalCategory.BronzeMatch.Winner;
-                    AO = GlobalCategory.BronzeMatch.AO;
-                    Looser= GlobalCategory.BronzeMatch.Looser;
+                    AKA = GlobalCategory.BronzeMatch.AKA as Competitor;
+                    Winner = GlobalCategory.BronzeMatch.Winner as Competitor;
+                    AO = GlobalCategory.BronzeMatch.AO as Competitor;
+                    Looser= GlobalCategory.BronzeMatch.Looser as Competitor;
                     repech = 2;
                     
                 }
             }
             else if (curRound == r_count + 1)
             {
-                AKA = GlobalCategory.RepechageAO.Matches[curMatch].AKA;
-                Winner = GlobalCategory.RepechageAO.Matches[curMatch].Winner;
-                AO = GlobalCategory.RepechageAO.Matches[curMatch].AO;
-                Looser = GlobalCategory.RepechageAO.Matches[curMatch].Looser;
+                AKA = GlobalCategory.RepechageAO.Matches[curMatch].AKA as Competitor;
+                Winner = GlobalCategory.RepechageAO.Matches[curMatch].Winner as Competitor;
+                AO = GlobalCategory.RepechageAO.Matches[curMatch].AO as Competitor;
+                Looser = GlobalCategory.RepechageAO.Matches[curMatch].Looser as Competitor;
                 repech = 1;
             }
             else
@@ -1023,7 +1023,7 @@ namespace KumiteSystemPC
                         ws.Cells[row, 4].Value = m.AKA.Club;
                         ws.Cells[row, 5].Value = m.AKA.GetFoulsC1();
                         ws.Cells[row, 6].Value = m.AKA.GetFoulsC2();
-                        ws.Cells[row, 7].Value = m.AKA.Score;
+                        ws.Cells[row, 7].Value = (m.AKA as Competitor).Score;
                     }
                     if (m.AO != null)
                     {
@@ -1033,7 +1033,7 @@ namespace KumiteSystemPC
                         ws.Cells[row, 13].Value = m.AO.Club;
                         ws.Cells[row, 12].Value = m.AO.GetFoulsC1();
                         ws.Cells[row, 11].Value = m.AO.GetFoulsC2();
-                        ws.Cells[row, 10].Value = m.AO.Score;
+                        ws.Cells[row, 10].Value = (m.AO as Competitor).Score;
                     }
                     if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName) { ws.Cells[row, 8].Value = "X"; }
                     else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) { ws.Cells[row, 9].Value = "X"; }
@@ -1222,7 +1222,7 @@ namespace KumiteSystemPC
                     ws.Cells[row, 3].Value = m.AKA.LastName;
                     ws.Cells[row, 4].Value = m.AKA.GetFoulsC1();
                     ws.Cells[row, 5].Value = m.AKA.GetFoulsC2();
-                    ws.Cells[row, 6].Value = m.AKA.Score;
+                    ws.Cells[row, 6].Value = (m.AKA as Competitor).Score;
                 }
                 if (m.AO != null)
                 {
@@ -1231,7 +1231,7 @@ namespace KumiteSystemPC
                     ws.Cells[row, 12].Value = m.AO.LastName;
                     ws.Cells[row, 11].Value = m.AO.GetFoulsC1();
                     ws.Cells[row, 10].Value = m.AO.GetFoulsC2();
-                    ws.Cells[row, 9].Value = m.AO.Score;
+                    ws.Cells[row, 9].Value = (m.AO as Competitor).Score;
                 }
                 if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName) { ws.Cells[row, 7].Value = "X"; }
                 else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) { ws.Cells[row, 8].Value = "X"; }
@@ -1304,7 +1304,7 @@ namespace KumiteSystemPC
 
             if (result == ContentDialogResult.Primary)
             {
-                GlobalCategory.FinishCurMatch();
+                GlobalCategory.FinishCurrentMatch();
                 if (GlobalCategory.isCurMFinished()) { DisplayMessageDialog("Info", "Match finished"); }
             }
             else if (result == ContentDialogResult.Secondary)
@@ -1322,7 +1322,7 @@ namespace KumiteSystemPC
                 List<Competitor> comps = new List<Competitor>();
                 if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count())
                 {
-                    match = GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex];
+                    match = GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex] as Match;
                 }
                 else if(groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
@@ -1340,8 +1340,8 @@ namespace KumiteSystemPC
                     match = GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex];
                 }
 
-                if(match.AKA != null) comps.Add(match.AKA);
-                if(match.AO != null) comps.Add(match.AO);
+                if(match.AKA != null) comps.Add(match.AKA as Competitor);
+                if(match.AO != null) comps.Add(match.AO as Competitor);
                 if (match.Winner != null)
                 {
                     MatchWinnerLabel.Content = $"Winner: {match.Winner}";
@@ -1413,7 +1413,7 @@ namespace KumiteSystemPC
 
         private void FinishCurMatchBTN_Click(object sender, RoutedEventArgs e)
         {
-            GlobalCategory.FinishCurMatch();
+            GlobalCategory.FinishCurrentMatch();
             if (GlobalCategory.isCurMFinished()) { /*UpdateExcelTree(workbook);*/ UpdateTree(); DisplayMessageDialog("Info", "Match finished"); }
         }
 
@@ -1424,7 +1424,10 @@ namespace KumiteSystemPC
 
         private void exportExcel_Click(object sender, RoutedEventArgs e)
         {
+            if (exApp != null) exApp.Quit();
             ExportCategory();
+            exApp.ActiveWorkbook.SaveAs(Properties.Settings.Default.DataPath + "\\" + CategoryName);
+            if (exApp.ActiveWorkbook.Saved) { try { DisplayMessageDialog("Info", "Category file saved"); } catch { } }
         }
 
         private void regenerateBronze_Click(object sender, RoutedEventArgs e)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TournamentTree
+namespace RoundRobin
 {
     public class Match : TournamentsBracketsBase.IMatch
     {
@@ -20,16 +20,25 @@ namespace TournamentTree
 
         public Match(Competitor _AKA, Competitor _AO, int id)
         {
-            //Competitors = new List<Competitor>();
-            //Competitors.Add(_AKA);
-            //Competitors.Add(_AO);
+
             AKA = _AKA;
             AO = _AO;
-            /*AKA = _AKA;
-            AO = _AO;*/
-            if (AKA != null && AKA.IsBye) { Winner = new Competitor(AO as Competitor); isFinished = true; Looser = new Competitor(AKA as Competitor); }
-            else if (AO != null && AO.IsBye) { Winner = new Competitor(AKA as Competitor); isFinished = true; Looser = new Competitor(AO as Competitor); }
-            //else { Winner = new Competitor(); Looser = new Competitor(); }
+
+            if (AKA != null && AKA.IsBye) 
+            {
+                Winner = new Competitor(AO as Competitor);
+                (AO as Competitor).TotalScore += 3;
+                isFinished = true; 
+                Looser = new Competitor(AKA as Competitor); 
+
+            }
+            else if (AO != null && AO.IsBye) 
+            {
+                Winner = new Competitor(AKA as Competitor);
+                (AKA as Competitor).TotalScore += 3;
+                isFinished = true; 
+                Looser = new Competitor(AO as Competitor); 
+            }
             if (AKA != null) AKA.Check_Winner += CheckWinner;
             if (AO != null) AO.Check_Winner += CheckWinner;
             ID = id;
@@ -49,12 +58,14 @@ namespace TournamentTree
             {
                 case 1:
                     Winner = new Competitor(aka);
+                    aka.TotalScore += 3;
                     if (setLooser) Looser = new Competitor(ao);
                     //isFinished = true;
                     HaveWinner?.Invoke();
                     break;
                 case 2:
                     Winner = new Competitor(ao);
+                    ao.TotalScore += 3;
                     if (setLooser) Looser = new Competitor(aka);
                     //isFinished = true;
                     HaveWinner?.Invoke();

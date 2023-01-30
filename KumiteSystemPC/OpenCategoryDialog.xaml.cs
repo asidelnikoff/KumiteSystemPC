@@ -30,8 +30,8 @@ namespace KumiteSystemPC
         SQLiteCommand m_sqlCmd;
         Dictionary<int, string> Tournaments;
         Dictionary<int, string> Categories;
-        public Category GlobalCategory;
-        int categoryType;
+        public TournamentsBracketsBase.ICategory GlobalCategory;
+        public int categoryType { get; private set; }
         public int CategoryID;
         public OpenCategoryDialog(SQLiteConnection con)
         {
@@ -138,9 +138,9 @@ namespace KumiteSystemPC
             }
         }
 
-        void ReadCategoryDB()
+        void Read_SE_Category_DB()
         {
-            List<Competitor> comps = new List<Competitor>();
+            List<TournamentsBracketsBase.ICompetitor> comps = new List<TournamentsBracketsBase.ICompetitor>();
             Repechage aka_rep = new Repechage();
             Repechage ao_rep = new Repechage();
             Match BronzeMatch = null;
@@ -197,17 +197,18 @@ namespace KumiteSystemPC
                 }
                 GlobalCategory = new Category();
                 GlobalCategory.Competitors = comps;
-                GlobalCategory.Rounds = Rounds;
+                GlobalCategory.Rounds = new List<TournamentsBracketsBase.IRound>(Rounds);
 
                 if (categoryType == 0) 
                 { 
-                    GlobalCategory.RepechageAKA = aka_rep; GlobalCategory.RepechageAO = ao_rep;
-                    GlobalCategory.is1third = false;
+                    (GlobalCategory as Category).RepechageAKA = aka_rep; 
+                    (GlobalCategory as Category).RepechageAO = ao_rep;
+                    (GlobalCategory as Category).is1third = false;
                 }
                 else if(categoryType == 1)
                 {
-                    GlobalCategory.is1third = true;
-                    GlobalCategory.BronzeMatch = BronzeMatch;
+                    (GlobalCategory as Category).is1third = true;
+                    (GlobalCategory as Category).BronzeMatch = BronzeMatch;
                 }
 
                 GlobalCategory.Winners = ReadWinners(CategoryID);
@@ -216,9 +217,9 @@ namespace KumiteSystemPC
             }
         }
 
-        List<Competitor> ReadWinners(int categoryID)
+        List<TournamentsBracketsBase.ICompetitor> ReadWinners(int categoryID)
         {
-            List<Competitor> res = new List<Competitor>();
+            var res = new List<TournamentsBracketsBase.ICompetitor>();
 
             m_sqlCmd.CommandText = $"SELECT Competitor.*, Place FROM Winners " +
                 $"LEFT JOIN Competitor on (Competitor.ID = Competitor) WHERE Category={categoryID}";
@@ -235,7 +236,7 @@ namespace KumiteSystemPC
 
             return res;
         }
-        Competitor ReadWinner(SQLiteDataReader reader)
+        TournamentsBracketsBase.ICompetitor ReadWinner(SQLiteDataReader reader)
         {
             return new Competitor(Convert.ToBoolean(reader["isBye"]),
                                             Convert.ToInt32(reader["ID"]), (string)reader["FirstName"],
@@ -243,9 +244,10 @@ namespace KumiteSystemPC
                                             0, Convert.ToInt32(reader["Status"]));
         }
 
-        Match ReadMatch(SQLiteDataReader reader, ref List<Competitor> comps, int mID)
+        TournamentsBracketsBase.IMatch ReadMatch(SQLiteDataReader reader, ref List<TournamentsBracketsBase.ICompetitor> comps, int mID)
         {
-            Match m = new Match(null, null, mID);
+            TournamentsBracketsBase.IMatch m = new Match(null, null, mID);
+            if (categoryType == 3) m = new RoundRobin.Match(null, null, mID);
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -253,11 +255,13 @@ namespace KumiteSystemPC
                     if (reader["AKA"] != DBNull.Value && Convert.ToInt32(reader["AKA"]) == Convert.ToInt32(reader["ID"]))
                     {
                         m.AKA = ReadCompetitor(reader, 0);
+                        if (categoryType == 3) m.AKA = new RoundRobin.Competitor(m.AKA as Competitor);
                         if (!m.AKA.IsBye && !comps.Contains(m.AKA)) comps.Add(m.AKA);
                     }
                     if (reader["AO"] != DBNull.Value && Convert.ToInt32(reader["AO"]) == Convert.ToInt32(reader["ID"]))
                     {
                         m.AO = ReadCompetitor(reader, 1);
+                        if (categoryType == 3) m.AO = new RoundRobin.Competitor(m.AO as Competitor);
                         if (!m.AO.IsBye && !comps.Contains(m.AO)) comps.Add(m.AO);
                     }
                     if (m != null && reader["Winner"] != DBNull.Value && Convert.ToInt32(reader["Winner"]) == Convert.ToInt32(reader["AKA"]))
@@ -296,7 +300,6 @@ namespace KumiteSystemPC
         Repechage ReadRepechage(int repechageId, int roundCount, int lastRoundId)
         {
             Repechage rep = null;
-            List<Competitor> comps = new List<Competitor>();
             m_sqlCmd.CommandText = $"SELECT * FROM Round WHERE Category = {CategoryID} AND Repechage={repechageId}";
             int repID = lastRoundId + 1;
             using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
@@ -310,6 +313,7 @@ namespace KumiteSystemPC
                     }
                 }
             }
+            List<TournamentsBracketsBase.ICompetitor> temp = new List<TournamentsBracketsBase.ICompetitor>();
             for (int j = 1; j <= roundCount; j++)
             {
                 m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
@@ -326,14 +330,18 @@ namespace KumiteSystemPC
                     if (reader.HasRows)
                     {
                         if(rep == null)rep = new Repechage();
-                        rep.Matches.Add(ReadMatch(reader, ref comps, j));
+                        rep.Matches.Add(ReadMatch(reader, ref temp, j) as Match);
                     }
                 }  
             }
             if (rep != null)
             {
-                rep.Competitors = new List<Competitor>(comps);
-                if (rep.Matches[rep.Matches.Count - 1].Winner != null) rep.Winner = rep.Matches[rep.Matches.Count - 1].Winner;
+                rep.Competitors = new List<Competitor>();
+                foreach (var competitor in temp)
+                {
+                    rep.Competitors.Add(new Competitor(competitor as Competitor));
+                }
+                if (rep.Matches[rep.Matches.Count - 1].Winner != null) rep.Winner = rep.Matches[rep.Matches.Count - 1].Winner as Competitor;
             }
             return rep;
         }
@@ -367,14 +375,104 @@ namespace KumiteSystemPC
 
         private void selectBTN_Click(object sender, RoutedEventArgs e)
         {
-            ReadCategoryDB();
+            if (categoryType == 0 || categoryType == 1)
+                Read_SE_Category_DB();
+            else if (categoryType == 3)
+            {
+                Read_RR_Category_DB();
+            }
             this.DialogResult = true;
             this.Close();
         }
 
+        private void Read_RR_Category_DB()
+        {
+            List<TournamentsBracketsBase.ICompetitor> comps = new List<TournamentsBracketsBase.ICompetitor>();
+            if (m_dbConn.State == System.Data.ConnectionState.Open)
+            {
+                #region Read Default Rounds
+                m_sqlCmd.CommandText = $"SELECT * FROM Round WHERE Category = {CategoryID} AND Repechage=-1";
+                int roundCount = 0;
+                List<int> defaultRoundsID = new List<int>();
+                using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            defaultRoundsID.Add(Convert.ToInt32(reader["ID"]));
+                            roundCount++;
+                        }
+                    }
+                }
+                m_sqlCmd.CommandText = $"SELECT * from CompetitorCategory where Category = {CategoryID};";
+                int competitorsCount = 0;
+                using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                        while (reader.Read())
+                            competitorsCount++;
+                }
+                competitorsCount += competitorsCount % 2;
+                List<RoundRobin.Round> Rounds = new List<RoundRobin.Round>();
+                foreach (var i in defaultRoundsID)
+                {
+                    RoundRobin.Round round = new RoundRobin.Round();
+                    round.ID = i;
+                    for (int j = 1; j <= competitorsCount / 2; j++)
+                    {
+                        m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
+                         $"Match.AO, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
+                         $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished, Competitor.*" +
+                         $"FROM Match " +
+                         $"LEFT JOIN Competitor on (Competitor.ID = Match.AKA or Competitor.ID = Match.AO) " +
+                         $"WHERE Category = {CategoryID} AND Round = {i} AND MatchID = {j}";
+
+                        using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                round.Matches.Add(ReadMatch(reader, ref comps, j));
+                        }
+                    }
+                    Rounds.Add(round);
+                }
+                #endregion
+
+                GlobalCategory = new RoundRobin.Category();
+                GlobalCategory.Competitors = comps;
+                GlobalCategory.Rounds = new List<TournamentsBracketsBase.IRound>(Rounds);
+
+                (GlobalCategory as RoundRobin.Category).UpdateAllRounds();
+
+                GlobalCategory.Winners = ReadWinners(CategoryID);
+                Properties.Settings.Default.LastSelectedTournament = tournamentCB.SelectedIndex;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         private void cateogryCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cateogryCB.SelectedIndex > -1) { CategoryID = Categories.ElementAt(cateogryCB.SelectedIndex).Key; }
+            if (cateogryCB.SelectedIndex > -1) 
+            { 
+                CategoryID = Categories.ElementAt(cateogryCB.SelectedIndex).Key;
+                m_sqlCmd.CommandText = $"SELECT * FROM Category WHERE Tournament={Tournaments.ElementAt(tournamentCB.SelectedIndex).Key}" +
+                    $" AND ID={CategoryID}";
+
+                using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var id = reader["ID"];
+                            var name = reader["Name"];
+                            var type = reader["Type"];
+                            categoryType = Convert.ToInt32(type);
+                        }
+                    }
+                    cateogryCB.Items.Refresh();
+                }
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
