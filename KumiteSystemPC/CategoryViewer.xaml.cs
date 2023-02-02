@@ -310,7 +310,15 @@ namespace KumiteSystemPC
             else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count)
             {
                 if (GlobalCategory.RepechageAKA != null) DrawRepechageBrackets(BracketsGrid, GlobalCategory.RepechageAKA);
-                else if (GlobalCategory.BronzeMatch != null) { }
+                else if (GlobalCategory.BronzeMatch != null) 
+                {
+                    var repechage = new Repechage();
+                    repechage.Competitors.Add(GlobalCategory.BronzeMatch.AKA as Competitor);
+                    repechage.Competitors.Add(GlobalCategory.BronzeMatch.AO as Competitor);
+                    repechage.Matches.Add(GlobalCategory.BronzeMatch);
+                    if (GlobalCategory.BronzeMatch.Winner != null) repechage.Winner = GlobalCategory.BronzeMatch.Winner as Competitor;
+                    DrawRepechageBrackets(BracketsGrid, repechage);
+                }
             }
             else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count + 1)
             {
@@ -1372,14 +1380,14 @@ namespace KumiteSystemPC
                     if (!GlobalCategory.is1third) MatchesGrid.ItemsSource = GlobalCategory.RepechageAKA.Matches;
                     else MatchesGrid.ItemsSource = new List<Match>() { GlobalCategory.BronzeMatch };
                 }
-                else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
-                {
-                    MatchesGrid.ItemsSource = GlobalCategory.RepechageAO.Matches;
-                }
                 else if(groups_List.SelectedItem.ToString() == "Results")
                 {
                     MatchesGrid.ItemsSource = null;
                     CompetitorsGrid.ItemsSource = GlobalCategory.Winners;
+                }
+                else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
+                {
+                    MatchesGrid.ItemsSource = GlobalCategory.RepechageAO.Matches;
                 }
                 MatchesGrid.Items.Refresh();
                 DrawBrackets(BracketsGrid);

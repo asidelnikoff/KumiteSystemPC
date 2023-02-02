@@ -172,9 +172,8 @@ namespace TournamentTree
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType().ToString() != "MS.Internal.NamedObject")
+            if (obj != null && obj.GetType().ToString() != "MS.Internal.NamedObject")
             {
-                
                 Competitor comp = (Competitor)obj;
                 Console.WriteLine($"{comp}");
                     return (FirstName == comp.FirstName) &&

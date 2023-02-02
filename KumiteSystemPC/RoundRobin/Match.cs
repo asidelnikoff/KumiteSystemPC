@@ -54,7 +54,9 @@ namespace RoundRobin
         {
             Competitor aka = AKA as Competitor;
             Competitor ao = AO as Competitor;
-            switch (winner)
+            if (isFinished && Winner.Equals(ao)) ao.TotalScore -= 3;
+            else if (isFinished && Winner.Equals(aka)) aka.TotalScore -= 3;
+                switch (winner)
             {
                 case 1:
                     Winner = new Competitor(aka);

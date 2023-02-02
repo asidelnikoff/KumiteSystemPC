@@ -191,9 +191,7 @@ namespace KumiteSystemPC
                         ao_rep = ReadRepechage(1, roundCount, defaultRoundsID[defaultRoundsID.Count - 1]);
                     }
                     else if (categoryType == 1)
-                    {
-                        BronzeMatch = ReadRepechage(2, roundCount, defaultRoundsID[defaultRoundsID.Count - 1]).Matches[0];
-                    }
+                        BronzeMatch = ReadBronzeMatch();
                 }
                 GlobalCategory = new Category();
                 GlobalCategory.Competitors = comps;
@@ -215,6 +213,42 @@ namespace KumiteSystemPC
                 Properties.Settings.Default.LastSelectedTournament = tournamentCB.SelectedIndex;
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private Match ReadBronzeMatch()
+        {
+            Match result = null;
+            m_sqlCmd.CommandText = $"SELECT * FROM Round WHERE Category = {CategoryID} AND Repechage=2";
+            int roundID = 0;
+            using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                    while (reader.Read())
+                        roundID = Convert.ToInt32(reader["ID"]);
+            }
+            m_sqlCmd.CommandText = $"SELECT * FROM Match WHERE Category = {CategoryID} AND Round={roundID}";
+            int matchID = 0;
+            using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                    while (reader.Read())
+                        matchID = Convert.ToInt32(reader["ID"]);
+            }
+            m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
+                         $"Match.AO, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
+                         $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished, Competitor.*" +
+                         $"FROM Match " +
+                         $"LEFT JOIN Competitor on (Competitor.ID = Match.AKA or Competitor.ID = Match.AO) " +
+                         $"WHERE Category = {CategoryID} AND Round = {roundID} AND MatchID = {matchID}";
+
+            //Match m = new Match(null, null, j);
+            var foo = new List<TournamentsBracketsBase.ICompetitor>();
+            using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                    result = ReadMatch(reader, ref foo, matchID) as Match;
+            }
+            return result;
         }
 
         List<TournamentsBracketsBase.ICompetitor> ReadWinners(int categoryID)
@@ -266,7 +300,6 @@ namespace KumiteSystemPC
                     }
                     if (m != null && reader["Winner"] != DBNull.Value && Convert.ToInt32(reader["Winner"]) == Convert.ToInt32(reader["AKA"]))
                     {
-                        m.isFinished = true;
                         if (reader["Looser"] != DBNull.Value && Convert.ToInt32(reader["Looser"]) != 0 && 
                             m.AO!=null && m.AKA!=null) m.SetWinner(1);
                         else if(m.AKA!=null)
@@ -274,10 +307,10 @@ namespace KumiteSystemPC
                             if (reader["Looser"] != DBNull.Value && Convert.ToInt32(reader["Looser"]) == 0) m.AO = new Competitor(true);
                             m.SetWinner(1, false);
                         }
+                        m.isFinished = true;
                     }
                     else if (m != null && reader["Winner"] != DBNull.Value && Convert.ToInt32(reader["Winner"]) == Convert.ToInt32(reader["AO"]))
                     {
-                        m.isFinished = true;
                         if (reader["Looser"] != null && Convert.ToInt32(reader["Looser"]) != 0 
                             && m.AKA!=null && m.AO!=null) m.SetWinner(2);
                         else if(m.AO!=null)
@@ -285,6 +318,7 @@ namespace KumiteSystemPC
                             if (reader["Looser"] != DBNull.Value && Convert.ToInt32(reader["Looser"]) == 0) m.AKA = new Competitor(true);
                             m.SetWinner(2, false);
                         }
+                        m.isFinished = true;
                     }
                     int senshu = Convert.ToInt32(reader["Senshu"]);
                     if (senshu != 0)
@@ -306,10 +340,9 @@ namespace KumiteSystemPC
             {
                 if (reader.HasRows)
                 {
-
                     while (reader.Read())
                     {
-                        repID = (Convert.ToInt32(reader["ID"]));
+                        repID = Convert.ToInt32(reader["ID"]);
                     }
                 }
             }

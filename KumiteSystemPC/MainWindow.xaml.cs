@@ -339,8 +339,8 @@ namespace KumiteSystemPC
                 string s_winners = "";
                 s_winners += $"1: {winners[0]}\n";
                 s_winners += $"2: {winners[1]}\n";
-                if (winners.Count()>2 && winners[2] != null) s_winners += $"3: {winners[2]}\n";
-                if (winners.Count() > 3 && winners[3] != null) s_winners += $"3: {winners[3]}\n";
+                if (winners.Count > 2 && winners[2] != null) s_winners += $"3: {winners[2]}\n";
+                if (winners.Count > 3 && winners[3] != null) s_winners += $"3: {winners[3]}\n";
 
 
                 ContentDialog CategoryResults = new ContentDialog
@@ -384,8 +384,8 @@ namespace KumiteSystemPC
             CategoryResultsEXT.SetCategory(CategoryName);
             if (Winners[0] != null) CategoryResultsEXT.SetFirst(Winners[0]);
             if (Winners[1] != null) CategoryResultsEXT.SetSecond(Winners[1]);
-            if (Winners[2] != null) CategoryResultsEXT.SetThird(Winners[2]);
-            if (Winners[3] != null) CategoryResultsEXT.SetThird1(Winners[3]);
+            if (Winners.Count > 2 && Winners[2] != null) CategoryResultsEXT.SetThird(Winners[2]);
+            if (Winners.Count > 3 && Winners[3] != null) CategoryResultsEXT.SetThird1(Winners[3]);
 
             List<Screen> sc = new List<Screen>();
             sc.AddRange(Screen.AllScreens);
@@ -1443,8 +1443,8 @@ namespace KumiteSystemPC
         private void MainWindow1_Unloaded(object sender, RoutedEventArgs e)
         {
             //Console.WriteLine("Closing...");
-            if (GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.Close(); }
-            if (GlobalCategoryViewerRR.IsLoaded) { GlobalCategoryViewerRR.Close(); }
+            if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { GlobalCategoryViewer.Close(); }
+            if (GlobalCategoryViewerRR != null && GlobalCategoryViewerRR.IsLoaded) { GlobalCategoryViewerRR.Close(); }
             //if (MainExApp != null) { MainExApp.Quit(); }
         }
 

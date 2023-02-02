@@ -102,7 +102,7 @@ namespace RoundRobin
                     {
                         if (currentRoundWinners.Contains(m.AKA))
                             (m.AKA as Competitor).TotalScore += 3;
-                        else if (currentRoundWinners.Contains(m.AO))
+                        if (currentRoundWinners.Contains(m.AO))
                             (m.AO as Competitor).TotalScore += 3;
                     }
                 }
@@ -225,10 +225,16 @@ namespace RoundRobin
             {
                 foreach (var m in Rounds[i].Matches)
                 {
-                    if (comp == m.AKA as Competitor)
+                    if (comp.Equals(m.AKA as Competitor))
+                    {
+                        Console.WriteLine("Adding score AKA");
                         (m.AKA as Competitor).TotalScore += 3;
-                    else if (comp == m.AO as Competitor)
+                    }
+                    else if (comp.Equals(m.AO as Competitor))
+                    {
+                        Console.WriteLine("Adding score AO");
                         (m.AO as Competitor).TotalScore += 3;
+                    }
                 }
             }
         }

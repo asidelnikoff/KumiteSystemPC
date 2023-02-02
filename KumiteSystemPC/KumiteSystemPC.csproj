@@ -8,7 +8,7 @@
     <ProjectGuid>{84554B51-9224-4F2B-AB3F-FA2C035A06EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>KumiteSystemPC</RootNamespace>
-    <AssemblyName>Kumite System</AssemblyName>
+    <AssemblyName>Kata System</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>KuS.ico</ApplicationIcon>
+    <ApplicationIcon>KaS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">

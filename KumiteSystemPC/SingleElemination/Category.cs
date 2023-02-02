@@ -61,9 +61,11 @@ namespace TournamentTree
                     if (!m.isFinished) return false;
                 }
             }
-            
-            if (!is1third) return RepechageAKA.IsFinished() && RepechageAO.IsFinished();
-            else return BronzeMatch.isFinished;
+
+            if (!is1third && RepechageAKA != null && RepechageAO != null)
+                return RepechageAKA.IsFinished() && RepechageAO.IsFinished();
+            else if (BronzeMatch != null) return BronzeMatch.isFinished;
+            else return false;
 
         }
 

@@ -21,5 +21,23 @@ namespace RoundRobin
             TotalScore = totalScore;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj != null && obj.GetType().ToString() != "MS.Internal.NamedObject")
+            {
+                Competitor comp = obj as Competitor;
+                if (comp == null) return false;
+                Console.WriteLine($"{comp}");
+                return (FirstName == comp.FirstName) &&
+                        (LastName == comp.LastName) &&
+                        (ID == comp.ID);
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return ($"{ID}{FirstName}{LastName}").GetHashCode();
+        }
+
     }
 }

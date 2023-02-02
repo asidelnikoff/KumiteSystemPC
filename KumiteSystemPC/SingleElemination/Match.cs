@@ -37,7 +37,7 @@ namespace TournamentTree
         public bool isAllCompetitors()
         {
             //TODO: All Conditions to check fullness of match
-            if ((AKA.FirstName == null && AKA.LastName == null && AKA.ID == 0) ||
+            if (AKA == null || AO == null || (AKA.FirstName == null && AKA.LastName == null && AKA.ID == 0) ||
                 (AO.FirstName == null && AO.LastName == null && AO.ID == 0) || AKA.IsBye || AO.IsBye) return false;
             else return true;
         }
