@@ -42,7 +42,6 @@ namespace KumiteSystemPC
         }
         public async void controlTime()
         {
-
             do
             {
                 TimeSpan ts = stopWatch.Elapsed;
@@ -58,7 +57,6 @@ namespace KumiteSystemPC
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
                 await Task.Delay(1000);
             } while (stopWatch.IsRunning);
-
         }
         bool atoshibaraku = false;
         void AtoshiBaraku()
@@ -92,13 +90,16 @@ namespace KumiteSystemPC
                 min = 0; sec = 0;
                 time = 0;
                 stopWatch.Reset();
-                minTXT.Text = String.Format("{0:d2}", min);
-                secTXT.Text = String.Format("{0:d2}", sec);
+                minTXT.Text = "";
+                secTXT.Text = "";
+                timerTime = TimeSpan.Zero;
             }
         }
 
         void showTimerExt()
         {
+            if (timerExt != null)
+                timerExt.Close();
             List<Screen> sc = new List<Screen>();
             sc.AddRange(Screen.AllScreens);
             timerExt = new TimerExt();
@@ -106,9 +107,7 @@ namespace KumiteSystemPC
             timerExt.Show();
             timerExt.Left = (sc[Properties.Settings.Default.ScreenNR].Bounds.Right + sc[Properties.Settings.Default.ScreenNR].Bounds.Left) / 2 - timerExt.Width / 2;
             timerExt.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Bottom / 2 - timerExt.Height / 2;
-
         }
-
         private void closeExtBtn_Click(object sender, RoutedEventArgs e)
         {
             if (timerExt != null) { timerExt.Close(); timerExt = null; }
@@ -117,15 +116,7 @@ namespace KumiteSystemPC
         private void minTXT_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-            {
-                try
-                {
-                    min = Convert.ToInt32(minTXT.Text);
-                    time = min * 60 + sec;
-                    timerTime = new TimeSpan(0, min, sec);
-                }
-                catch { DisplayMessageDialog("Warning", "Invalid values are entered!"); minTXT.Text = "0"; }
-            }
+            TrySetTimerTime();
         }
 
 
@@ -149,40 +140,41 @@ namespace KumiteSystemPC
             FocusManager.SetFocusedElement(FocusManager.GetFocusScope(secTXT), null);
             // Kill keyboard focus
             Keyboard.ClearFocus();
+        }
 
+        void TrySetTimerTime()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(minTXT.Text) && !String.IsNullOrWhiteSpace(minTXT.Text))
+                    min = Convert.ToInt32(minTXT.Text);
+                if (!String.IsNullOrEmpty(secTXT.Text) && !String.IsNullOrWhiteSpace(secTXT.Text))
+                    sec = Convert.ToInt32(secTXT.Text);
+                time = min * 60 + sec;
+                timerTime = new TimeSpan(0, min, sec);
+            }
+            catch 
+            { 
+                DisplayMessageDialog("Warning", "Invalid values are entered!");
+                minTXT.Text = "";
+                secTXT.Text = ""; 
+            }
         }
 
         private void secTXT_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-            {
-                try
-                {
-                    sec = Convert.ToInt32(secTXT.Text);
-                    time = min * 60 + sec;
-                    timerTime = new TimeSpan(0, min, sec);
-                }
-                catch { DisplayMessageDialog("Warning", "Invalid values are entered!"); secTXT.Text = "0"; }
-            }
+                TrySetTimerTime();
         }
 
         private void startBtn_Click(object sender, RoutedEventArgs e)
         {
             if (timerTime <= TimeSpan.Zero)
-            {
-                try
-                {
-                    min = Convert.ToInt32(minTXT.Text);
-                    sec = Convert.ToInt32(secTXT.Text);
-                    time = min * 60 + sec;
-                    timerTime = new TimeSpan(0, min, sec);
-                }
-                catch { DisplayMessageDialog("Warning", "Invalid values are entered!"); minTXT.Text = "0"; }
-            }
+                TrySetTimerTime();
 
             if (!stopWatch.IsRunning && timerTime > TimeSpan.Zero)
             {
-                if (timerExt == null) { showTimerExt(); }
+                if (timerExt == null || !timerExt.IsLoaded) { showTimerExt(); }
                 remainTime = timerTime;
                 startBtn.Content = "Stop";
                 stopWatch.Start();

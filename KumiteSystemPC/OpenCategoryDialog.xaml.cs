@@ -219,7 +219,7 @@ namespace KumiteSystemPC
         {
             Match result = null;
             m_sqlCmd.CommandText = $"SELECT * FROM Round WHERE Category = {CategoryID} AND Repechage=2";
-            int roundID = 0;
+            int roundID = -10;
             using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
             {
                 if (reader.HasRows)
@@ -227,26 +227,29 @@ namespace KumiteSystemPC
                         roundID = Convert.ToInt32(reader["ID"]);
             }
             m_sqlCmd.CommandText = $"SELECT * FROM Match WHERE Category = {CategoryID} AND Round={roundID}";
-            int matchID = 0;
+            int matchID = -10;
             using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
             {
                 if (reader.HasRows)
                     while (reader.Read())
                         matchID = Convert.ToInt32(reader["ID"]);
             }
-            m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
-                         $"Match.AO, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
-                         $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished, Competitor.*" +
-                         $"FROM Match " +
-                         $"LEFT JOIN Competitor on (Competitor.ID = Match.AKA or Competitor.ID = Match.AO) " +
-                         $"WHERE Category = {CategoryID} AND Round = {roundID} AND MatchID = {matchID}";
-
-            //Match m = new Match(null, null, j);
-            var foo = new List<TournamentsBracketsBase.ICompetitor>();
-            using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+            if (roundID >= 0 && matchID >= 0)
             {
-                if (reader.HasRows)
-                    result = ReadMatch(reader, ref foo, matchID) as Match;
+                m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
+                             $"Match.AO, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
+                             $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished, Competitor.*" +
+                             $"FROM Match " +
+                             $"LEFT JOIN Competitor on (Competitor.ID = Match.AKA or Competitor.ID = Match.AO) " +
+                             $"WHERE Category = {CategoryID} AND Round = {roundID} AND MatchID = {matchID}";
+
+                //Match m = new Match(null, null, j);
+                var foo = new List<TournamentsBracketsBase.ICompetitor>();
+                using (SQLiteDataReader reader = m_sqlCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                        result = ReadMatch(reader, ref foo, matchID) as Match;
+                }
             }
             return result;
         }
