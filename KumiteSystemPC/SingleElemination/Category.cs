@@ -253,7 +253,7 @@ namespace TournamentTree
             if (RepechageAKA != null && RepechageAKA.Matches.Count > 0 && RepechageAKA.Winner == null) { isAll = false; }
             if (RepechageAO != null && RepechageAO.Matches.Count > 0 && RepechageAO.Winner == null) { isAll = false; }
 
-            if (curRound + 1 == Rounds.Count() && isAll)
+            if (isAll)
             {
                 FormResults();
                 ShowResults();
@@ -384,7 +384,7 @@ namespace TournamentTree
                 if (Rounds[curRound].Matches[0].Looser != null) aka = new Competitor(Rounds[curRound].Matches[0].Looser as Competitor);
                 if (Rounds[curRound].Matches[1].Looser != null) ao = new Competitor(Rounds[curRound].Matches[1].Looser as Competitor);
                 aka.ResetCompetitor(); ao.ResetCompetitor();
-                BronzeMatch = new Match(aka, ao, Competitors.Count());
+                BronzeMatch = new Match(aka, ao, 1);
                 
                 BronzeGen?.Invoke();
             }

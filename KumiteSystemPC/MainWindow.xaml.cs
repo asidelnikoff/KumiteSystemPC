@@ -365,7 +365,10 @@ namespace KumiteSystemPC
 
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+                DisplayMessageDialog("Error", ex.Message);
+            }
         }
 
         private void closeExtRes_Click(object sender, RoutedEventArgs e)

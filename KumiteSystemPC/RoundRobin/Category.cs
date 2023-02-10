@@ -136,7 +136,7 @@ namespace RoundRobin
                 if (!r.IsFinished()) { isAll = false; break; }
             }
 
-            if (curRound + 1 == Rounds.Count() && isAll)
+            if (isAll)
             {
                 FormResults();
                 ShowResults();
