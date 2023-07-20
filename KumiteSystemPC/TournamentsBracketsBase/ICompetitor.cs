@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TournamentTree;
 
 namespace TournamentsBracketsBase
 {
@@ -24,9 +25,9 @@ namespace TournamentsBracketsBase
         /// </Status>
 
         event CheckWinnerDelegate Check_Winner;
+        
 
-
-         int ID { get; }
+        int ID { get; }
          string FirstName { get; set; }
          string LastName { get; set; }
          string Club { get; }

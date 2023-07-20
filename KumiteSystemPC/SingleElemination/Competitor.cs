@@ -12,18 +12,19 @@ namespace TournamentTree
     {
         /// <Fouls>
         /// 1 - C,
-        /// 2 - K,
-        /// 3 - HC,
-        /// 4 - H
+        /// 2 - C2,
+        /// 3 - C3,
+        /// 4 - HC
+        /// 5 - H
         /// </Fouls>
-
+        public enum Fouls { Chui1 = 1, Chui2, Chui3, HansokuChui, Hansoku}
 
         /// <Status>
         /// 0 - Active
         /// 1 - KIKEN
         /// 2 - SHIKAKU
         /// </Status>
-
+        public enum Statuses { Active, Kiken, Shikaku };
 
         //public delegate void CheckWinnerDelegate(bool isTimeUp=false);
         public event TournamentsBracketsBase.CheckWinnerDelegate Check_Winner;
@@ -104,7 +105,7 @@ namespace TournamentTree
            // Check_Winner?.Invoke();
         }
 
-        public void SetScore(int score)
+        public void SetScore(int score) //only used in Kata
         {
             ScoreProperty = score;
             AllScores.Clear();

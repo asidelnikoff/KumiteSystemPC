@@ -398,7 +398,7 @@ namespace KumiteSystemPC
             else score = (string)reader["AO_score"];
             for (int k = 0; k < score.Length; k++)
             {
-                if (Char.IsDigit(score[k])) { res.AddPoints(Convert.ToInt32(score[k]) - 48); }
+                if (Char.IsDigit(score[k])) { res.AddPoints(Convert.ToInt32(score[k]) - '0'); }
             }
             return res;
         }

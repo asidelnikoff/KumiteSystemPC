@@ -262,19 +262,22 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <CheckBox Margin="10,0" Content="H" x:Name="AKA_H1_CB" HorizontalAlignment="Left" Unchecked="AKA_H1_CB_Unchecked" Checked="AKA_H1_CB_Checked"/>
                         <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC1_CB" HorizontalAlignment="Left" Unchecked="AKA_HC1_CB_Unchecked" Checked="AKA_HC1_CB_Checked"/>
-                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K1_CB" HorizontalAlignment="Left" Checked="AKA_K1_CB_Checked" Unchecked="AKA_K1_CB_Unchecked"/>
-                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C1_CB" HorizontalAlignment="Left" Checked="AKA_C1_CB_Checked" Unchecked="AKA_C1_CB_Uncheked"/>
-                        <Label FontSize="24" Grid.Column="4" Content="C1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H1_CB" HorizontalAlignment="Left" Checked="AO_H1_CB_Checked" Unchecked="AO_H1_CB_Unchecked"/>
-                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC1_CB" HorizontalAlignment="Left" Checked="AO_HC1_CB_Checked" Unchecked="AO_HC1_CB_Unchecked"/>
-                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K1_CB" HorizontalAlignment="Left" Checked="AO_K1_CB_Checked" Unchecked="AO_K1_CB_Unchecked"/>
-                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C1_CB" HorizontalAlignment="Left" Unchecked="AO_C1_CB_Unchecked" Checked="AO_C1_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="2" Content="C3" x:Name="AKA_C3_CB" HorizontalAlignment="Left" Checked="AKA_C3_CB_Checked" Unchecked="AKA_C3_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="3" Content="C2" x:Name="AKA_C2_CB" HorizontalAlignment="Left" Checked="AKA_C2_CB_Checked" Unchecked="AKA_C2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="4" Content="C1" x:Name="AKA_C1_CB" HorizontalAlignment="Left" Checked="AKA_C1_CB_Checked" Unchecked="AKA_C1_CB_Uncheked"/>
+                        <Label Visibility="Collapsed" FontSize="24" Grid.Column="5" Content="C1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <CheckBox Margin="10,0" Grid.Column="9" Content="H" x:Name="AO_H1_CB" HorizontalAlignment="Left" Checked="AO_H1_CB_Checked" Unchecked="AO_H1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="8" Content="HC" x:Name="AO_HC1_CB" HorizontalAlignment="Left" Checked="AO_HC1_CB_Checked" Unchecked="AO_HC1_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="7" Content="C3" x:Name="AO_C3_CB" HorizontalAlignment="Left" Checked="AO_C3_CB_Checked" Unchecked="AO_C3_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="6" Content="C2" x:Name="AO_C2_CB" HorizontalAlignment="Left" Checked="AO_C2_CB_Checked" Unchecked="AO_C2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="5" Content="C1" x:Name="AO_C1_CB" HorizontalAlignment="Left" Unchecked="AO_C1_CB_Unchecked" Checked="AO_C1_CB_Checked"/>
                     </Grid>
 
-                    <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="#72000000">
+                    <!--<Grid Grid.Row="2" Grid.ColumnSpan="2" Background="#72000000" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -295,7 +298,7 @@
                         <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC2_CB" HorizontalAlignment="Left" Unchecked="AO_HC2_CB_Unchecked" Checked="AO_HC2_CB_Checked"/>
                         <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K2_CB" HorizontalAlignment="Left" Unchecked="AO_K2_CB_Unchecked" Checked="AO_K2_CB_Checked"/>
                         <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C2_CB" HorizontalAlignment="Left" Checked="AO_C2_CB_Checked" Unchecked="AO_C2_CB_Unchecked"/>
-                    </Grid>
+                    </Grid>-->
                     <Grid Grid.Row="3" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

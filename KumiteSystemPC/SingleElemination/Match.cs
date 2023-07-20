@@ -83,25 +83,46 @@ namespace TournamentTree
             Competitor Aka = AKA as Competitor;
             Competitor Ao = AO as Competitor;
 
-            if (Aka.Status == 1 || Aka.Status == 2) { SetWinner(2, false); }
-            else if (Ao.Status == 1 || Ao.Status == 2) { SetWinner(1, false); }
+            if (Aka.Status == (int)Competitor.Statuses.Kiken || Aka.Status == (int)Competitor.Statuses.Shikaku) { SetWinner(2, false); }
+            else if (Ao.Status == (int)Competitor.Statuses.Kiken || Ao.Status == (int)Competitor.Statuses.Shikaku) { SetWinner(1, false); }
             //
             else if (AKA != null && AKA.IsBye) { SetWinner(2); }
             else if (AO != null && AO.IsBye) { SetWinner(1); }
             //
-            else if (Aka.Fouls_C1 >= 4 || Aka.Fouls_C2 >= 4) { SetWinner(2); }
-            else if (Ao.Fouls_C1 >= 4 || Ao.Fouls_C2 >= 4) { SetWinner(1); }
+            else if (Aka.Fouls_C1 >= (int)Competitor.Fouls.Hansoku /*|| Aka.Fouls_C2 >= 4*/) { SetWinner(2); }
+            else if (Ao.Fouls_C1 >= (int)Competitor.Fouls.Hansoku /*|| Ao.Fouls_C2 >= 4*/) { SetWinner(1); }
             //
-            else if (Aka.Score - 8 >= Ao.Score && Aka.Fouls_C1 < 4 && Aka.Fouls_C2 < 4) { SetWinner(1); }
-            else if (Ao.Score - 8 >= Aka.Score && Ao.Fouls_C1 < 4 && Ao.Fouls_C2 < 4) { SetWinner(2); }
+            else if (Aka.Score - 8 >= Ao.Score && Aka.Fouls_C1 < (int)Competitor.Fouls.Hansoku /*&& Aka.Fouls_C2 < 4*/) { SetWinner(1); }
+            else if (Ao.Score - 8 >= Aka.Score && Ao.Fouls_C1 < (int)Competitor.Fouls.Hansoku /*&& Ao.Fouls_C2 < 4*/) { SetWinner(2); }
             //
-            else if (isTimeUP && Aka.Score > Ao.Score && Aka.Fouls_C1 < 4 && Aka.Fouls_C2 < 4) { SetWinner(1); }
-            else if (isTimeUP && Ao.Score > Aka.Score && Ao.Fouls_C1 < 4 && Ao.Fouls_C2 < 4) { SetWinner(2); }
+            else if (isTimeUP && Aka.Score > Ao.Score && Aka.Fouls_C1 < (int)Competitor.Fouls.Hansoku /*&& Aka.Fouls_C2 < 4*/) { SetWinner(1); }
+            else if (isTimeUP && Ao.Score > Aka.Score && Ao.Fouls_C1 < (int)Competitor.Fouls.Hansoku /*&& Ao.Fouls_C2 < 4*/) { SetWinner(2); }
             //
             else if (isTimeUP && Aka.Score == Ao.Score && Aka.Senshu) { SetWinner(1); }
             else if (isTimeUP && Aka.Score == Ao.Score && Ao.Senshu) { SetWinner(2); }
             //
+            else if(isTimeUP)
+            {
+                int countIpAka = 0, countWazAka = 0;
+                foreach(var sc in Aka.AllScores)
+                {
+                    if (sc == 3) countIpAka++;
+                    else if (sc == 2) countWazAka++;
+                }
+                foreach(var sc in Ao.AllScores)
+                {
+                    if (sc == 3) countIpAka--;
+                    else if (sc == 2) countWazAka--;
+                }
 
+                if (countIpAka > 0) SetWinner(1);
+                else if (countIpAka < 0) SetWinner(2);
+                else
+                {
+                    if (countWazAka > 0) SetWinner(1);
+                    else if (countWazAka < 0) SetWinner(2);
+                }
+            }
             //
             //TODO: All conditions to Set winner
 

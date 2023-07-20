@@ -588,7 +588,7 @@ namespace KumiteSystemPC
             showTime(String.Format("{0:00}:{1:00}", remainTime.Minutes, remainTime.Seconds));
             AddInfo($"Stop timer. Time left: {String.Format("{0:00}:{1:00}", remainTime.Minutes, remainTime.Seconds)}");
             GlobalMatchNow.CheckWinner(true);
-            msViewBox.Visibility = Visibility.Collapsed;
+            //msViewBox.Visibility = Visibility.Collapsed;
             //FinishMatch(CheckWin(0), true);
         }
         void AtoshiBaraku()
@@ -636,7 +636,7 @@ namespace KumiteSystemPC
             {
                 stopWatch.Start();
                 controlTime();
-                AddInfo($"Stop timer. Time left: {TimerL.Content}");
+                AddInfo($"Start timer. Time left: {TimerL.Content}");
                 startTimeBTN.Content = "Stop";
                 TimerL.IsEnabled = true;
                 //if (externalBoard != null) externalBoard.TimerEXT.IsEnabled = true;
@@ -659,7 +659,8 @@ namespace KumiteSystemPC
 
         private void SetTime_Click(object sender, RoutedEventArgs e)
         {
-            SetTimeer();
+            if (!stopWatch.IsRunning)
+                SetTimeer();
         }
 
         private void ResetTimerBtn_Click(object sender, RoutedEventArgs e)
@@ -684,6 +685,7 @@ namespace KumiteSystemPC
             }
 
             TimerL.Foreground = Brushes.White;
+            TimerLms.Foreground = Brushes.White;
             TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
             msViewBox.Visibility = Visibility.Collapsed;
             //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
@@ -700,7 +702,7 @@ namespace KumiteSystemPC
 
         private void TimeS_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && !stopWatch.IsRunning)
             {
                 try
                 {
@@ -727,7 +729,7 @@ namespace KumiteSystemPC
 
         private void TimeM_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && !stopWatch.IsRunning)
             {
                 try
                 {
@@ -900,36 +902,58 @@ namespace KumiteSystemPC
         #region FOULS C1 AKA
         private void AKA_C1_CB_Uncheked(object srnder, RoutedEventArgs e)
         {
-            if (AKA_K1_CB.IsChecked == true || AKA_HC1_CB.IsChecked == true || AKA_H1_CB.IsChecked == true) { AKA_C1_CB.IsChecked = true; }
+            if (AKA_C3_CB.IsChecked == true || AKA_C2_CB.IsChecked == true || AKA_HC1_CB.IsChecked == true 
+                || AKA_H1_CB.IsChecked == true)
+                    { AKA_C1_CB.IsChecked = true; }
             else
             {
                 GlobalMatchNow.AKA.SetFoulsC1(0);
-                AddInfo("AKA remove sanction C1 C");
+                AddInfo("AKA remove sanction C1");
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c1AKA, 0); }
             }
         }
         private void AKA_C1_CB_Checked(object sender, RoutedEventArgs e)
         {
-
-            GlobalMatchNow.AKA.SetFoulsC1(1); AddInfo("AKA sanction C1 C");
+            GlobalMatchNow.AKA.SetFoulsC1(1); AddInfo("AKA sanction C1");
             if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c1AKA, 1); }
         }
-        private void AKA_K1_CB_Unchecked(object sender, RoutedEventArgs e)
+        private void AKA_C2_CB_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (AKA_HC1_CB.IsChecked == true || AKA_H1_CB.IsChecked == true) { AKA_K1_CB.IsChecked = true; }
+            if (AKA_C3_CB.IsChecked == true || AKA_HC1_CB.IsChecked == true || AKA_H1_CB.IsChecked == true) 
+                { AKA_C2_CB.IsChecked = true; }
             else
             {
                 GlobalMatchNow.AKA.SetFoulsC1(GlobalMatchNow.AKA.Fouls_C1 - 1);
-                AddInfo("AKA remove sanction C1 K");
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k1AKA, 0); }
+                AddInfo("AKA remove sanction C2");
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c2AKA, 0); }
             }
         }
-        private void AKA_K1_CB_Checked(object sender, RoutedEventArgs e)
+        private void AKA_C2_CB_Checked(object sender, RoutedEventArgs e)
         {
             AKA_C1_CB.IsChecked = true;
             GlobalMatchNow.AKA.SetFoulsC1(2);
-            AddInfo("AKA sanction C1 K");
-            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k1AKA, 1); }
+            AddInfo("AKA sanction C2");
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c2AKA, 1); }
+        }
+        private void AKA_C3_CB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (AKA_HC1_CB.IsChecked == true || AKA_H1_CB.IsChecked == true)
+            { AKA_C3_CB.IsChecked = true; }
+            else
+            {
+                GlobalMatchNow.AKA.SetFoulsC1(GlobalMatchNow.AKA.Fouls_C1 - 1);
+                AddInfo("AKA remove sanction C3");
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c3AKA, 0); }
+            }
+        }
+        private void AKA_C3_CB_Checked(object sender, RoutedEventArgs e)
+        {
+            AKA_C1_CB.IsChecked = true;
+            AKA_C2_CB.IsChecked = true;
+            GlobalMatchNow.AKA.SetFoulsC1(3);
+            AddInfo("AKA sanction C3");
+            //TODO: Animation
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c3AKA, 1); }
         }
         private void AKA_HC1_CB_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -937,166 +961,179 @@ namespace KumiteSystemPC
             else
             {
                 GlobalMatchNow.AKA.SetFoulsC1(GlobalMatchNow.AKA.Fouls_C1 - 1);
-                AddInfo("AKA remove sanction C1 HC");
+                AddInfo("AKA remove sanction HC");
                 if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc1AKA, 0); }
 
             }
         }
         private void AKA_HC1_CB_Checked(object sender, RoutedEventArgs e)
         {
-            AKA_C1_CB.IsChecked = true; AKA_K1_CB.IsChecked = true;
-            GlobalMatchNow.AKA.SetFoulsC1(3);
-            AddInfo("AKA sanction C1 HC");
+            AKA_C1_CB.IsChecked = true; AKA_C2_CB.IsChecked = true; AKA_C3_CB.IsChecked = true;
+            GlobalMatchNow.AKA.SetFoulsC1(4);
+            AddInfo("AKA sanction HC");
             if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc1AKA, 1); }
         }
 
 
         private void AKA_H1_CB_Unchecked(object sender, RoutedEventArgs e)
         {
-            GlobalMatchNow.AKA.SetFoulsC1(GlobalMatchNow.AKA.Fouls_C1 - 1); AddInfo("AKA remove sanction C1 H");
+            GlobalMatchNow.AKA.SetFoulsC1(GlobalMatchNow.AKA.Fouls_C1 - 1); 
+            AddInfo("AKA remove sanction H");
             if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h1AKA, 0); }
         }
         private void AKA_H1_CB_Checked(object sender, RoutedEventArgs e)
         {
-            AKA_C1_CB.IsChecked = true; AKA_K1_CB.IsChecked = true; AKA_HC1_CB.IsChecked = true;
-            GlobalMatchNow.AKA.SetFoulsC1(4);
-            AddInfo("AKA sanction C1 H");
+            AKA_C1_CB.IsChecked = true; AKA_C2_CB.IsChecked = true; AKA_C3_CB.IsChecked = true; AKA_HC1_CB.IsChecked = true;
+            GlobalMatchNow.AKA.SetFoulsC1(5);
+            AddInfo("AKA sanction H");
             if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h1AKA, 1); }
         }
 
         #endregion
+        
+        //Not used
         #region FOULS C2 AKA
-        private void AKA_C2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AKA_K2_CB.IsChecked == true || AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_C2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AKA.SetFoulsC2(0);
-                AddInfo("AKA remove sanction C2 C");
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c2AKA, 0); }
-            }
-        }
-        private void AKA_C2_CB_Checked(object sender, RoutedEventArgs e)
-        {
+        //private void AKA_C2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AKA_K2_CB.IsChecked == true || AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_C2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AKA.SetFoulsC2(0);
+        //        AddInfo("AKA remove sanction C2 C");
+        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c2AKA, 0); }
+        //    }
+        //}
+        //private void AKA_C2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
 
-            if (AKA_C2_CB.IsChecked == true)
-            {
-                GlobalMatchNow.AKA.SetFoulsC2(1); AddInfo("AKA sanction C2 C");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.c2AKA, 1);
+        //    if (AKA_C2_CB.IsChecked == true)
+        //    {
+        //        GlobalMatchNow.AKA.SetFoulsC2(1); AddInfo("AKA sanction C2 C");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.c2AKA, 1);
 
-                }
-            }
+        //        }
+        //    }
 
-        }
+        //}
 
-        private void AKA_K2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_K2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
-                AddInfo("AKA remove sanction C2 K");
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 0); }
-            }
-        }
-        private void AKA_K2_CB_Checked(object sender, RoutedEventArgs e)
-        {
+        //private void AKA_K2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_K2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
+        //        AddInfo("AKA remove sanction C2 K");
+        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 0); }
+        //    }
+        //}
+        //private void AKA_K2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
 
-            AKA_C2_CB.IsChecked = true;
-            GlobalMatchNow.AKA.SetFoulsC2(2);
-            AddInfo("AKA sanction C2 K");
-            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 1); }
-        }
+        //    AKA_C2_CB.IsChecked = true;
+        //    GlobalMatchNow.AKA.SetFoulsC2(2);
+        //    AddInfo("AKA sanction C2 K");
+        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 1); }
+        //}
 
-        private void AKA_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AKA_H2_CB.IsChecked == true) { AKA_HC2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
-                AddInfo("AKA remove sanction C2 HC");
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 0); }
-            }
-        }
-        private void AKA_HC2_CB_Checked(object sender, RoutedEventArgs e)
-        {
-            AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true;
-            GlobalMatchNow.AKA.SetFoulsC2(3);
-            AddInfo("AKA sanction C2 HC");
-            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 1); }
-        }
+        //private void AKA_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AKA_H2_CB.IsChecked == true) { AKA_HC2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
+        //        AddInfo("AKA remove sanction C2 HC");
+        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 0); }
+        //    }
+        //}
+        //private void AKA_HC2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true;
+        //    GlobalMatchNow.AKA.SetFoulsC2(3);
+        //    AddInfo("AKA sanction C2 HC");
+        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 1); }
+        //}
 
-        private void AKA_H2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1); AddInfo("AKA remove sanction C2 H");
-            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 0); }
-        }
-        private void AKA_H2_CB_Checked(object sender, RoutedEventArgs e)
-        {
-            AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true; AKA_HC2_CB.IsChecked = true;
-            GlobalMatchNow.AKA.SetFoulsC2(4);
-            AddInfo("AKA sanction C2 H");
-            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 1); }
+        //private void AKA_H2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1); AddInfo("AKA remove sanction C2 H");
+        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 0); }
+        //}
+        //private void AKA_H2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true; AKA_HC2_CB.IsChecked = true;
+        //    GlobalMatchNow.AKA.SetFoulsC2(4);
+        //    AddInfo("AKA sanction C2 H");
+        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 1); }
 
 
-        }
+        //}
         #endregion
 
 
         #region FOULS C1 AO
         private void AO_C1_CB_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (AO_K1_CB.IsChecked == true || AO_HC1_CB.IsChecked == true || AO_H1_CB.IsChecked == true) { AO_C1_CB.IsChecked = true; }
+            if (AO_C3_CB.IsChecked == true || AO_C2_CB.IsChecked == true || AO_HC1_CB.IsChecked == true 
+                || AO_H1_CB.IsChecked == true) 
+            { AO_C1_CB.IsChecked = true; }
             else
             {
                 GlobalMatchNow.AO.SetFoulsC1(0);
-                AddInfo("AO remove sanction C1 C");
+                AddInfo("AO remove sanction C1");
                 if (externalBoard != null)
-                {
                     externalBoard.ShowSanction(externalBoard.c1AO, 0);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOC1, 0); }
             }
         }
         private void AO_C1_CB_Checked(object sender, RoutedEventArgs e)
         {
-            GlobalMatchNow.AO.SetFoulsC1(1); AddInfo("AO sanction C1 C");
+            GlobalMatchNow.AO.SetFoulsC1(1); 
+            AddInfo("AO sanction C1");
             if (externalBoard != null)
-            {
-                externalBoard.ShowSanction(externalBoard.c1AO, 1);
-            }
-            //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOC1, 1); }           
+                externalBoard.ShowSanction(externalBoard.c1AO, 1);    
         }
-        private void AO_K1_CB_Unchecked(object sender, RoutedEventArgs e)
+        private void AO_C2_CB_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (AO_HC1_CB.IsChecked == true || AO_H1_CB.IsChecked == true) { AO_K1_CB.IsChecked = true; }
+            if (AO_C3_CB.IsChecked == true || AO_HC1_CB.IsChecked == true || AO_H1_CB.IsChecked == true) 
+            { AO_C2_CB.IsChecked = true; }
             else
             {
                 GlobalMatchNow.AO.SetFoulsC1(GlobalMatchNow.AO.Fouls_C1 - 1);
-                AddInfo("AO remove sanction C1 K");
+                AddInfo("AO remove sanction C2");
                 if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.k1AO, 0);
-
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK1, 0); }
+                    externalBoard.ShowSanction(externalBoard.c2AO, 0);
             }
         }
-        private void AO_K1_CB_Checked(object sender, RoutedEventArgs e)
+        private void AO_C2_CB_Checked(object sender, RoutedEventArgs e)
         {
             AO_C1_CB.IsChecked = true;
             GlobalMatchNow.AO.SetFoulsC1(2);
-            AddInfo("AO sanction C1 K");
+            AddInfo("AO sanction C2");
             if (externalBoard != null)
+                externalBoard.ShowSanction(externalBoard.c2AO, 1);
+        }
+
+        private void AO_C3_CB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (AO_HC1_CB.IsChecked == true || AO_H1_CB.IsChecked == true)
+            { AO_C3_CB.IsChecked = true; }
+            else
             {
-
-                externalBoard.ShowSanction(externalBoard.k1AO, 1);
-
+                GlobalMatchNow.AO.SetFoulsC1(GlobalMatchNow.AO.Fouls_C1 - 1);
+                AddInfo("AO remove sanction C3");
+                if (externalBoard != null)
+                    externalBoard.ShowSanction(externalBoard.c3AO, 0);
             }
+        }
+        private void AO_C3_CB_Checked(object sender, RoutedEventArgs e)
+        {
+            AO_C1_CB.IsChecked = true;
+            AO_C2_CB.IsChecked = true;
+            GlobalMatchNow.AO.SetFoulsC1(3);
+            AddInfo("AO sanction C3");
+            if (externalBoard != null)
+                externalBoard.ShowSanction(externalBoard.c3AO, 1);
         }
 
 
@@ -1106,180 +1143,162 @@ namespace KumiteSystemPC
             else
             {
                 GlobalMatchNow.AO.SetFoulsC1(GlobalMatchNow.AO.Fouls_C1 - 1);
-                AddInfo("AO remove sanction C1 HC");
+                AddInfo("AO remove sanction HC");
                 if (externalBoard != null)
-                {
                     externalBoard.ShowSanction(externalBoard.hc1AO, 0);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC1, 0); }
             }
         }
         private void AO_HC1_CB_Checked(object sender, RoutedEventArgs e)
         {
-            AO_C1_CB.IsChecked = true; AO_K1_CB.IsChecked = true;
-            GlobalMatchNow.AO.SetFoulsC1(3);
-            AddInfo("AO sanction C1 HC");
+            AO_C1_CB.IsChecked = true; AO_C2_CB.IsChecked = true; AO_C3_CB.IsChecked = true;
+            GlobalMatchNow.AO.SetFoulsC1(4);
+            AddInfo("AO sanction HC");
             if (externalBoard != null)
-            {
-
                 externalBoard.ShowSanction(externalBoard.hc1AO, 1);
-
-            }
-
         }
 
         private void AO_H1_CB_Unchecked(object sender, RoutedEventArgs e)
         {
-            GlobalMatchNow.AO.SetFoulsC1(GlobalMatchNow.AO.Fouls_C1 - 1); AddInfo("AO remove sanction C1 H");
+            GlobalMatchNow.AO.SetFoulsC1(GlobalMatchNow.AO.Fouls_C1 - 1); AddInfo("AO remove sanction H");
             if (externalBoard != null)
-            {
                 externalBoard.ShowSanction(externalBoard.h1AO, 0);
-
-            }
-            //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOH1, 0); }
-
         }
         private void AO_H1_CB_Checked(object sender, RoutedEventArgs e)
         {
-            AO_C1_CB.IsChecked = true; AO_K1_CB.IsChecked = true; AO_HC1_CB.IsChecked = true;
-            GlobalMatchNow.AO.SetFoulsC1(4);
-            AddInfo("AO sanction C1 H");
+            AO_C1_CB.IsChecked = true; AO_C2_CB.IsChecked = true; AO_C3_CB.IsChecked = true; AO_HC1_CB.IsChecked = true;
+            GlobalMatchNow.AO.SetFoulsC1(5);
+            AddInfo("AO sanction H");
             if (externalBoard != null)
-            {
-
                 externalBoard.ShowSanction(externalBoard.h1AO, 1);
-
-            }
 
         }
 
         #endregion
+
+        //Not Used
         #region FOULS C2 AO
+        //private void AO_C2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AO_K2_CB.IsChecked == true || AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_C2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AO.SetFoulsC2(0);
+        //        AddInfo("AO remove sanction C2 C");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.c2AO, 0);
 
 
-        private void AO_C2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AO_K2_CB.IsChecked == true || AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_C2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AO.SetFoulsC2(0);
-                AddInfo("AO remove sanction C2 C");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.c2AO, 0);
+        //        }
+        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOC2, 0); }
+        //    }
+        //}
+        //private void AO_C2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    GlobalMatchNow.AO.SetFoulsC2(1); AddInfo("AO sanction C2 C");
+        //    if (externalBoard != null)
+        //    {
+        //        externalBoard.ShowSanction(externalBoard.c2AO, 1);
+
+        //    }
 
 
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOC2, 0); }
-            }
-        }
-        private void AO_C2_CB_Checked(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AO.SetFoulsC2(1); AddInfo("AO sanction C2 C");
-            if (externalBoard != null)
-            {
-                externalBoard.ShowSanction(externalBoard.c2AO, 1);
+        //}
 
-            }
+        //private void AO_K2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_K2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
+        //        AddInfo("AO remove sanction C2 K");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.k2AO, 0);
 
+        //        }
+        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 0); }
+        //    }
+        //}
+        //private void AO_K2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
 
-        }
+        //    if (AO_K2_CB.IsChecked == true)
+        //    {
+        //        AO_C2_CB.IsChecked = true;
+        //        GlobalMatchNow.AO.SetFoulsC2(2);
+        //        AddInfo("AO sanction C2 K");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.k2AO, 1);
 
-        private void AO_K2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_K2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
-                AddInfo("AO remove sanction C2 K");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.k2AO, 0);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 0); }
-            }
-        }
-        private void AO_K2_CB_Checked(object sender, RoutedEventArgs e)
-        {
-
-            if (AO_K2_CB.IsChecked == true)
-            {
-                AO_C2_CB.IsChecked = true;
-                GlobalMatchNow.AO.SetFoulsC2(2);
-                AddInfo("AO sanction C2 K");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.k2AO, 1);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 1); }
-            }
-
-
-
-        }
-
-        private void AO_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (AO_H2_CB.IsChecked == true) { AO_HC2_CB.IsChecked = true; }
-            else
-            {
-                GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
-                AddInfo("AO remove sanction C2 HC");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.hc2AO, 0);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 0); }
-            }
-        }
-        private void AO_HC2_CB_Checked(object sender, RoutedEventArgs e)
-        {
-
-            if (AO_HC2_CB.IsChecked == true)
-            {
-                AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true;
-                GlobalMatchNow.AO.SetFoulsC2(3);
-                AddInfo("AO sanction C2 HC");
-                if (externalBoard != null)
-                {
-                    externalBoard.ShowSanction(externalBoard.hc2AO, 1);
-
-                }
-                //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 1); }
-            }
+        //        }
+        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 1); }
+        //    }
 
 
 
-        }
+        //}
+
+        //private void AO_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    if (AO_H2_CB.IsChecked == true) { AO_HC2_CB.IsChecked = true; }
+        //    else
+        //    {
+        //        GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
+        //        AddInfo("AO remove sanction C2 HC");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.hc2AO, 0);
+
+        //        }
+        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 0); }
+        //    }
+        //}
+        //private void AO_HC2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
+
+        //    if (AO_HC2_CB.IsChecked == true)
+        //    {
+        //        AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true;
+        //        GlobalMatchNow.AO.SetFoulsC2(3);
+        //        AddInfo("AO sanction C2 HC");
+        //        if (externalBoard != null)
+        //        {
+        //            externalBoard.ShowSanction(externalBoard.hc2AO, 1);
+
+        //        }
+        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 1); }
+        //    }
 
 
-        private void AO_H2_CB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1); AddInfo("AO remove sanction C2 H");
-            if (externalBoard != null)
-            {
-                externalBoard.ShowSanction(externalBoard.h2AO, 0);
 
-            }
-        }
-        private void AO_H2_CB_Checked(object sender, RoutedEventArgs e)
-        {
+        //}
 
-            AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true; AO_HC2_CB.IsChecked = true;
-            GlobalMatchNow.AO.SetFoulsC2(4);
-            AddInfo("AO sanction C2 H");
-            if (externalBoard != null)
-            {
 
-                externalBoard.ShowSanction(externalBoard.h2AO, 1);
+        //private void AO_H2_CB_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1); AddInfo("AO remove sanction C2 H");
+        //    if (externalBoard != null)
+        //    {
+        //        externalBoard.ShowSanction(externalBoard.h2AO, 0);
 
-            }
+        //    }
+        //}
+        //private void AO_H2_CB_Checked(object sender, RoutedEventArgs e)
+        //{
 
-        }
+        //    AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true; AO_HC2_CB.IsChecked = true;
+        //    GlobalMatchNow.AO.SetFoulsC2(4);
+        //    AddInfo("AO sanction C2 H");
+        //    if (externalBoard != null)
+        //    {
+
+        //        externalBoard.ShowSanction(externalBoard.h2AO, 1);
+
+        //    }
+
+        //}
         #endregion
 
         #region KIKEN and SHIKAKU set
@@ -1368,6 +1387,8 @@ namespace KumiteSystemPC
 
             TextLog.Blocks.Clear();
 
+            TimerLms.Visibility = Visibility.Collapsed;
+
             try
             {
                 DisplayMessageDialog("Info", "Match reseted");
@@ -1384,25 +1405,27 @@ namespace KumiteSystemPC
         {
             AKA_H1_CB.IsChecked = false;
             AKA_HC1_CB.IsChecked = false;
-            AKA_K1_CB.IsChecked = false;
+            AKA_C3_CB.IsChecked = false;
+            AKA_C2_CB.IsChecked = false;
             AKA_C1_CB.IsChecked = false;
 
-            AKA_H2_CB.IsChecked = false;
-            AKA_HC2_CB.IsChecked = false;
-            AKA_K2_CB.IsChecked = false;
-            AKA_C2_CB.IsChecked = false;
+            //AKA_H2_CB.IsChecked = false;
+            //AKA_HC2_CB.IsChecked = false;
+            //AKA_K2_CB.IsChecked = false;
+            //AKA_C2_CB.IsChecked = false;
 
             AO_H1_CB.IsChecked = false;
             AO_HC1_CB.IsChecked = false;
-            AO_K1_CB.IsChecked = false;
+            AO_C3_CB.IsChecked = false;
+            AO_C2_CB.IsChecked = false;
             AO_C1_CB.IsChecked = false;
 
-            AO_H2_CB.IsChecked = false;
-            AO_HC2_CB.IsChecked = false;
-            AO_K2_CB.IsChecked = false;
-            AO_C2_CB.IsChecked = false;
+            //AO_H2_CB.IsChecked = false;
+            //AO_HC2_CB.IsChecked = false;
+            //AO_K2_CB.IsChecked = false;
+            //AO_C2_CB.IsChecked = false;
 
-            if (externalBoard != null) { }
+           // if (externalBoard != null) { }
         }
 
         private void FinishMatchBTN_Click(object sender, RoutedEventArgs e)

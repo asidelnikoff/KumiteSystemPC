@@ -43,6 +43,8 @@ namespace KumiteSystemPC
 
             tatamiNr.Text = Properties.Settings.Default.TatamiNr.ToString();
 
+            pointsToWin.Text = Properties.Settings.Default.PointToWin.ToString();
+
             if (Properties.Settings.Default.AutoNextLoad) { AutoLoadNextCB.IsChecked = true; }
             if (Properties.Settings.Default.ShowNextMatchEXT) { ShoNextEXTCB.IsChecked = true; }
         }
@@ -202,6 +204,22 @@ namespace KumiteSystemPC
         {
             Properties.Settings.Default.ShowCompetitorClub = false;
             Properties.Settings.Default.Save();
+        }
+
+        private void pointsToWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                try
+                {
+                    Properties.Settings.Default.PointToWin = Convert.ToInt32(pointsToWin.Text);
+                    Properties.Settings.Default.Save();
+                }
+                catch
+                {
+                    pointsToWin.Text = Properties.Settings.Default.PointToWin.ToString();
+                }
+            }
         }
     }
 }

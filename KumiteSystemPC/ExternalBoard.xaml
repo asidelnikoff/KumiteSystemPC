@@ -129,42 +129,46 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <!--<ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>-->
             </Grid.ColumnDefinitions>
 
             <Viewbox>
-                <Label Content="C1" Foreground="Red" FontSize="48"/>
+                <Label Content="PENALTY" Margin="3" Foreground="Red" FontSize="12"/>
             </Viewbox>
             <Border Grid.Column="1" Style="{StaticResource AKAfoulBorder}" x:Name="c1AKA"/>
-            <Border Grid.Column="2" Style="{StaticResource AKAfoulBorder}" x:Name="k1AKA"/>
-            <Border Grid.Column="3" Style="{StaticResource AKAfoulBorder}" x:Name="hc1AKA"/>
-            <Border Grid.Column="4" Style="{StaticResource AKAfoulBorder}" x:Name="h1AKA"/>
-            <Image x:Name="akaC1" Source="akaZam.png" Grid.Column="1" Margin="5" Stretch="Fill" Opacity="0"/>
+            <Border Grid.Column="2" Style="{StaticResource AKAfoulBorder}" x:Name="c2AKA"/>
+            <Border Grid.Column="3" Style="{StaticResource AKAfoulBorder}" x:Name="c3AKA"/>
+            <Border Grid.Column="4" Style="{StaticResource AKAfoulBorder}" x:Name="hc1AKA"/>
+            <Border Grid.Column="5" Style="{StaticResource AKAfoulBorder}" x:Name="h1AKA"/>
+          
             <Viewbox Grid.Column="1" Margin="7">
-                <Label Content="C" Foreground="White" FontSize="18"/>
+                <Label Content="C1" Foreground="White" FontSize="18"/>
             </Viewbox>
 
-            <Image x:Name="akaK1" Source="akaZam.png" Grid.Column="2" Margin="5" Stretch="Fill" Opacity="0"/>
+            
             <Viewbox Grid.Column="2" Margin="7">
-                <Label Content="K" Foreground="White" FontSize="18"/>
+                <Label Content="C2" Foreground="White" FontSize="18"/>
             </Viewbox>
-
-            <Image x:Name="akaHC1" Source="akaZam.png" Grid.Column="3" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="3" Margin="7">
+                <Label Content="C3" Foreground="White" FontSize="18"/>
+            </Viewbox>
+            
+            <Viewbox Grid.Column="4" Margin="7">
                 <Label Content="HC" Foreground="White" FontSize="18"/>
             </Viewbox>
-            <Image x:Name="akaH1" Source="akaZam.png" Grid.Column="4" Margin="5" Stretch="Fill" Opacity="0"/>
-            <Viewbox Grid.Column="4" Margin="7">
+            
+            <Viewbox Grid.Column="5" Margin="7">
                 <Label Content="H" Foreground="White" FontSize="18"/>
             </Viewbox>
 
 
-            <Viewbox Grid.Column="6" Margin="7">
+            <!--<Viewbox Grid.Column="6" Margin="7">
                 <Label Content="C2" Foreground="Red" FontSize="48"/>
             </Viewbox>
             <Border Grid.Column="7" Style="{StaticResource AKAfoulBorder}" x:Name="c2AKA"/>
@@ -174,9 +178,9 @@
             <Image x:Name="akaC2" Source="akaZam.png" Grid.Column="7" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="7" Margin="7">
                 <Label Content="C" Foreground="White" FontSize="18"/>
-            </Viewbox>
+            </Viewbox>-->
 
-            <Image x:Name="akaK2" Source="akaZam.png" Grid.Column="8" Margin="5" Stretch="Fill" Opacity="0"/>
+            <!--<Image x:Name="akaK2" Source="akaZam.png" Grid.Column="8" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="8" Margin="7">
                 <Label Content="K" Foreground="White" FontSize="18"/>
             </Viewbox>
@@ -188,7 +192,7 @@
             <Image x:Name="akaH2" Source="akaZam.png" Grid.Column="10" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="10" Margin="7">
                 <Label Content="H" Foreground="White" FontSize="18"/>
-            </Viewbox>
+            </Viewbox>-->
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,0,20,0">
@@ -198,42 +202,48 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <!--<ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>-->
             </Grid.ColumnDefinitions>
 
             <Viewbox>
-                <Label Content="C1" Foreground="#FF009FFD" FontSize="48"/>
+                <Label Margin="3" Content="PENALTY" Foreground="#FF009FFD" FontSize="12"/>
             </Viewbox>
             <Image x:Name="aoC1" Source="aoZam.png" Grid.Column="1" Margin="5" Stretch="Fill" Opacity="0"/>
             <Border Grid.Column="1" Style="{StaticResource AOfoulBorder}"  x:Name="c1AO"/>
-            <Border Grid.Column="2" Style="{StaticResource AOfoulBorder}" x:Name="k1AO"/>
-            <Border Grid.Column="3" Style="{StaticResource AOfoulBorder}" x:Name="hc1AO"/>
-            <Border Grid.Column="4" Style="{StaticResource AOfoulBorder}" x:Name="h1AO"/>
+            <Border Grid.Column="2" Style="{StaticResource AOfoulBorder}" x:Name="c2AO"/>
+            <Border Grid.Column="3" Style="{StaticResource AOfoulBorder}" x:Name="c3AO"/>
+            <Border Grid.Column="4" Style="{StaticResource AOfoulBorder}" x:Name="hc1AO"/>
+            <Border Grid.Column="5" Style="{StaticResource AOfoulBorder}" x:Name="h1AO"/>
             <Viewbox Grid.Column="1" Margin="7">
-                <Label Content="C" Foreground="White" FontSize="18"/>
+                <Label Content="C1" Foreground="White" FontSize="18"/>
             </Viewbox>
 
-            <Image x:Name="aoK1" Source="aoZam.png" Grid.Column="2" Margin="5" Stretch="Fill" Opacity="0"/>
+            
             <Viewbox Grid.Column="2" Margin="7">
-                <Label Content="K" Foreground="White" FontSize="18"/>
+                <Label Content="C2" Foreground="White" FontSize="18"/>
             </Viewbox>
 
-            <Image x:Name="aoHC1" Source="aoZam.png" Grid.Column="3" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="3" Margin="7">
+                <Label Content="C3" Foreground="White" FontSize="18"/>
+            </Viewbox>
+
+            
+            <Viewbox Grid.Column="4" Margin="7">
                 <Label Content="HC" Foreground="White" FontSize="18"/>
             </Viewbox>
-            <Image x:Name="aoH1" Source="aoZam.png" Grid.Column="4" Margin="5" Stretch="Fill" Opacity="0"/>
-            <Viewbox Grid.Column="4" Margin="7">
+            
+            <Viewbox Grid.Column="5" Margin="7">
                 <Label Content="H" Foreground="White" FontSize="18"/>
             </Viewbox>
 
 
-            <Viewbox Grid.Column="6">
+            <!--<Viewbox Grid.Column="6">
                 <Label Content="C2" Foreground="#FF009FFD" FontSize="48"/>
             </Viewbox>
             <Border Grid.Column="7" Style="{StaticResource AOfoulBorder}" x:Name="c2AO"/>
@@ -257,7 +267,7 @@
             <Image x:Name="aoH2" Source="aoZam.png" Grid.Column="10" Margin="5" Stretch="Fill" Opacity="0"/>
             <Viewbox Grid.Column="10" Margin="7">
                 <Label Content="H" Foreground="White" FontSize="18"/>
-            </Viewbox>
+            </Viewbox>-->
         </Grid>
 
 
