@@ -603,20 +603,23 @@ namespace KumiteSystemPC
 
         private void _10secBtn_Click(object sender, RoutedEventArgs e)
         {
-            min = 0;
-            sec = 10;
-            // time = min * 60 + sec;
-            timerTime = new TimeSpan(0, min, sec);
-            remainTime = timerTime;
-            TimerL.Foreground = Brushes.DarkRed;
-            TimerLms.Foreground = Brushes.DarkRed;
-            msViewBox.Visibility = Visibility.Visible;
-            if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
-            //IsTimerEnabled = true;
+            if (!stopWatch.IsRunning)
+            {
+                min = 0;
+                sec = 10;
+                // time = min * 60 + sec;
+                timerTime = new TimeSpan(0, min, sec);
+                remainTime = timerTime;
+                TimerL.Foreground = Brushes.DarkRed;
+                TimerLms.Foreground = Brushes.DarkRed;
+                msViewBox.Visibility = Visibility.Visible;
+                if (externalBoard != null) { externalBoard.TimerEXT.Foreground = Brushes.DarkRed; }
+                //IsTimerEnabled = true;
 
-            if (!stopWatch.IsRunning) { startTimeBTN.Content = "Stop"; stopWatch.Start(); }
-            //  timer.Start();
-            controlTime();
+                if (!stopWatch.IsRunning) { startTimeBTN.Content = "Stop"; stopWatch.Start(); }
+                //  timer.Start();
+                controlTime();
+            }
         }
 
         private void startTimerBtn_Click(object sender, RoutedEventArgs e)
@@ -661,8 +664,11 @@ namespace KumiteSystemPC
 
         private void ResetTimerBtn_Click(object sender, RoutedEventArgs e)
         {
-            SetTimeer();
-            stopWatch.Reset();
+            if (!stopWatch.IsRunning)
+            {
+                SetTimeer();
+                stopWatch.Reset();
+            }
         }
 
         void SetTimeer()
@@ -678,8 +684,8 @@ namespace KumiteSystemPC
             }
 
             TimerL.Foreground = Brushes.White;
-            TimerLms.Foreground = Brushes.White;
             TimerL.Content = String.Format("{0:d2}:{1:d2}", min, sec);
+            msViewBox.Visibility = Visibility.Collapsed;
             //if (externalBoard != null) { externalBoard.TimerText(sec, min); }
             TimeM.Text = String.Format("{0:d2}", min);
             TimeS.Text = String.Format("{0:d2}", sec);

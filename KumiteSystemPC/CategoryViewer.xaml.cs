@@ -162,6 +162,8 @@ namespace KumiteSystemPC
 
         private void GlobalCategory_BronzeGenDB()
         {
+            if (groups_List.Items.Contains("Bronze Match"))
+                groups_List.Items.RemoveAt(groups_List.Items.IndexOf("Bronze Match"));
             groups_List.Items.Add("Bronze Match");
             groups_List_ContextMenu.Visibility = Visibility.Visible;
             if (m_dbConn.State == System.Data.ConnectionState.Open)
