@@ -220,6 +220,8 @@ namespace RoundRobin
         public void UpdateRound(int round)
         {
             var comp = Rounds[round].Matches[curMatch].Winner as Competitor;
+            var mAka = Rounds[round].Matches[curMatch].AKA as Competitor;
+            var mAo = Rounds[round].Matches[curMatch].AO as Competitor;
 
             for (int i = round; i < Rounds.Count; i++)
             {
@@ -234,6 +236,14 @@ namespace RoundRobin
                     {
                         Console.WriteLine("Adding score AO");
                         (m.AO as Competitor).TotalScore += 3;
+                    }
+                    else if(comp.IsBye)
+                    {
+                        if (mAka.Equals(m.AKA)) (m.AKA as Competitor).TotalScore++;
+                        else if (mAka.Equals(m.AO)) (m.AO as Competitor).TotalScore++;
+
+                        if (mAo.Equals(m.AKA)) (m.AKA as Competitor).TotalScore++;
+                        else if (mAo.Equals(m.AO)) (m.AO as Competitor).TotalScore++;
                     }
                 }
             }

@@ -56,7 +56,7 @@ namespace RoundRobin
             Competitor ao = AO as Competitor;
             if (isFinished && Winner.Equals(ao)) ao.TotalScore -= 3;
             else if (isFinished && Winner.Equals(aka)) aka.TotalScore -= 3;
-                switch (winner)
+            switch (winner)
             {
                 case 1:
                     Winner = new Competitor(aka);
@@ -70,6 +70,13 @@ namespace RoundRobin
                     ao.TotalScore += 3;
                     if (setLooser) Looser = new Competitor(aka);
                     //isFinished = true;
+                    HaveWinner?.Invoke();
+                    break;
+                case 0:
+                    Winner = new Competitor(true);
+                    aka.TotalScore++;
+                    ao.TotalScore++;
+                    if (setLooser) Looser = new Competitor(true);
                     HaveWinner?.Invoke();
                     break;
                 default:
@@ -138,6 +145,9 @@ namespace RoundRobin
             }
             //
             //TODO: All conditions to Set winner
+
+            //Set tie (only for Round Robin)
+            SetWinner(0);
 
         }
         public void Reset()

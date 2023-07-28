@@ -136,12 +136,14 @@ namespace TournamentTree
                 case 0:
                     return "";
                 case 1:
-                    return "C";
+                    return "C1";
                 case 2:
-                    return "K";
+                    return "C2";
                 case 3:
-                    return "HC";
+                    return "C3";
                 case 4:
+                    return "HC";
+                case 5:
                     return "H";
                 default:
                     return "";
