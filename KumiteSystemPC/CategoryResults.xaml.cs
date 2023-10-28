@@ -38,24 +38,23 @@ namespace KumiteSystemPC
         }
         public void SetSecond(TournamentsBracketsBase.ICompetitor comp)
         {
-            if (comp.Club != "") secondComp.Text = $"{comp} ({comp.Club})";
-            else secondComp.Text = $"{comp}";
-            //secondScore.Text = comp.FinalScore.ToString();
-            SecondGrid.Visibility = Visibility.Visible;
+            SetTextBlockCompetitiorAndVisibility(secondComp, comp);
         }
         public void SetThird(TournamentsBracketsBase.ICompetitor comp)
         {
-            if (comp.Club != "") thirdComp.Text = $"{comp} ({comp.Club})";
-            else thirdComp.Text = $"{comp}";
-            //thirdScore.Text = comp.FinalScore.ToString();
-            ThirdGrid.Visibility = Visibility.Visible;
+            SetTextBlockCompetitiorAndVisibility(thirdComp, comp);
         }
         public void SetThird1(TournamentsBracketsBase.ICompetitor comp)
         {
-            if (comp.Club != "") fourthComp.Text = $"{comp} ({comp.Club})";
-            else fourthComp.Text = $"{comp}";
-            //fourthScore.Text = comp.FinalScore.ToString();
-            FourthGrid.Visibility = Visibility.Visible;
+            SetTextBlockCompetitiorAndVisibility(fourthComp, comp);
+        }
+
+        private void SetTextBlockCompetitiorAndVisibility(TextBlock textBlock, TournamentsBracketsBase.ICompetitor comp)
+        {
+            textBlock.Text = $"{comp}";
+            if (!String.IsNullOrEmpty(comp.Club))
+                textBlock.Text += $" ({comp.Club})";
+            textBlock.Visibility = Visibility.Visible;
         }
     }
 }

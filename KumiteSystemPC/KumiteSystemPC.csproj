@@ -110,9 +110,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddCompetitorDialog.xaml.cs">
-      <DependentUpon>AddCompetitorDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CategoryResults.xaml.cs">
       <DependentUpon>CategoryResults.xaml</DependentUpon>
     </Compile>
@@ -154,10 +151,6 @@
     <Compile Include="TournamentsBracketsBase\ICompetitor.cs" />
     <Compile Include="TournamentsBracketsBase\IMatch.cs" />
     <Compile Include="TournamentsBracketsBase\IRound.cs" />
-    <Page Include="AddCompetitorDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="CategoryResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
