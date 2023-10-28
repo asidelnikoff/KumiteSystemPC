@@ -31,10 +31,7 @@ namespace KumiteSystemPC
         }
         public void SetFirst(TournamentsBracketsBase.ICompetitor comp)
         {
-            if (comp.Club != "") firstComp.Text = $"{comp} ({comp.Club})";
-            else firstComp.Text = $"{comp}";
-            //firstScore.Text = comp.FinalScore.ToString();
-            FirstGrid.Visibility = Visibility.Visible;
+            SetTextBlockCompetitiorAndVisibility(firstComp, comp);
         }
         public void SetSecond(TournamentsBracketsBase.ICompetitor comp)
         {

@@ -1,6 +1,7 @@
 ﻿using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -27,68 +28,22 @@ namespace KumiteSystemPC
         List<Competitor> CompetitorsList;
         Category GlobalCategory;
         public string CategoryName;
+
         Excel.Application exApp;
         Excel.Workbook workbook;
+
         public delegate void GetMatchHandler(int mID, int rID);
         public event GetMatchHandler GetMatchEv;
-        public CategoryViewer()
-        {
-            InitializeComponent();
-        }
-        public CategoryViewer(List<Competitor> competitors, string categoryName, bool generate = false)
-        {
-            InitializeComponent();
-            CompetitorsList = new List<Competitor>(competitors);
-            CategoryName = categoryName;
-            if (generate)
-            {
-                GenerateCategory();
-                //CompetitorsGrid.IsReadOnly = true;
-            }
-        }
-        public CategoryViewer(Category category,string categoryName,Excel.Workbook wb)
-        {
-            InitializeComponent();
-            GlobalCategory = category;
-            //GlobalCategory.RepechageGen += GlobalCategory_RepechageGen;
-            //GlobalCategory.BronzeGen += GlobalCategory_BronzeGen;
-            //GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
-            GlobalCategory.HaveCategoryResults += CategoryHaveResults;
-            CategoryName = categoryName;
-            workbook = wb;
-            this.Title = categoryName;
-            foreach (var g in GlobalCategory.Rounds)
-            {
-                groups_List.Items.Add($"1/{g.ToString()}");
-            }
-
-            if (GlobalCategory.BronzeMatch != null) { groups_List.Items.Add("Bronze Match"); groups_List_ContextMenu.Visibility = Visibility.Visible; }
-            if(GlobalCategory.RepechageAKA != null) { groups_List.Items.Add("Repechage 1"); groups_List_ContextMenu.Visibility = Visibility.Visible; }
-            if (GlobalCategory.RepechageAO != null) { groups_List.Items.Add("Repechage 2"); groups_List_ContextMenu.Visibility = Visibility.Visible; }
-            groups_List.SelectedIndex = 0;
-            //CompetitorsGrid.IsReadOnly = true;
-            //NxtMatch = new List<int>() { -1,-1};
-
-            categoryNameL.Content = $"Category: {categoryName}";
-
-            if (GlobalCategory.Winners!=null && GlobalCategory.Winners.Count>0) 
-            {
-                categoryComplition.Content = "- Completed";
-                categoryComplition.Foreground = Brushes.Green;
-                groups_List.Items.Add("Results");
-            }
-            else 
-            {
-                categoryComplition.Content = "- Not Completed";
-                categoryComplition.Foreground = Brushes.Green;
-            }
-
-            DrawBrackets(BracketsGrid);
-        }
 
         SQLiteConnection m_dbConn;
         SQLiteCommand m_sqlCmd;
         List<TournamentsBracketsBase.ICompetitor> Winners;
+
+        public CategoryViewer()
+        {
+            InitializeComponent();
+        }
+        
         public CategoryViewer(Category category, string categoryName, SQLiteConnection con, int categoryID)
         {
             InitializeComponent();
@@ -106,7 +61,7 @@ namespace KumiteSystemPC
             this.Title = categoryName;
             foreach (var g in GlobalCategory.Rounds)
             {
-                groups_List.Items.Add($"1/{g.ToString()}");
+                groups_List.Items.Add($"1/{g}");
             }
             if (GlobalCategory.BronzeMatch != null) { groups_List.Items.Add("Bronze Match"); }
             if (GlobalCategory.RepechageAKA != null) { groups_List.Items.Add("Repechage 1"); }
@@ -132,33 +87,6 @@ namespace KumiteSystemPC
 
             DrawBrackets(BracketsGrid);
         }
-
-       /* private void GlobalCategory_BronzeGen()
-        {
-
-            groups_List.Items.Add("Bronze Match");
-
-            Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-            ws.Name = "Bronze Match";
-            AddRows(ws, new List<Match>() { GlobalCategory.BronzeMatch });
-
-            Excel.Worksheet ws_ = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-            ws_.Name = "Bronze Match(Visual)";
-            int row = 3;
-            int col = 1;
-            ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AKA}";
-            SetCellStyle(row, col, ws_);
-            row += 2;
-            ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.AO}";
-            SetCellStyle(row, col, ws_);
-            if (GlobalCategory.BronzeMatch.Winner != null) 
-            {
-                col = 3;
-                row = 4;
-                ws_.Cells[row, col].Value = $"{GlobalCategory.BronzeMatch.Winner}";
-                SetCellStyle(row, col, ws_);
-            }
-        }*/
 
         private void GlobalCategory_BronzeGenDB()
         {
@@ -190,12 +118,12 @@ namespace KumiteSystemPC
 
                 for (int i = 0; i < GlobalCategory.RepechageAKA.Matches.Count; i++)
                 {
-                    Match m = GlobalCategory.RepechageAKA.Matches[i];
+                    Match m = GlobalCategory.RepechageAKA.Matches[i] as Match;
                     InsertRepechageMatch(m, groups_List.Items.Count - 2);
                 }
                 for (int i = 0; i < GlobalCategory.RepechageAO.Matches.Count; i++)
                 {
-                    Match m = GlobalCategory.RepechageAO.Matches[i];
+                    Match m = GlobalCategory.RepechageAO.Matches[i] as Match;
                     InsertRepechageMatch(m, groups_List.Items.Count - 1);
                 }
             }
@@ -229,40 +157,7 @@ namespace KumiteSystemPC
 
             groups_List.Items.Add("Results");
         }
-        /*public List<int> NxtMatch;
-        private void GlobalCategory_HaveNxtMatch(int round, int match)
-        {
-            /*if (round < GlobalCategory.Rounds.Count())
-            { DisplayMessageDialog("Info",$"Next match: {GlobalCategory.Rounds[round].Matches[match]}"); }
-            else if(round == GlobalCategory.Rounds.Count())
-            { DisplayMessageDialog("Info", $"Next match: {GlobalCategory.RepechageAKA.Matches[match]}"); }
-            else if(round + 1 == GlobalCategory.Rounds.Count())
-            { DisplayMessageDialog("Info", $"Next match: {GlobalCategory.RepechageAO.Matches[match]}"); }
-            NxtMatch[0] = round;NxtMatch[1] = match;
-            groups_List.SelectedIndex = round;
-            MatchesGrid.SelectedIndex = match;
-        }*/
-
-        /*private void GlobalCategory_RepechageGen()
-        {
-            groups_List.Items.Add("Repechage 1");
-            groups_List.Items.Add("Repechage 2");
-            Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-            ws.Name = "Repechage 1";
-            ExportRepechage(ws,0);
-            
-            Excel.Worksheet ws1 = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-            ws1.Name = "Repechage 2";
-            ExportRepechage(ws1, 1);*/
-
-        /*Excel.Worksheet ws_ = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-        ws_.Name = "Repechage 1(Visual)";
-        ExportRepechageVisual(ws_, 0);
-        Excel.Worksheet _ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
-        _ws.Name = "Repechage 2(Visual)";
-        ExportRepechageVisual(_ws, 1);
-    }*/
-
+        
         void InsertRepechageMatch(Match m, int repechageID)
         {
             if (m.Winner != null && m.Looser != null)
@@ -280,24 +175,6 @@ namespace KumiteSystemPC
             m_sqlCmd.ExecuteNonQuery();
         }
 
-        
-
-        void GenerateCategory()
-        {
-            GlobalCategory = new Category(CompetitorsList);
-            GlobalCategory.GenerateBrackets();
-            foreach (var g in GlobalCategory.Rounds)
-            {
-                groups_List.Items.Add($"1/{g.ToString()}");
-            }
-
-            ExportCategory();
-
-            groups_List.SelectedIndex = 0;
-            CompetitorsGrid.Items.Refresh();
-            DisplayMessageDialog("Category", "Category created");
-        }
-
         #region Draw Brackets
 
         void DrawBrackets(Grid BracketsGrid)
@@ -306,12 +183,11 @@ namespace KumiteSystemPC
             BracketsGrid.RowDefinitions.Clear();
             BracketsGrid.ColumnDefinitions.Clear();
             if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count || groups_List.SelectedItem.ToString()=="Results")
-            {
                 DrawDefaultBrackets(BracketsGrid, GlobalCategory);
-            }
             else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count)
             {
-                if (GlobalCategory.RepechageAKA != null) DrawRepechageBrackets(BracketsGrid, GlobalCategory.RepechageAKA);
+                if (GlobalCategory.RepechageAKA != null) 
+                    DrawRepechageBrackets(BracketsGrid, GlobalCategory.RepechageAKA);
                 else if (GlobalCategory.BronzeMatch != null) 
                 {
                     var repechage = new Repechage();
@@ -323,9 +199,7 @@ namespace KumiteSystemPC
                 }
             }
             else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count + 1)
-            {
                 DrawRepechageBrackets(BracketsGrid, GlobalCategory.RepechageAO);
-            }
         }
         void DrawDefaultBrackets(Grid BracketsGrid, Category GlobalCategory)
         {
@@ -385,8 +259,6 @@ namespace KumiteSystemPC
                     BracketsGrid.Children.Add(match);
                     row += add;
                 }
-
-                //BracketsGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             }
             if (GlobalCategory.Rounds[GlobalCategory.Rounds.Count - 1].IsFinished())
             {
@@ -597,7 +469,7 @@ namespace KumiteSystemPC
 
         #endregion
 
-        void CategoryHaveResults(List<TournamentsBracketsBase.ICompetitor> winners)
+        void ExportCategoryResultsToExcel(List<TournamentsBracketsBase.ICompetitor> winners)
         {
 
             Excel.Workbook wb = workbook;
@@ -611,7 +483,6 @@ namespace KumiteSystemPC
             if (winners.Count() > 2 && winners[2] != null) { ws.Cells[4, 1] = "3."; ws.Cells[4, 2] = winners[2].ToString(); }
             if (winners.Count() > 3 && winners[3] != null) { ws.Cells[5, 1] = "3."; ws.Cells[5, 2] = winners[3].ToString(); }
         }
-
 
         int CategoryID;
         public void UpdateTree()
@@ -672,7 +543,6 @@ namespace KumiteSystemPC
                         {
                             var id = reader["ID"];
                             curRound = Convert.ToInt32(id);
-                            //CategoryNames.Add((string)name);
                         }
                     }
                 }
@@ -851,72 +721,21 @@ namespace KumiteSystemPC
                 ws.Range[ws.Cells[2, 1], ws.Cells[ws.UsedRange.Rows.Count, ws.UsedRange.Columns.Count]].Cells.Font.Size = 12;
 
                 if (wb.Worksheets.Count > 1) wb.Worksheets[1].Delete();
+                
                 ExportRounds(wb);
                 exApp = ex;
                 exApp.Visible = true;
                 exApp.DisplayAlerts = false;
             }
-            if (GlobalCategory.RepechageAKA != null && GlobalCategory.RepechageAKA.Matches.Count > 0) { ExportRepechage(wb,0); }
-            if(GlobalCategory.RepechageAO!=null && GlobalCategory.RepechageAO.Matches.Count > 0) { ExportRepechage(wb,1); }
 
-            if (GlobalCategory.Winners != null && GlobalCategory.Winners.Count > 0) { CategoryHaveResults(GlobalCategory.Winners); }
-        }
+            if (GlobalCategory.RepechageAKA != null && GlobalCategory.RepechageAKA.Matches.Count > 0) 
+                ExportRepechage(wb,0);
+            if(GlobalCategory.RepechageAO!=null && GlobalCategory.RepechageAO.Matches.Count > 0) 
+                ExportRepechage(wb,1);
 
-        void ExportRounds(Excel.Workbook wb)
-        {
-            foreach (var r in GlobalCategory.Rounds)
-            {
-                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.Add(wb.Worksheets[wb.Worksheets.Count]);
-                int row = 2;
-                ws.Name = $"1%{r.ToString()}";
-                ws.Cells[1, 1].Value = "ID_AKA";
-                ws.Cells[1, 2].Value = "AKA First_Name";
-                ws.Cells[1, 3].Value = "AKA Last_Name";
-                ws.Cells[1, 4].Value = "AKA Club";
-                ws.Cells[1, 5].Value = "AKA Fouls C1";
-                ws.Cells[1, 6].Value = "AKA Fouls C2";
-                ws.Cells[1, 7].Value = "AKA Score";
-                ws.Cells[1, 8].Value = "Winner AKA";
-                for (int i = 1; i <= 8; i++) { ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red); }
-                ws.Cells[1, 9].Value = "Winner AO";
-                ws.Cells[1, 16].Value = "ID_AO";
-                ws.Cells[1, 15].Value = "AO First_Name";
-                ws.Cells[1, 14].Value = "AO Last_Name";
-                ws.Cells[1, 13].Value = "AO Club";
-                ws.Cells[1, 12].Value = "AO Fouls C1";
-                ws.Cells[1, 11].Value = "AO Fouls C2";
-                ws.Cells[1, 10].Value = "AO Score";
-                for (int i = 9; i <= 16; i++) { ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue); }
-                foreach (var m in r.Matches)
-                {
-                    if (m.AKA != null)
-                    {
-                        ws.Cells[row, 1].Value = m.AKA.ID;
-                        ws.Cells[row, 2].Value = m.AKA.FirstName;
-                        ws.Cells[row, 3].Value = m.AKA.LastName;
-                        ws.Cells[row, 4].Value = m.AKA.Club;
-                        ws.Cells[row, 5].Value = m.AKA.GetFoulsC1();
-                        ws.Cells[row, 6].Value = m.AKA.GetFoulsC2();
-                        ws.Cells[row, 7].Value = (m.AKA as Competitor).Score;
-                    }
-                    if (m.AO != null)
-                    {
-                        ws.Cells[row, 16].Value = m.AO.ID;
-                        ws.Cells[row, 15].Value = m.AO.FirstName;
-                        ws.Cells[row, 14].Value = m.AO.LastName;
-                        ws.Cells[row, 13].Value = m.AO.Club;
-                        ws.Cells[row, 12].Value = m.AO.GetFoulsC1();
-                        ws.Cells[row, 11].Value = m.AO.GetFoulsC2();
-                        ws.Cells[row, 10].Value = (m.AO as Competitor).Score;
-                    }
-                    if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName) { ws.Cells[row, 8].Value = "X"; }
-                    else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) { ws.Cells[row, 9].Value = "X"; }
-                    row++;
-                }
-                Excel.Range range = ws.UsedRange;
-                range.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                range.Borders.Weight = 2d;
-            }
+            if (GlobalCategory.Winners != null && GlobalCategory.Winners.Count > 0)
+                ExportCategoryResultsToExcel(GlobalCategory.Winners);
+
         }
         void ExportFirstVisual(Excel.Worksheet ws)
         {
@@ -959,15 +778,22 @@ namespace KumiteSystemPC
             ws.Columns[col + 1].ColumnWidth = 3;
             ws.Columns[col].ColumnWidth = 32;
         }
-
-
+        void ExportRounds(Excel.Workbook wb)
+        {
+            foreach (var r in GlobalCategory.Rounds)
+            {
+                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.Add(wb.Worksheets[wb.Worksheets.Count]);
+                ws.Name = $"1%{r.ToString()}";
+                ExportMatchesToExcelSheet(ws, r.Matches);
+            }
+        }
         void ExportRepechage(Excel.Workbook workbook,int num)
         {
             if (num == 0)
             {
                 Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 ws.Name = "Repechage 1";
-                AddRows(ws, GlobalCategory.RepechageAKA.Matches);
+                ExportMatchesToExcelSheet(ws, GlobalCategory.RepechageAKA.Matches);
 
                 Excel.Worksheet ws_ = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 ws_.Name = "Repechage 1(Visual)";
@@ -978,7 +804,7 @@ namespace KumiteSystemPC
             {
                 Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 ws.Name = "Repechage 2";
-                AddRows(ws, GlobalCategory.RepechageAO.Matches);
+                ExportMatchesToExcelSheet(ws, GlobalCategory.RepechageAO.Matches);
 
                 Excel.Worksheet _ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 _ws.Name = "Repechage 2(Visual)";
@@ -988,15 +814,73 @@ namespace KumiteSystemPC
             {
                 Excel.Worksheet ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 ws.Name = "Bronze Match";
-                AddRows(ws, new List<Match>() { GlobalCategory.BronzeMatch });
+                Repechage temp = new Repechage();
+                temp.Matches = new List<TournamentsBracketsBase.IMatch>() { GlobalCategory.BronzeMatch };
+                ExportMatchesToExcelSheet(ws, temp.Matches);
 
                 Excel.Worksheet _ws = workbook.Worksheets.Add(workbook.Worksheets[workbook.Worksheets.Count]);
                 _ws.Name = "Bronze Match(Visual)";
-                Repechage temp = new Repechage();
-                temp.Matches = new List<Match>() { GlobalCategory.BronzeMatch };
                 ExportRepechageVisual(_ws, temp);
             } //Export Bronze match
 
+        }
+
+        void ExportMatchesToExcelSheet(Excel.Worksheet ws, List<TournamentsBracketsBase.IMatch> matches)
+        {
+            int row = 2;
+            SetupPageHeader(ws);
+
+            foreach (var m in matches)
+            {
+                if (m.AKA != null)
+                {
+                    ws.Cells[row, 1].Value = m.AKA.ID;
+                    ws.Cells[row, 2].Value = m.AKA.FirstName;
+                    ws.Cells[row, 3].Value = m.AKA.LastName;
+                    ws.Cells[row, 4].Value = m.AKA.Club;
+                    ws.Cells[row, 5].Value = m.AKA.GetFoulsC1();
+                    ws.Cells[row, 6].Value = (m.AKA as Competitor).Score;
+                }
+                if (m.AO != null)
+                {
+                    ws.Cells[row, 14].Value = m.AO.ID;
+                    ws.Cells[row, 13].Value = m.AO.FirstName;
+                    ws.Cells[row, 12].Value = m.AO.LastName;
+                    ws.Cells[row, 11].Value = m.AO.Club;
+                    ws.Cells[row, 10].Value = m.AO.GetFoulsC1();
+                    ws.Cells[row, 9].Value = (m.AO as Competitor).Score;
+                }
+                if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName)
+                    ws.Cells[row, 7].Value = "X";
+                else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) 
+                    ws.Cells[row, 8].Value = "X";
+                row++;
+            }
+            Excel.Range range = ws.UsedRange;
+            range.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            range.Borders.Weight = 2d;
+        }
+
+        void SetupPageHeader(Excel.Worksheet ws)
+        {
+            ws.Cells[1, 1].Value = "ID_AKA";
+            ws.Cells[1, 2].Value = "AKA First_Name";
+            ws.Cells[1, 3].Value = "AKA Last_Name";
+            ws.Cells[1, 4].Value = "AKA Club";
+            ws.Cells[1, 5].Value = "AKA Fouls";
+            ws.Cells[1, 6].Value = "AKA Score";
+            ws.Cells[1, 7].Value = "Winner AKA";
+            for (int i = 1; i <= 7; i++)
+                ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red);
+            ws.Cells[1, 8].Value = "Winner AO";
+            ws.Cells[1, 14].Value = "ID_AO";
+            ws.Cells[1, 13].Value = "AO First_Name";
+            ws.Cells[1, 12].Value = "AO Last_Name";
+            ws.Cells[1, 11].Value = "AO Club";
+            ws.Cells[1, 10].Value = "AO Fouls";
+            ws.Cells[1, 9].Value = "AO Score";
+            for (int i = 8; i <= 14; i++)
+                ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue);
         }
 
         void ExportRepechageVisual(Excel.Worksheet ws, Repechage repechage)
@@ -1060,6 +944,7 @@ namespace KumiteSystemPC
                 ws.Cells[row,col].Style.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             }
         }
+        
         void SetCellStyle(int row,int col,Excel.Worksheet ws)
         {
             ws.Columns[col + 1].ColumnWidth = 3;
@@ -1068,124 +953,7 @@ namespace KumiteSystemPC
             ws.Cells[row, col].Borders.Weight = 2d;
         }
 
-        void AddRows(Excel.Worksheet ws,List<Match> matches)
-        {
-            int row = 2;
-            ws.Cells[1, 1].Value = "ID_AKA";
-            ws.Cells[1, 2].Value = "AKA First_Name";
-            ws.Cells[1, 3].Value = "AKA Last_Name";
-            ws.Cells[1, 4].Value = "AKA Fouls C1";
-            ws.Cells[1, 5].Value = "AKA Fouls C2";
-            ws.Cells[1, 6].Value = "AKA Score";
-            ws.Cells[1, 7].Value = "Winner AKA";
-            for (int i = 1; i <= 7; i++) { ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Red); }
-            ws.Cells[1, 8].Value = "Winner AO";
-            ws.Cells[1, 14].Value = "ID_AO";
-            ws.Cells[1, 13].Value = "AO First_Name";
-            ws.Cells[1, 12].Value = "AO Last_Name";
-            ws.Cells[1, 11].Value = "AO Fouls C1";
-            ws.Cells[1, 10].Value = "AO Fouls C2";
-            ws.Cells[1, 9].Value = "AO Score";
-            for (int i = 8; i <= 14; i++) { ws.Cells[1, i].Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue); }
-            foreach (var m in matches)
-            {
-                if (m.AKA != null)
-                {
-                    ws.Cells[row, 1].Value = m.AKA.ID;
-                    ws.Cells[row, 2].Value = m.AKA.FirstName;
-                    ws.Cells[row, 3].Value = m.AKA.LastName;
-                    ws.Cells[row, 4].Value = m.AKA.GetFoulsC1();
-                    ws.Cells[row, 5].Value = m.AKA.GetFoulsC2();
-                    ws.Cells[row, 6].Value = (m.AKA as Competitor).Score;
-                }
-                if (m.AO != null)
-                {
-                    ws.Cells[row, 14].Value = m.AO.ID;
-                    ws.Cells[row, 13].Value = m.AO.FirstName;
-                    ws.Cells[row, 12].Value = m.AO.LastName;
-                    ws.Cells[row, 11].Value = m.AO.GetFoulsC1();
-                    ws.Cells[row, 10].Value = m.AO.GetFoulsC2();
-                    ws.Cells[row, 9].Value = (m.AO as Competitor).Score;
-                }
-                if (m.Winner != null && m.Winner.ID == m.AKA.ID && m.Winner.FirstName == m.AKA.FirstName) { ws.Cells[row, 7].Value = "X"; }
-                else if (m.Winner != null && m.Winner.ID == m.AO.ID && m.Winner.FirstName == m.AO.FirstName) { ws.Cells[row, 8].Value = "X"; }
-                row++;
-            }
-            Excel.Range range = ws.UsedRange;
-            range.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-            range.Borders.Weight = 2d;
-        }
-        /*void ExportRounds(Excel.Workbook wb)
-        {
-            foreach (var r in GlobalCategory.Rounds)
-            {
-                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets.Add(wb.Worksheets[wb.Worksheets.Count]);
-                ws.Name = $"1_|_{r.ToString()}";
-                AddRows(ws, r.Matches);
-            }
-        }
-        void ExportFirstVisual(Excel.Worksheet ws)
-        {
-            int row = 3;
-            int col = 1;
-            foreach (var m in GlobalCategory.Rounds[0].Matches)
-            {
-                Excel.Range range = ws.Cells[row, col].EntireColumn;
-
-                ws.Cells[row, col].Value = m.AKA.GetName();
-                ws.Cells[row, col].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                ws.Cells[row, col].Borders.Weight = 2d;
-                row += 2;
-
-
-                ws.Cells[row, col].Value = m.AO.GetName();
-                ws.Cells[row, col].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                ws.Cells[row, col].Borders.Weight = 2d;
-                row += 2;
-
-                range.EntireColumn.AutoFit();
-            }
-            ws.Columns[col + 1].ColumnWidth = 3;
-            ws.Columns[col].ColumnWidth = 32;
-        }*/
-        #endregion
-
-        #region Dialog Functions
-        private async void DisplayMessageDialog(string caption, string message)
-        {
-            await ContentDialogMaker.CreateContentDialogAsync(new ContentDialog
-            {
-                Title = caption,
-                Content = message,
-                PrimaryButtonText = "OK",
-                DefaultButton = ContentDialogButton.Primary
-            }, awaitPreviousDialog: true);
-            
-        }
-        private async void DisplayFinishMatchDialog()
-        {
-            ContentDialog FinishMatchDialog = new ContentDialog
-            {
-                Title = "Finish current match?",
-                Content = "This match isn't finished. Do you want to finish it?",
-                PrimaryButtonText = "Finish",
-                SecondaryButtonText = "Load without finishing",
-                DefaultButton = ContentDialogButton.Primary,
-                CloseButtonText = "Cancel"
-            };
-
-            ContentDialogResult result = await FinishMatchDialog.ShowAsync();
-
-            if (result == ContentDialogResult.Primary)
-            {
-                GlobalCategory.FinishCurrentMatch();
-                if (GlobalCategory.isCurMFinished()) { DisplayMessageDialog("Info", "Match finished"); }
-            }
-            else if (result == ContentDialogResult.Secondary)
-            {
-                LoadRoundMatch(groups_List.SelectedIndex, MatchesGrid.SelectedIndex);
-            }
-        }
+        
         #endregion
 
         private void MatchesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1194,42 +962,32 @@ namespace KumiteSystemPC
             {
                 Match match = new Match(null, null, -1);
                 List<Competitor> comps = new List<Competitor>();
+
                 if (groups_List.SelectedIndex < GlobalCategory.Rounds.Count())
-                {
                     match = GlobalCategory.Rounds[groups_List.SelectedIndex].Matches[MatchesGrid.SelectedIndex] as Match;
-                }
                 else if(groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
                     if (!GlobalCategory.is1third)
-                    {
-                        match = GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex];
-                    }
+                        match = GlobalCategory.RepechageAKA.Matches[MatchesGrid.SelectedIndex] as Match;
                     else
-                    {
                         match = GlobalCategory.BronzeMatch;
-                    }
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count() + 1)
-                {
-                    match = GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex];
-                }
+                    match = GlobalCategory.RepechageAO.Matches[MatchesGrid.SelectedIndex] as Match;
 
-                if(match.AKA != null) comps.Add(match.AKA as Competitor);
-                if(match.AO != null) comps.Add(match.AO as Competitor);
+                if(match.AKA != null) 
+                    comps.Add(match.AKA as Competitor);
+                if(match.AO != null) 
+                    comps.Add(match.AO as Competitor);
+                
+                MatchWinnerLabel.Content = $"Winner: ";
                 if (match.Winner != null)
-                {
-                    MatchWinnerLabel.Content = $"Winner: {match.Winner}";
-                }
-                else MatchWinnerLabel.Content = $"Winner: ";
+                    MatchWinnerLabel.Content += $"{match.Winner}";
 
                 CompetitorsGrid.ItemsSource = comps;
-                //GetMatchEv?.Invoke(MatchesGrid.SelectedIndex, groups_List.SelectedIndex);
                 CompetitorsGrid.Items.Refresh();
 
             }
-            //MatchesGrid.Items.Refresh();
-            
-            
         }
 
         private void groups_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1239,7 +997,6 @@ namespace KumiteSystemPC
                 if (GlobalCategory.Rounds.Count() > 0 && groups_List.SelectedIndex < GlobalCategory.Rounds.Count())
                 {
                     MatchesGrid.ItemsSource = GlobalCategory.Rounds[groups_List.SelectedIndex].Matches;
-                    // MatchesGrid.SelectedIndex = 0;
                 }
                 else if (groups_List.SelectedIndex == GlobalCategory.Rounds.Count())
                 {
@@ -1258,12 +1015,10 @@ namespace KumiteSystemPC
                 MatchesGrid.Items.Refresh();
                 DrawBrackets(BracketsGrid);
             }
-            //CompetitorsGrid.Items.Refresh();
         }
         
         void LoadRoundMatch(int round, int match) {
             GetMatchEv?.Invoke(match, round);
-            //DisplayMessageDialog("Info", "Match loaded");
         }
 
         private void LoadMatchBTN_Click(object sender, RoutedEventArgs e)
@@ -1276,7 +1031,6 @@ namespace KumiteSystemPC
             else
             {
                 DisplayFinishMatchDialog();
-               // DisplayMessageDialog("Info", "Match isn't finished");
             }
         }
 
@@ -1288,7 +1042,11 @@ namespace KumiteSystemPC
         private void FinishCurMatchBTN_Click(object sender, RoutedEventArgs e)
         {
             GlobalCategory.FinishCurrentMatch();
-            if (GlobalCategory.isCurMFinished()) { /*UpdateExcelTree(workbook);*/ UpdateTree(); DisplayMessageDialog("Info", "Match finished"); }
+            if (GlobalCategory.isCurMFinished()) 
+            {
+                UpdateTree(); 
+                DisplayMessageDialog("Info", "Match finished"); 
+            }
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -1298,10 +1056,18 @@ namespace KumiteSystemPC
 
         private void exportExcel_Click(object sender, RoutedEventArgs e)
         {
-            if (exApp != null) exApp.Quit();
+            if (exApp != null) 
+                exApp.Quit();
             ExportCategory();
             exApp.ActiveWorkbook.SaveAs(Properties.Settings.Default.DataPath + "\\" + CategoryName);
-            if (exApp.ActiveWorkbook.Saved) { try { DisplayMessageDialog("Info", "Category file saved"); } catch { } }
+            if (exApp.ActiveWorkbook.Saved) 
+            { 
+                try 
+                { 
+                    DisplayMessageDialog("Info", "Category file saved"); 
+                } 
+                catch { } 
+            }
         }
 
         private void regenerateBronze_Click(object sender, RoutedEventArgs e)
@@ -1334,10 +1100,46 @@ namespace KumiteSystemPC
                 LoadRoundMatch(groups_List.SelectedIndex, MatchesGrid.SelectedIndex);
             }
             else
-            {
                 DisplayFinishMatchDialog();
-                // DisplayMessageDialog("Info", "Match isn't finished");
+        }
+
+
+        #region Dialog Functions
+        private async void DisplayMessageDialog(string caption, string message)
+        {
+            await ContentDialogMaker.CreateContentDialogAsync(new ContentDialog
+            {
+                Title = caption,
+                Content = message,
+                PrimaryButtonText = "OK",
+                DefaultButton = ContentDialogButton.Primary
+            }, awaitPreviousDialog: true);
+
+        }
+        private async void DisplayFinishMatchDialog()
+        {
+            ContentDialog FinishMatchDialog = new ContentDialog
+            {
+                Title = "Finish current match?",
+                Content = "This match isn't finished. Do you want to finish it?",
+                PrimaryButtonText = "Finish",
+                SecondaryButtonText = "Load without finishing",
+                DefaultButton = ContentDialogButton.Primary,
+                CloseButtonText = "Cancel"
+            };
+
+            ContentDialogResult result = await FinishMatchDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                GlobalCategory.FinishCurrentMatch();
+                if (GlobalCategory.isCurMFinished()) { DisplayMessageDialog("Info", "Match finished"); }
+            }
+            else if (result == ContentDialogResult.Secondary)
+            {
+                LoadRoundMatch(groups_List.SelectedIndex, MatchesGrid.SelectedIndex);
             }
         }
+        #endregion
     }
 }

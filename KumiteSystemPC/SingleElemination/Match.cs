@@ -11,7 +11,6 @@ namespace TournamentTree
         public int ID { get; set; }
         public TournamentsBracketsBase.ICompetitor AKA { get; set; }
         public TournamentsBracketsBase.ICompetitor AO { get; set; }
-        //List<Competitor> Competitors { get; set; }
         public bool isFinished { get; set; }
         public event TournamentsBracketsBase.HaveWinnerHandler HaveWinner;
 
@@ -20,16 +19,11 @@ namespace TournamentTree
 
         public Match(Competitor _AKA, Competitor _AO, int id)
         {
-            //Competitors = new List<Competitor>();
-            //Competitors.Add(_AKA);
-            //Competitors.Add(_AO);
             AKA = _AKA;
             AO = _AO;
-            /*AKA = _AKA;
-            AO = _AO;*/
             if (AKA != null && AKA.IsBye) { Winner = new Competitor(AO as Competitor); isFinished = true; Looser = new Competitor(AKA as Competitor); }
             else if (AO != null && AO.IsBye) { Winner = new Competitor(AKA as Competitor); isFinished = true; Looser = new Competitor(AO as Competitor); }
-            //else { Winner = new Competitor(); Looser = new Competitor(); }
+
             if (AKA != null) AKA.Check_Winner += CheckWinner;
             if (AO != null) AO.Check_Winner += CheckWinner;
             ID = id;
@@ -64,19 +58,6 @@ namespace TournamentTree
                     break;
             }
         }
-
-        /*public void SetAKA(Competitor competitor)
-        {
-            AKA = competitor;
-            AKA = competitor;
-        }
-        public void SetAO(Competitor competitor)
-        {
-            AO = competitor;
-            AO = competitor;
-        }*/
-
-
 
         public void CheckWinner(bool isTimeUP = false)
         {

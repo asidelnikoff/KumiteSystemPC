@@ -9,8 +9,8 @@ namespace TournamentTree
     public class Repechage
     {
         public List<Competitor> Competitors { get; set; }
-        List<Round> Rounds { get; set; } //Not needed probably
-        public List<Match> Matches { get; set; }
+        List<Round> Rounds { get; set; } 
+        public List<TournamentsBracketsBase.IMatch> Matches { get; set; }
         public Competitor Winner { get; set; }
         int curRound=0;
 
@@ -21,12 +21,12 @@ namespace TournamentTree
         public Repechage()
         {
             Competitors = new List<Competitor>();
-            Matches = new List<Match>();
+            Matches = new List<TournamentsBracketsBase.IMatch>();
         }
         public void Generate()
         {
             Rounds = new List<Round>();
-            Matches = new List<Match>();
+            Matches = new List<TournamentsBracketsBase.IMatch>();
             if (Competitors.Count() > 0)
             {
                 Round round1 = new Round();
@@ -53,10 +53,6 @@ namespace TournamentTree
         }
         public bool IsFinished()
         {
-            /*foreach(var m in Matches)
-            {
-                if (m.Winner == null) return false;
-            }*/
             if (Winner == null) { return false; }
             return true;
         }
