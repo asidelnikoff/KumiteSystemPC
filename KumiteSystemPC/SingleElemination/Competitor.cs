@@ -66,7 +66,7 @@ namespace TournamentTree
         }
         #endregion
 
-        public Competitor() { AllScores = new List<int>(); }
+        public Competitor() { AllScores = new List<int>(); ID = -1; }
 
         public Competitor(Competitor competitor)
         {
@@ -82,7 +82,7 @@ namespace TournamentTree
             Club = competitor.Club;
         }
 
-        public Competitor(bool isBye=false,int id=0,string FName="", string LName="", string _Club="",int score=0,int fc1=0,int fc2=0, int status =0)
+        public Competitor(bool isBye=false,int id=-1,string FName="", string LName="", string _Club="",int score=0,int fc1=0,int fc2=0, int status =0)
         {
             IsBye = isBye;
             

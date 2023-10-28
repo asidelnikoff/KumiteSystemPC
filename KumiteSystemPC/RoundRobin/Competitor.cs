@@ -15,7 +15,7 @@ namespace RoundRobin
         public Competitor(TournamentTree.Competitor competitor) : base(competitor) 
         { TotalScore = 0; }
 
-        public Competitor(bool isBye = false, int id = 0, string FName = "", string LName = "", string _Club = "", int totalScore = 0,int score = 0, int fc1 = 0, int fc2 = 0, int status = 0) :
+        public Competitor(bool isBye = false, int id = -1, string FName = "", string LName = "", string _Club = "", int totalScore = 0,int score = 0, int fc1 = 0, int fc2 = 0, int status = 0) :
             base(isBye,id,FName,LName,_Club,score,fc1,fc2,status)
         {
             TotalScore = totalScore;

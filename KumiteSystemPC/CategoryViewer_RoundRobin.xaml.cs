@@ -579,6 +579,7 @@ namespace KumiteSystemPC
             BracketsGrid.Children.Clear();
             BracketsGrid.RowDefinitions.Clear();
             BracketsGrid.ColumnDefinitions.Clear();
+            //MatchesGrid.Items.Refresh();
             DrawBrackets(BracketsGrid);
         }
         #region EXPORT CATEGORY

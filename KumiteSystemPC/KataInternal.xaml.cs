@@ -55,7 +55,7 @@ namespace KumiteSystemPC
 
             _Aka = new Competitor(false, 1, "");
             _Ao = new Competitor(false, 2, "");
-            GlobalMatchNow = new Match(_Aka as Competitor, _Ao as Competitor, 0);
+            GlobalMatchNow = new Match(_Aka as Competitor, _Ao as Competitor, -1);
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
             NxtMatch = new List<int>() { -1, -1 };
             if (Properties.Settings.Default.EndOfMatch != "") { end_of_m_sound = new System.Media.SoundPlayer(Properties.Settings.Default.EndOfMatch); }
@@ -156,6 +156,7 @@ namespace KumiteSystemPC
                     categoryViewer.GetMatchEv += GetMatch;
                     GlobalCategoryViewerRR = categoryViewer;
                     GlobalCategoryViewerRR.Show();
+                    TieBTN.Visibility = Visibility.Visible;
                 }
 
                 AKA_curTXT.IsReadOnly = true;
@@ -184,61 +185,61 @@ namespace KumiteSystemPC
         string CategoryName = "";
         void OpenCategory()
         {
-           /* Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-            openFile.Title = "Open Categroy";
-            openFile.Filter = "Excel Files(*.xls;*.xlsx)|*.xls;*.xlsx";
-            if (GlobalCategory != null && MainExApp != null)
-            {
-                DisplaySaveDialog();
-            }
-            TreeTypeDialog treeTypeDialog = new TreeTypeDialog();
-            treeTypeDialog.Owner = this;
-            if (CanOpen && treeTypeDialog.ShowDialog() == true && openFile.ShowDialog() == true)
-            {
-                //Category = new Category();
-                MainExApp = new Excel.Application();
-                string fileName = openFile.FileName;
+            /* Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
+             openFile.Title = "Open Categroy";
+             openFile.Filter = "Excel Files(*.xls;*.xlsx)|*.xls;*.xlsx";
+             if (GlobalCategory != null && MainExApp != null)
+             {
+                 DisplaySaveDialog();
+             }
+             TreeTypeDialog treeTypeDialog = new TreeTypeDialog();
+             treeTypeDialog.Owner = this;
+             if (CanOpen && treeTypeDialog.ShowDialog() == true && openFile.ShowDialog() == true)
+             {
+                 //Category = new Category();
+                 MainExApp = new Excel.Application();
+                 string fileName = openFile.FileName;
 
-                MainExApp.Workbooks.Open(fileName,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing);
+                 MainExApp.Workbooks.Open(fileName,
+                   Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                   Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                   Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                   Type.Missing, Type.Missing);
 
 
 
-                GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
-                if (Properties.Settings.Default.DefaultTreeType == 0) { GlobalCategory.is1third = false; }
-                else if (Properties.Settings.Default.DefaultTreeType == 1) { GlobalCategory.is1third = true; }
-                GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
-                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
+                 GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
+                 if (Properties.Settings.Default.DefaultTreeType == 0) { GlobalCategory.is1third = false; }
+                 else if (Properties.Settings.Default.DefaultTreeType == 1) { GlobalCategory.is1third = true; }
+                 GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
+                 GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
 
-                CategoryName = MainExApp.ActiveWorkbook.Name.Substring(0, MainExApp.ActiveWorkbook.Name.IndexOf('.'));
+                 CategoryName = MainExApp.ActiveWorkbook.Name.Substring(0, MainExApp.ActiveWorkbook.Name.IndexOf('.'));
 
-                CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, MainExApp.ActiveWorkbook);
-                CategoryViewer.GetMatchEv += GetMatch;
-                GlobalCategoryViewer = CategoryViewer;
-                GlobalCategoryViewer.Show();
-                MainExApp.DisplayAlerts = false;
-                MainExApp.Visible = true;
+                 CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, MainExApp.ActiveWorkbook);
+                 CategoryViewer.GetMatchEv += GetMatch;
+                 GlobalCategoryViewer = CategoryViewer;
+                 GlobalCategoryViewer.Show();
+                 MainExApp.DisplayAlerts = false;
+                 MainExApp.Visible = true;
 
-                AKA_curTXT.IsReadOnly = true;
-                AO_curTXT.IsReadOnly = true;
+                 AKA_curTXT.IsReadOnly = true;
+                 AO_curTXT.IsReadOnly = true;
 
-                AKA_nxtTXT.IsReadOnly = true;
-                AO_nxtTXT.IsReadOnly = true;
-                try
-                {
-                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
-                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
-                }
-                catch
-                {
-                    if (externalBoard != null && externalBoard.IsLoaded)
-                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
-                }
-                CanOpen = false;
-            }*/
+                 AKA_nxtTXT.IsReadOnly = true;
+                 AO_nxtTXT.IsReadOnly = true;
+                 try
+                 {
+                     string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
+                     externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                 }
+                 catch
+                 {
+                     if (externalBoard != null && externalBoard.IsLoaded)
+                         externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName;
+                 }
+                 CanOpen = false;
+             }*/
         }
 
         /*Category ReadCategory(Excel.Workbook wb)
@@ -507,6 +508,11 @@ namespace KumiteSystemPC
             /*AddInfo($"Winner AO( {GlobalMatchNow.AO.FirstName} {GlobalMatchNow.AO.LastName} )");*/
             GlobalMatchNow.SetWinner(2);
         }
+
+        private void TieBTN_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.SetWinner(0);
+        }
         #endregion
 
         #region KIKEN and SHIKAKU set
@@ -600,29 +606,36 @@ namespace KumiteSystemPC
 
         private void FinishMatchBTN_Click(object sender, RoutedEventArgs e)
         {
-            if (GlobalMatchNow.Winner != null)
+            if (GlobalMatchNow.ID == -1)
+                return;
+
+            if (GlobalMatchNow.Winner == null)
             {
-                GlobalCategory.FinishCurrentMatch();
-                if (GlobalCategory.isCurMFinished())
-                {
-                    if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded) { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook); */
-                        GlobalCategoryViewer.UpdateTree(); }
-                    else if (GlobalCategoryViewerRR != null && GlobalCategoryViewerRR.IsLoaded)
-                    { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
-                        GlobalCategoryViewerRR.UpdateTree();
-                    }
+                DisplayMessageDialog("Info", "Mark the match result");
+                return;
+            }
 
-                    if (GlobalCategoryViewer != null) { GlobalCategoryViewer.MatchesGrid.Items.Refresh(); }
-                    if (GlobalCategoryViewerRR != null) { GlobalCategoryViewerRR.MatchesGrid.Items.Refresh(); }
-                    GlobalMatchNow.HaveWinner -= Match_HaveWinner;
+            GlobalCategory.FinishCurrentMatch();
 
-                    DisplayMessageDialog("Info", "Match finished");
+            if (GlobalCategory.isCurMFinished())
+            {
+                if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
+                { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
+                    GlobalCategoryViewer.UpdateTree();
                 }
+                else if (GlobalCategoryViewerRR != null && GlobalCategoryViewerRR.IsLoaded)
+                { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
+                    GlobalCategoryViewerRR.UpdateTree();
+                }
+                //ResetMatch();
+
+                if (GlobalCategoryViewer != null) { GlobalCategoryViewer.MatchesGrid.Items.Refresh(); }
+                if (GlobalCategoryViewerRR != null) { GlobalCategoryViewerRR.MatchesGrid.Items.Refresh(); }
+                GlobalMatchNow.HaveWinner -= Match_HaveWinner;
+
+                DisplayMessageDialog("Info", "Match finished");
             }
-            else
-            {
-                DisplayMessageDialog("Info", "Mark the winner of match");
-            }
+
         }
 
         private void NextMatchBTN_Click(object sender, RoutedEventArgs e)
@@ -677,15 +690,16 @@ namespace KumiteSystemPC
                 sc.AddRange(Screen.AllScreens);
                 externalBoard = new Kata_ExternalBoard();
                 externalBoard.Send_Status += ExternalBoard_Send_Status;
-                    try
-                    {
-                        string[] worrd = CategoryName.Split(new char[] { ' ' }, 2);
-                        externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
-                    }
-                    catch {
-                        if (externalBoard != null && externalBoard.IsLoaded && !String.IsNullOrEmpty(CategoryName))
-                            externalBoard.CategoryEXT.Text = CategoryName;
-                    }
+                try
+                {
+                    string[] worrd = CategoryName.Split(new char[] { ' ' }, 2);
+                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
+                }
+                catch
+                {
+                    if (externalBoard != null && externalBoard.IsLoaded && !String.IsNullOrEmpty(CategoryName))
+                        externalBoard.CategoryEXT.Text = CategoryName;
+                }
 
                 MakeBindingExternal();
 
@@ -715,7 +729,7 @@ namespace KumiteSystemPC
         ExtTimerSet extTimerSet;
         private void openExtTimerSet_btn_Click(object sender, RoutedEventArgs e)
         {
-            if (extTimerSet == null || !extTimerSet.IsLoaded )
+            if (extTimerSet == null || !extTimerSet.IsLoaded)
             {
                 extTimerSet = new ExtTimerSet();
                 extTimerSet.Owner = this;
@@ -727,7 +741,7 @@ namespace KumiteSystemPC
         Settings settings;
         private void SettingsBTN_Click(object sender, RoutedEventArgs e)
         {
-            if (settings == null || !settings.IsLoaded )
+            if (settings == null || !settings.IsLoaded)
             {
                 settings = new Settings();
                 settings.Show();
@@ -760,7 +774,7 @@ namespace KumiteSystemPC
             Properties.Settings.Default.DefaultJudjesNumber = judjesCB.SelectedIndex;
             Properties.Settings.Default.Save();
             JudjesCount = judjesCB.SelectedIndex + 1;
-            for(int i=flgsAka.Items.Count;i<=JudjesCount;i++)
+            for (int i = flgsAka.Items.Count; i <= JudjesCount; i++)
             {
                 flgsAka.Items.Add(i);
                 flgsAo.Items.Add(i);

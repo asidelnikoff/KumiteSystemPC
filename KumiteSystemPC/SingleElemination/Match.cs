@@ -50,13 +50,13 @@ namespace TournamentTree
                 case 1:
                     Winner = new Competitor(aka);
                     if (setLooser) Looser = new Competitor(ao);
-                    //isFinished = true;
+                    isFinished = true;
                     HaveWinner?.Invoke();
                     break;
                 case 2:
                     Winner = new Competitor(ao);
                     if (setLooser) Looser = new Competitor(aka);
-                    //isFinished = true;
+                    isFinished = true;
                     HaveWinner?.Invoke();
                     break;
                 default:
