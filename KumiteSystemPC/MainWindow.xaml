@@ -46,10 +46,6 @@
 
         <Menu Height="Auto" FontSize="14" Background="{DynamicResource BorderBrush}" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <MenuItem Header="Open cateogry" Click="DBOpenCategory_Click" VerticalAlignment="Stretch" Margin="10,0,0,0"/>
-            <MenuItem Header="Category" Height="Auto" Foreground="White" HorizontalContentAlignment="Center" Visibility="Collapsed">
-                <MenuItem Header="Category Generator" Click="CategoryGenBTN_Click"/>
-                <MenuItem Header="Open Category" Click="openCategoryBTN_Click"/>
-            </MenuItem>
             <MenuItem Header="Resets" VerticalAlignment="Stretch" Foreground="White">
                 <MenuItem Header="Reset Match" x:Name="ResetMatchBtn" Click="ResetMatchBtn_Click"/>
                 <MenuItem Header="Reset Timer" x:Name="ResetTimerBtn" Click="ResetTimerBtn_Click"/>

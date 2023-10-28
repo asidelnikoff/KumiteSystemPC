@@ -1351,12 +1351,6 @@ namespace KumiteSystemPC
             }
         }
 
-        private void CategoryGenBTN_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryGenerator CategoryGen = new CategoryGenerator();
-            CategoryGen.Show();
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
             if (GlobalCategoryViewer != null) { GlobalCategoryViewer.Close(); }
