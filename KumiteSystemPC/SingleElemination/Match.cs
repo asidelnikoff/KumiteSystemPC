@@ -103,9 +103,14 @@ namespace TournamentTree
                     if (countWazAka > 0) SetWinner(1);
                     else if (countWazAka < 0) SetWinner(2);
                 }
+
+                if (!isFinished)
+                    SetWinner(0);
             }
             //
             //TODO: All conditions to Set winner
+
+
 
         }
         public void Reset()

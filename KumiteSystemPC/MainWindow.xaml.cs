@@ -575,12 +575,18 @@ namespace KumiteSystemPC
                 TimerLms.Content = String.Format(".{0:ff}", remainTime);
                 remainTime = timerTime - ts;
 
-                if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
+                if (remainTime <= TimeSpan.Zero) 
+                { 
+                    stopWatch.Stop(); 
+                    TimerFinished(); 
+                }
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
                 if (!atoshibaraku) await Task.Delay(1000);
                 else await Task.Delay(10);
             } while (stopWatch.IsRunning);
 
+            showTime(String.Format("{0:mm}:{0:ss}", TimeSpan.Zero));
+            TimerLms.Content = String.Format(".{0:ff}", TimeSpan.Zero);
         }
         void TimerFinished()
         {

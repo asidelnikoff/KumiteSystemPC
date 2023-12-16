@@ -146,12 +146,15 @@ namespace RoundRobin
                     if (countWazAka > 0) SetWinner(1);
                     else if (countWazAka < 0) SetWinner(2);
                 }
+
+                if (!isFinished)
+                    SetWinner(0);
             }
             //
             //TODO: All conditions to Set winner
 
             //Set tie (only for Round Robin)
-            SetWinner(0);
+            //SetWinner(0);
 
         }
         public void Reset()

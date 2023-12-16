@@ -36,6 +36,7 @@ namespace KumiteSystemPC
             screenC.SelectedIndex = Properties.Settings.Default.ScreenNR;
 
             endOfMTXT.Text = Properties.Settings.Default.EndOfMatch;
+            warningMTXT.Text = Properties.Settings.Default.WarningSound;
 
             dataPathTXT.Text = Properties.Settings.Default.DataPath;
 
