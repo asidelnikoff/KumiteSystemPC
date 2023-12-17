@@ -407,6 +407,13 @@ namespace KumiteSystemPC
             AO_ScoreL.Content = $"{GlobalMatchNow.AO.ScoreProperty}";
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
 
+            if (CategoryResultsEXT != null)
+            {
+                CategoryResultsEXT.Close();
+                CategoryResultsEXT = null;
+                closeExtRes.Visibility = Visibility.Collapsed;
+            }
+
             if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
             {
                 GlobalCategoryViewer.groups_List.SelectedIndex = rID;

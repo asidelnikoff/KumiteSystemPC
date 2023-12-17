@@ -140,8 +140,8 @@ namespace KumiteSystemPC
                     for (int j = 1; j <= Math.Pow(2, roundCount - i - 1); j++)
                     {
                         m_sqlCmd.CommandText = $"SELECT Match.ID as MatchID, Match.Round, Match.AKA, " +
-                         $"Match.AO, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
-                         $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished, Competitor.*" +
+                         $"Match.AO, Competitor.*, Match.Winner, Match.Looser, Match.AKA_C1, Match.AKA_C2, " +
+                         $"Match.AO_C1, Match.AO_C2, Match.AKA_score, Match.AO_score, Match.Senshu, Match.isFinished " +
                          $"FROM Match " +
                          $"LEFT JOIN Competitor on (Competitor.ID = Match.AKA or Competitor.ID = Match.AO) " +
                          $"WHERE Category = {CategoryID} AND Round = {i} AND MatchID = {j}";
@@ -381,13 +381,19 @@ namespace KumiteSystemPC
                             m.SetWinner(0);
                     }
                     int senshu = Convert.ToInt32(reader["Senshu"]);
-                    if (senshu != 0)
+                    if (senshu != 0 && m.isAllCompetitors())
                     {
                         if (senshu == 1) { m.AKA.Senshu = true; m.AO.Senshu = false; }
                         else if (senshu == 2) { m.AO.Senshu = true; m.AKA.Senshu = false; }
                     }
                 }
             }
+
+            if (m.AKA != null)
+                m.AKA.Check_Winner += m.CheckWinner;
+            if (m.AO != null)
+                m.AO.Check_Winner += m.CheckWinner;
+
             return m;
         }
 

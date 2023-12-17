@@ -13,7 +13,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using WpfScreenHelper;
 using System.Data.SQLite;
 using System.Windows.Controls;
-
+using TournamentsBracketsBase;
 
 namespace KumiteSystemPC
 {
@@ -128,6 +128,13 @@ namespace KumiteSystemPC
                     GlobalCategoryViewerRR = categoryViewer;
                     GlobalCategoryViewerRR.Show();
                     TieBTN.Visibility = Visibility.Visible;
+                }
+
+                if(CategoryResultsEXT != null)
+                {
+                    CategoryResultsEXT.Close();
+                    CategoryResultsEXT = null;
+                    closeExtRes.Visibility = Visibility.Collapsed;
                 }
 
                 AKA_curTXT.IsReadOnly = true;
@@ -423,11 +430,16 @@ namespace KumiteSystemPC
             AKA_curTXT.Text = GetCompetitorString(GlobalMatchNow.AKA);
             AO_curTXT.Text = GetCompetitorString(GlobalMatchNow.AO);
 
+
+
             AKA_ScoreL.Content = $"{GlobalMatchNow.AKA.ScoreProperty}";
             AO_ScoreL.Content = $"{GlobalMatchNow.AO.ScoreProperty}";
 
             if (GlobalMatchNow.AKA.Senshu) { AKAsenshuCB.IsChecked = true; }
             else if (GlobalMatchNow.AO.Senshu) { AOsenshuCB.IsChecked = true; }
+
+            SetAkaFouls((Competitor.Fouls)GlobalMatchNow.AKA.Fouls_C1);
+            SetAoFouls((Competitor.Fouls)GlobalMatchNow.AO.Fouls_C1);
 
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
 
@@ -445,6 +457,33 @@ namespace KumiteSystemPC
             //if (Properties.Settings.Default.AutoNextLoad) GlobalCategory.GetNext();
             //Console.WriteLine(GlobalMatchNow.ToString());
             DisplayMessageDialog("Info", "Match loaded");
+        }
+
+        void SetAkaFouls(Competitor.Fouls fouls)
+        {
+            if (fouls == Competitor.Fouls.Chui1)
+                AKA_C1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui2)
+                AKA_C2_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui3)
+                AKA_C3_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.HansokuChui)
+                AKA_HC1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Hansoku)
+                AKA_H1_CB.IsChecked = true;
+        }
+        void SetAoFouls(Competitor.Fouls fouls)
+        {
+            if (fouls == Competitor.Fouls.Chui1)
+                AO_C1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui2)
+                AO_C2_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui3)
+                AO_C3_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.HansokuChui)
+                AO_HC1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Hansoku)
+                AO_H1_CB.IsChecked = true;
         }
 
         private void GlobalCategory_HaveNxtMatch(int round, int match, TournamentsBracketsBase.IMatch nxtMatch)
@@ -480,7 +519,7 @@ namespace KumiteSystemPC
                 else if (GlobalCategoryViewerRR != null)
                 {
                     GlobalCategoryViewerRR.CompetitorsGrid.Items.Refresh();
-                    if(!GlobalMatchNow.Winner.IsBye) GlobalCategoryViewerRR.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
+                    if (!GlobalMatchNow.Winner.IsBye) GlobalCategoryViewerRR.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
                 }
                 if (externalBoard != null)
                 {
@@ -573,20 +612,27 @@ namespace KumiteSystemPC
 
                 showTime(String.Format("{0:mm}:{0:ss}", remainTime));
                 TimerLms.Content = String.Format(".{0:ff}", remainTime);
+                
                 remainTime = timerTime - ts;
 
-                if (remainTime <= TimeSpan.Zero) 
-                { 
-                    stopWatch.Stop(); 
-                    TimerFinished(); 
+                if (remainTime <= TimeSpan.Zero)
+                {
+                    stopWatch.Stop();
+                    TimerFinished();
                 }
+
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
+
                 if (!atoshibaraku) await Task.Delay(1000);
                 else await Task.Delay(10);
+
             } while (stopWatch.IsRunning);
 
-            showTime(String.Format("{0:mm}:{0:ss}", TimeSpan.Zero));
-            TimerLms.Content = String.Format(".{0:ff}", TimeSpan.Zero);
+            if (remainTime <= TimeSpan.Zero)
+            {
+                showTime(String.Format("{0:mm}:{0:ss}", TimeSpan.Zero));
+                TimerLms.Content = String.Format(".{0:ff}", TimeSpan.Zero);
+            }
         }
         void TimerFinished()
         {
@@ -599,6 +645,7 @@ namespace KumiteSystemPC
         }
         void AtoshiBaraku()
         {
+            showTime(String.Format("{0:mm}:{0:ss}", remainTime));
             atoshibaraku = true;
             try { warn_sound.Play(); } catch { }
             TimerL.Foreground = Brushes.DarkRed;
@@ -808,32 +855,44 @@ namespace KumiteSystemPC
             AO_ScoreL.Content = GlobalMatchNow.AO.ScoreProperty;
             AKA_ScoreL.Content = GlobalMatchNow.AKA.ScoreProperty;
 
-            GlobalMatchNow.CheckWinner();
+            GlobalMatchNow.CheckWinner(remainTime <= TimeSpan.Zero);
         }
 
         private void AOsenshuCB_Click(object sender, RoutedEventArgs e)
         {
             if (AOsenshuCB.IsChecked == true)
             {
-                GlobalMatchNow.AO.Senshu = true;
-                GlobalMatchNow.AKA.Senshu = false;
-                AKAsenshuCB.IsChecked = false;
-                AddInfo("AO senshu");
-                //AO_SenshuL.Visibility = Visibility.Visible;
-                AoSenshuBorder.Visibility = Visibility.Visible;
-                AkaSenshuBorder.Visibility = Visibility.Collapsed;
-                //AKA_SenshuL.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
+                
             }
             else
             {
-                GlobalMatchNow.AO.Senshu = false;
-                AddInfo("AO senshu remove");
-                //AO_SenshuL.Visibility = Visibility.Collapsed;
-                AoSenshuBorder.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+                
             }
         }
+
+        private void AOsenshuCB_Checked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.Senshu = true;
+            GlobalMatchNow.AKA.Senshu = false;
+            AKAsenshuCB.IsChecked = false;
+            AddInfo("AO senshu");
+            //AO_SenshuL.Visibility = Visibility.Visible;
+            AoSenshuBorder.Visibility = Visibility.Visible;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
+            //AKA_SenshuL.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
+        }
+
+        private void AOsenshuCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.Senshu = false;
+            AddInfo("AO senshu remove");
+            //AO_SenshuL.Visibility = Visibility.Collapsed;
+            AoSenshuBorder.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+        }
+
+       
 
 
         private void AKAipponBTN_Click(object sender, RoutedEventArgs e)
@@ -890,6 +949,15 @@ namespace KumiteSystemPC
         {
             if (AKAsenshuCB.IsChecked == true)
             {
+            }
+            else
+            {
+
+            }
+        }
+
+        private void AKAsenshuCB_Checked(object sender, RoutedEventArgs e)
+        {
                 GlobalMatchNow.AO.Senshu = false;
                 GlobalMatchNow.AKA.Senshu = true;
                 AOsenshuCB.IsChecked = false;
@@ -898,16 +966,17 @@ namespace KumiteSystemPC
                 // AO_SenshuL.Visibility = Visibility.Collapsed;
                 AoSenshuBorder.Visibility = Visibility.Collapsed;
                 AkaSenshuBorder.Visibility = Visibility.Visible;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0);
             }
-            else
-            {
-                GlobalMatchNow.AKA.Senshu = false;
-                AddInfo("AKA senshu remove");
-                //AKA_SenshuL.Visibility = Visibility.Collapsed;
-                AkaSenshuBorder.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
-            }
+        }
+
+        private void AKAsenshuCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AKA.Senshu = false;
+            AddInfo("AKA senshu remove");
+            //AKA_SenshuL.Visibility = Visibility.Collapsed;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
         }
         #endregion
 
@@ -1376,8 +1445,11 @@ namespace KumiteSystemPC
             AOsenshuCB.IsChecked = GlobalMatchNow.AO.Senshu;
             AKAsenshuCB.IsChecked = GlobalMatchNow.AKA.Senshu;
 
-            AO_SenshuL.Visibility = Visibility.Collapsed;
-            AKA_SenshuL.Visibility = Visibility.Collapsed;
+            /*AO_SenshuL.Visibility = Visibility.Collapsed;
+            AKA_SenshuL.Visibility = Visibility.Collapsed;*/
+
+            AoSenshuBorder.Visibility = Visibility.Collapsed;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
 
             AKA_ScoreL.Content = GlobalMatchNow.AKA.ScoreProperty;
             AO_ScoreL.Content = GlobalMatchNow.AO.ScoreProperty;
@@ -1460,7 +1532,7 @@ namespace KumiteSystemPC
                 }
 
                 string fileName = $"{DateTime.Now.ToShortDateString()}-{GlobalMatchNow.AKA}_{GlobalMatchNow.AO}";
-                if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB)) 
+                if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB))
                     DisplayMessageDialog("Info", "Log saved");
                 else
                     DisplayMessageDialog("Info", "Can't save log");
@@ -1527,6 +1599,10 @@ namespace KumiteSystemPC
             Binding timerColor = new Binding("Foreground");
             timerColor.Source = TimerL;
             externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
+
+            Binding timerMsColor = new Binding("Foreground");
+            timerMsColor.Source = TimerLms;
+            externalBoard.TimerEXTms.SetBinding(Label.ForegroundProperty, timerColor);
 
             Binding timerTxtms = new Binding("Content");
             timerTxtms.Source = TimerLms;
@@ -1781,6 +1857,8 @@ namespace KumiteSystemPC
                 roundCounter--;
             }*/
         }
+
+        
 
         private void roundTB_KeyDown(object sender, KeyEventArgs e)
         {
