@@ -1118,10 +1118,21 @@
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="AKA_curTXT" 
                                  Margin="10,0"
-                                 Text="{Binding CurrentMatchAkaText}"
+                                 Text="{Binding CurrentMatchAkaText, UpdateSourceTrigger=PropertyChanged}"
                                  VerticalAlignment="Center"
                                  Background="#80ffffff"
-                                 BorderThickness="0">
+                                 BorderThickness="0"
+                                 IsReadOnly="{Binding IsNameFieldReadOnly}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=SetupCompetitorNameCommand}" Key="Enter">
+                                    <KeyBinding.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding Path="CurrentMatchAkaText"/>
+                                        </MultiBinding>
+                                    </KeyBinding.CommandParameter>
+                                </KeyBinding>
+                            </TextBox.InputBindings>
                             <TextBox.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="{x:Static lang:Resources.kiken}" 
@@ -1137,11 +1148,22 @@
                         </TextBox>
                         <TextBox x:Name="AO_curTXT" 
                                  Margin="10,0" 
-                                 Text="{Binding CurrentMatchAoText}"
+                                 Text="{Binding CurrentMatchAoText, UpdateSourceTrigger=PropertyChanged}"
                                  VerticalAlignment="Center"
                                  Grid.Column="2"
                                  Background="#80ffffff"
-                                 BorderThickness="0">
+                                 BorderThickness="0"
+                                 IsReadOnly="{Binding IsNameFieldReadOnly}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=SetupCompetitorNameCommand}" Key="Enter">
+                                    <KeyBinding.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding Path="CurrentMatchAoText"/>
+                                        </MultiBinding>
+                                    </KeyBinding.CommandParameter>
+                                </KeyBinding>
+                            </TextBox.InputBindings>
                             <TextBox.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="{x:Static lang:Resources.kiken}" 

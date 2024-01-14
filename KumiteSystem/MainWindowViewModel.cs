@@ -42,7 +42,7 @@ namespace KumiteSystem
 
         ExternalBoardState externalBoardState;
 
-        System.Media.SoundPlayer endOfMatchSound;
+        
         System.Media.SoundPlayer warningSound;
 
         public MainWindowViewModel() : base()
@@ -50,8 +50,6 @@ namespace KumiteSystem
             LoadSettings();
             SetupDbService();
 
-            if (Properties.Settings.Default.EndOfMatchSound != "")
-                endOfMatchSound = new System.Media.SoundPlayer(Properties.Settings.Default.EndOfMatchSound);
             if (Properties.Settings.Default.WarningSound != "")
                 warningSound = new System.Media.SoundPlayer(Properties.Settings.Default.WarningSound);
 
@@ -67,17 +65,20 @@ namespace KumiteSystem
 
         private void MainWindowViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (externalBoardState != null)
-            {
-                externalBoardState.RemainTime = Timer.RemainTime;
-                externalBoardState.ScoreAka = CurrentMatch.AKA?.Score;
-                externalBoardState.ScoreAo = CurrentMatch.AO?.Score;
-                externalBoardState.AkaSenshu = CurrentMatch.AKA?.Senshu;
-                externalBoardState.AoSenshu = CurrentMatch.AO?.Senshu;
-                externalBoardState.FoulsC1Aka = CurrentMatch.AKA?.Fouls_C1;
-                externalBoardState.FoulsC1Ao = CurrentMatch.AO?.Fouls_C1;
-                externalBoardState.IsAtoshiBaraku = IsAtoshiBaraku;
-            }
+            if(e.PropertyName == nameof(CurrentMatch))
+                if (externalBoardState != null)
+                {
+                    externalBoardState.CurrentMatchAo = CurrentMatch.AO?.ToString();
+                    externalBoardState.CurrentMatchAka = CurrentMatch.AKA?.ToString();
+                    externalBoardState.RemainTime = Timer.RemainTime;
+                    externalBoardState.ScoreAka = CurrentMatch.AKA?.Score;
+                    externalBoardState.ScoreAo = CurrentMatch.AO?.Score;
+                    externalBoardState.AkaSenshu = CurrentMatch.AKA?.Senshu;
+                    externalBoardState.AoSenshu = CurrentMatch.AO?.Senshu;
+                    externalBoardState.FoulsC1Aka = CurrentMatch.AKA?.Fouls_C1;
+                    externalBoardState.FoulsC1Ao = CurrentMatch.AO?.Fouls_C1;
+                    externalBoardState.IsAtoshiBaraku = IsAtoshiBaraku;
+                }
             if (e.PropertyName == nameof(IsTimerRunning))
             {
                 if (IsTimerRunning)
@@ -226,7 +227,6 @@ namespace KumiteSystem
 
         private new async void Match_HaveWinner(ICompetitor winner)
         {
-            endOfMatchSound?.Play();
             if (externalBoardState != null)
             {
                 externalBoardState.IsAkaWinner = CurrentMatch?.AKA?.Equals(winner) == true;

@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Akrobat-Bold.otf" />
+    <None Remove="Fonts\Akrobat-Regular.otf" />
+    <None Remove="Fonts\Akrobat-SemiBold.otf" />
+    <None Remove="Fonts\Arial-Bold.ttf" />
+    <None Remove="Fonts\Arial.ttf" />
+    <None Remove="Fonts\Montserrat-Bold.ttf" />
+    <None Remove="Fonts\Montserrat-Regular.ttf" />
+    <None Remove="Fonts\Montserrat-SemiBold.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>8</VersionMinor>
@@ -43,6 +54,17 @@
   <ItemGroup>
     <ProjectReference Include="..\LanguageLibrary\LanguageLibrary.csproj" />
     <ProjectReference Include="..\TournamentBracketLibrary\TournamentBracketLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Akrobat-Bold.otf" />
+    <Resource Include="Fonts\Akrobat-Regular.otf" />
+    <Resource Include="Fonts\Akrobat-SemiBold.otf" />
+    <Resource Include="Fonts\Arial-Bold.ttf" />
+    <Resource Include="Fonts\Arial.ttf" />
+    <Resource Include="Fonts\Montserrat-Bold.ttf" />
+    <Resource Include="Fonts\Montserrat-Regular.ttf" />
+    <Resource Include="Fonts\Montserrat-SemiBold.ttf" />
   </ItemGroup>
 
   <ItemGroup>

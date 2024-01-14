@@ -72,12 +72,12 @@
 
             <Viewbox HorizontalAlignment="Left" 
                      Margin="20,15" VerticalAlignment="Center">
-                <Label Content="{Binding State.CurrentMatchAka}"
+                <TextBlock Text="{Binding State.CurrentMatchAka}"
                        VerticalAlignment="Center" 
                        x:Name="AkaNowNameL" 
                        Foreground="White" 
                        FontSize="35">
-                </Label>
+                </TextBlock>
             </Viewbox>
 
             <Border Style="{DynamicResource AOfoulBorder}"
@@ -109,8 +109,9 @@
                      Margin="20,15" 
                      VerticalAlignment="Center"
                      Grid.Column="3">
-                <Label Content="{Binding State.CurrentMatchAo}"
+                <TextBlock Text="{Binding State.CurrentMatchAo}"
                        VerticalAlignment="Center" 
+                       TextAlignment="Right"
                        x:Name="AoNowNameL" 
                        Foreground="White" 
                        FontSize="35"/>

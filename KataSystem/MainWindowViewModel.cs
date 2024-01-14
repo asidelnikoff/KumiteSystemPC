@@ -44,11 +44,14 @@ namespace KataSystem
 
         private void MainWindowViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (externalBoardState != null)
-            {
-                externalBoardState.ScoreAka = CurrentMatch.AKA?.Score;
-                externalBoardState.ScoreAo = CurrentMatch.AO?.Score;
-            }
+            if (e.PropertyName == nameof(CurrentMatch))
+                if (externalBoardState != null)
+                {
+                    externalBoardState.CurrentMatchAo = CurrentMatch.AO?.ToString();
+                    externalBoardState.CurrentMatchAka = CurrentMatch.AKA?.ToString();
+                    externalBoardState.ScoreAka = CurrentMatch.AKA?.Score;
+                    externalBoardState.ScoreAo = CurrentMatch.AO?.Score;
+                }
             if (e.PropertyName == nameof(JudjesNumberInput))
             {
                 JudjesList = new ObservableCollection<int>(Enumerable.Range(0, JudjesNumberInput + 1));

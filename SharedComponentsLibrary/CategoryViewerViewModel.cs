@@ -288,8 +288,8 @@ namespace SharedComponentsLibrary
             else
             {
                 externalResultsBoard = new ExternalResults(Category.Name, currentCategory.Winners);
-                externalResultsBoard.Loaded += (sender, e) => IsExternalBoardOpened = true;
-                externalResultsBoard.Closed += (sender, e) => IsExternalBoardOpened = false;
+                externalResultsBoard.Loaded += (sender, e) => IsExternalResultsOpened = true;
+                externalResultsBoard.Closed += (sender, e) => IsExternalResultsOpened = false;
                 externalResultsBoard.Show();
             }
         }
