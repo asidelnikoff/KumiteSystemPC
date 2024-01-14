@@ -1,0 +1,1197 @@
+﻿<Window x:Class="KumiteSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KumiteSystem"
+        xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:shared="clr-namespace:SharedComponentsLibrary;assembly=SharedComponentsLibrary" xmlns:system="clr-namespace:System;assembly=System.Runtime" xmlns:bracketsBase="clr-namespace:TournamentsBracketsBase;assembly=TournamentBracketLibrary"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Height="580" Width="900"
+        Title="MainWindow"
+        >
+    <behaviours:Interaction.Triggers>
+        <behaviours:EventTrigger EventName="Closed">
+            <behaviours:InvokeCommandAction
+                                Command="{Binding CloseCommand}">
+            </behaviours:InvokeCommandAction>
+        </behaviours:EventTrigger>
+    </behaviours:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="353*"/>
+            <ColumnDefinition Width="94*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="395*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="2"
+              Background="{DynamicResource LightGray}"
+              VerticalAlignment="Center">
+            <MenuItem Header="{x:Static lang:Resources.OpenCategory}" 
+                      VerticalAlignment="Stretch"
+                      Margin="10,0,0,0"
+                      Command="{Binding OpenCategoryCommand}"/>
+            <MenuItem Header="{x:Static lang:Resources.Resets}" 
+                      VerticalAlignment="Stretch">
+                <MenuItem Header="{x:Static lang:Resources.ResetMatch}" 
+                          x:Name="ResetMatchBtn"
+                          Command="{Binding ResetMatchCommand}"/>
+                <MenuItem Header="{x:Static lang:Resources.ResetTimer}" 
+                          x:Name="ResetTimerBtn"
+                          Command="{Binding ResetTimerCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static lang:Resources.Externals}" 
+                      VerticalAlignment="Stretch">
+                <MenuItem Header="{Binding IsExternalBoardOpened, Converter={StaticResource IsExternalBoardOpenedToText}}" 
+                          x:Name="openExt_btn"
+                          Command="{Binding OpenExternalBoardCommand}"/>
+                <MenuItem Header="{x:Static lang:Resources.ExtTimer}" 
+                          x:Name="openExtTimerSet_btn"
+                          Command="{Binding OpenTimerBoardCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Close ext. category results" 
+                      Visibility="Collapsed" 
+                      x:Name="closeExtRes"/>
+        </Menu>
+        <Button     HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Height="Auto"
+                    Width="Auto"
+                    Margin="10,2"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    ui:ControlHelper.CornerRadius="25"
+                    Command="{Binding OpenSettingsCommand}">
+            <Button.Content>
+                <Viewbox>
+                    <Image Source="Images/settings.png"/>
+                </Viewbox>
+            </Button.Content>
+        </Button>
+        <!--<Menu FontSize="14" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right">
+            <MenuItem Header="Settings"  
+                      x:Name="SettingsBTN" 
+                      Margin="0,0,10,0"
+                      Command="{Binding OpenSettingsCommand}"/>
+        </Menu>-->
+        <Grid Grid.ColumnSpan="2" Margin="0,5,0,0" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="144*"/>
+                        <RowDefinition Height="229*"/>
+                        <RowDefinition Height="138*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="5,10,5,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.1*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Column="1" 
+                                Grid.RowSpan="2" 
+                                BorderThickness="1" 
+                                BorderBrush="#191919"/>
+                        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Timer.RemainTime, StringFormat={}{0:mm\\:ss}}" 
+                                       x:Name="TimerL" 
+                                       FontSize="34" 
+                                   FontWeight="Regular"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                       Foreground="{Binding IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverter}}"/>
+                            <TextBlock Text="{Binding Timer.RemainTime, StringFormat={}{0:\\.ff}}" 
+                                       x:Name="TimerLms" 
+                                       FontSize="25"  
+                                       Foreground="{Binding IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverter}}"
+                                       Margin="5,5,0,10"
+                                       Visibility="{Binding MillisecondsVisibility}"/>
+                        </StackPanel>
+                        <Grid Grid.Column="1" Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Fill="{DynamicResource RedBrush}" Grid.ColumnSpan="2"/>
+                            <Rectangle Fill="{DynamicResource BlueBrush}" Grid.Column="2" Grid.ColumnSpan="2"/>
+                            <Border Background="#AAFFFFFF" 
+                                    Margin="10,0" 
+                                    x:Name="AkaSenshuBorder" 
+                                    Visibility="{Binding CurrentMatch.AKA.Senshu, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <Border Background="#AAFFFFFF" 
+                                    Margin="10,0" 
+                                    x:Name="AoSenshuBorder" 
+                                    Grid.Column="3" 
+                                    Visibility="{Binding CurrentMatch.AO.Senshu, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <Label Content="{Binding CurrentMatch.AO.Score}"
+                                   Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="38"
+                                   Foreground="white" 
+                                       x:Name="AO_ScoreL"
+                                       Margin="0"
+                                       Style="{DynamicResource Header}"
+                                   FontFamily="Akrobat"/>
+                            <Label Content="{Binding CurrentMatch.AKA.Score}" 
+                                   Grid.Column="1"
+                                   Foreground="white" 
+                                   x:Name="AKA_ScoreL" 
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="38"
+                                   Margin="0"
+                                   Style="{DynamicResource Header}"
+                                   FontFamily="Akrobat"/>
+                            <Border Grid.ColumnSpan="4" 
+                                    BorderThickness="1" 
+                                    BorderBrush="#191919"/>
+                        </Grid>
+                    </Grid>
+                    <shared:BindableRichTextBox Grid.Row="1" 
+                                                ui:ControlHelper.Header="Log" 
+                                                Margin="5,10" 
+                                                x:Name="LogTB" 
+                                                IsReadOnly="True"
+                                                Document="{Binding LoggerDocument}">
+                        <shared:BindableRichTextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static lang:Resources.SaveLog}" 
+                                          x:Name="saveLogBtn"
+                                          Command="{Binding SaveLogFileCommand}"/>
+                                <MenuItem Header="{x:Static lang:Resources.ClearLog}" 
+                                          x:Name="clearLogBtn"
+                                          Command="{Binding ClearLogCommand}"/>
+                            </ContextMenu>
+                        </shared:BindableRichTextBox.ContextMenu>
+                    </shared:BindableRichTextBox>
+                    <Grid Grid.Row="2" Margin="5,11,5,17">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Margin="0,10" BorderBrush="White" BorderThickness="2" Opacity="0"/>
+                        <Button Style="{DynamicResource AccentButton}" 
+                                Margin="0,10" 
+                                x:Name="FinishMatchBTN" 
+                                Content="{x:Static lang:Resources.FinishMatch}" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"
+                                Command="{Binding FinishMatchCommand}"/>
+                        <Button Margin="0,10" 
+                                Grid.Row="1" 
+                                x:Name="NextMatchBTN" 
+                                Content="{x:Static lang:Resources.NextMatch}" 
+                                IsEnabled="{Binding IsNextMatchButtonEnabled}"
+                                Style="{DynamicResource BaseButton}"
+                                Command="{Binding LoadNextMatchCommand}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1" Grid.RowSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="#50c84b31"/>
+                    <Border Grid.Column="1" Background="#502d4263"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Style="{DynamicResource AccentButton}" 
+                            Content="{Binding IsTimerRunning, Converter={StaticResource IsTimerRunningToText}}" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch" 
+                            Margin="10"
+                            Command="{Binding StartStopTimerCommand}"/>
+                    <Grid Grid.Column="1" 
+                          Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content=":" 
+                               Grid.Column="1" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"/>
+                        <TextBox Margin="2" 
+                                 x:Name="TimeM" 
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="TimerMinutesInput" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <shared:IsStringIntegerValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=SetTimerCommand}" Key="Enter"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <TextBox Margin="2" 
+                                 x:Name="TimeS" 
+                                 Grid.Column="2" 
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="TimerSecondsInput" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <shared:IsStringIntegerValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=SetTimerCommand}" Key="Enter"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Grid.Column="3" 
+                                Content="{x:Static lang:Resources.Set}"
+                                x:Name="setTimeBTN" 
+                                VerticalAlignment="Stretch" 
+                                HorizontalAlignment="Stretch" 
+                                Margin="6,2,2,2"
+                                Style="{DynamicResource BaseButton}"
+                                Command="{Binding SetTimerCommand}"/>
+                    </Grid>
+                    <Button Grid.Column="2" 
+                            Content="{x:Static lang:Resources.ResetTimer}" 
+                            Margin="12" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                            Style="{DynamicResource BaseButton}"
+                            Command="{Binding ResetTimerCommand}"/>
+                    <Button Grid.Column="3" 
+                            Content="{x:Static lang:Resources.Knockout}" 
+                            Margin="12" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                            Command="{Binding StartKnockoutTimeCommand}"
+                            Style="{DynamicResource BaseButton}"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="AKAminusBTN" 
+                                        Margin="10,10,5,10" 
+                                        Content="-" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource RedButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>-1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AKAplusBTN" 
+                                        Grid.Column="1" 
+                                        Margin="5,10,10,10" 
+                                        Content="+"
+                                        Style="{DynamicResource RedButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="AKAipponBTN" 
+                                        Margin="10,5,5,10" 
+                                        Content="{x:Static lang:Resources.Ippon}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource RedButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>3</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AKAwazariBTN"
+                                        Grid.Column="1" 
+                                        Margin="5,5,5,10" 
+                                        Content="{x:Static lang:Resources.Wazari}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource RedButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>2</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AKAyukoBTN" 
+                                        Grid.Column="2" 
+                                        Margin="5,5,10,10" 
+                                        Content="{x:Static lang:Resources.Yuko}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource RedButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AKA"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <CheckBox x:Name="AKAsenshuCB" 
+                                          Grid.Column="3" 
+                                          Content="{x:Static lang:Resources.Senshu}" 
+                                          HorizontalAlignment="Right"
+                                          VerticalContentAlignment="Center" 
+                                          FlowDirection="RightToLeft" 
+                                          Margin="0,0,5,0"
+                                          FontFamily="Montserrat"
+                                          Foreground="{DynamicResource RedBrush}"
+                                          IsChecked="{Binding CurrentMatch.AKA.Senshu, Mode=OneWay}">
+                                    <behaviours:Interaction.Triggers>
+                                        <behaviours:EventTrigger EventName="Checked">
+                                            <behaviours:InvokeCommandAction Command="{Binding SetSenshuToCompetitorCommand}"
+                                                                            CommandParameter="{Binding CurrentMatch.AKA}"/>
+                                        </behaviours:EventTrigger>
+                                        <behaviours:EventTrigger EventName="Unchecked">
+                                            <behaviours:InvokeCommandAction Command="{Binding RemoveSenshuFromCompetitorCommand}"
+                                                                            CommandParameter="{Binding CurrentMatch.AKA}"/>
+                                        </behaviours:EventTrigger>
+                                    </behaviours:Interaction.Triggers>
+                                </CheckBox>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="AOplusBTN" 
+                                        Margin="10,10,5,10"
+                                        Content="+" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource BlueButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AOminusBTN" 
+                                        Grid.Column="1" 
+                                        Margin="5,10,10,10" 
+                                        Content="-" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource BlueButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>-1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="AOipponBTN" 
+                                        Grid.Column="3" 
+                                        Margin="5,5,10,10" 
+                                        Content="{x:Static lang:Resources.Ippon}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource BlueButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>3</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AOwazariBTN" 
+                                        Grid.Column="2" 
+                                        Margin="5,5,5,10" 
+                                        Content="{x:Static lang:Resources.Wazari}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource BlueButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>2</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button x:Name="AOyukoBTN" 
+                                        Grid.Column="1" 
+                                        Margin="10,5,5,10" 
+                                        Content="{x:Static lang:Resources.Yuko}" 
+                                        HorizontalAlignment="Stretch" 
+                                        VerticalAlignment="Stretch"
+                                        Style="{DynamicResource BlueButton}"
+                                        Command="{Binding AddPointsToCompetitorCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding Path="CurrentMatch.AO"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <system:Int32>1</system:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <CheckBox x:Name="AOsenshuCB" 
+                                          Grid.Column="0" 
+                                          Content="{x:Static lang:Resources.Senshu}" 
+                                          VerticalContentAlignment="Center" Margin="5,0,0,0"
+                                          FontFamily="Montserrat"
+                                          Foreground="{DynamicResource BlueBrush}"
+                                          IsChecked="{Binding CurrentMatch.AO.Senshu, Mode=OneWay}">
+                                    <behaviours:Interaction.Triggers>
+                                        <behaviours:EventTrigger EventName="Checked">
+                                            <behaviours:InvokeCommandAction Command="{Binding SetSenshuToCompetitorCommand}"
+                                                                            CommandParameter="{Binding CurrentMatch.AO}"/>
+                                        </behaviours:EventTrigger>
+                                        <behaviours:EventTrigger EventName="Unchecked">
+                                            <behaviours:InvokeCommandAction Command="{Binding RemoveSenshuFromCompetitorCommand}"
+                                                                            CommandParameter="{Binding CurrentMatch.AO}"/>
+                                        </behaviours:EventTrigger>
+                                    </behaviours:Interaction.Triggers>
+                                </CheckBox>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="#15000000">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Margin="10,0" 
+                                  Content="H" 
+                                  x:Name="AKA_H1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AKA.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>5</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>5</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="1" 
+                                  Content="HC" 
+                                  x:Name="AKA_HC1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AKA.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>4</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>4</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="2" 
+                                  Content="C3" 
+                                  x:Name="AKA_C3_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AKA.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>3</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>3</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="3" 
+                                  Content="C2" 
+                                  x:Name="AKA_C2_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AKA.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>2</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>2</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="4" 
+                                  Content="C1" 
+                                  x:Name="AKA_C1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AKA.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>1</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AKA"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>1</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <Label Visibility="Collapsed" 
+                               FontSize="24" 
+                               Grid.Column="5" 
+                               Content="C1" 
+                               VerticalContentAlignment="Center" 
+                               HorizontalContentAlignment="Center"/>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="9" 
+                                  Content="H" 
+                                  x:Name="AO_H1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AO.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>5</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>5</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="8" 
+                                  Content="HC" 
+                                  x:Name="AO_HC1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AO.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>4</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>4</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="7" 
+                                  Content="C3" 
+                                  x:Name="AO_C3_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AO.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>3</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>3</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="6" 
+                                  Content="C2" 
+                                  x:Name="AO_C2_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AO.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>2</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>2</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                        <CheckBox Margin="10,0" 
+                                  Grid.Column="5" 
+                                  Content="C1" 
+                                  x:Name="AO_C1_CB" 
+                                  HorizontalAlignment="Left"
+                                  FontFamily="Montserrat"
+                                  VerticalContentAlignment="Center"
+                                  IsChecked="{Binding CurrentMatch.AO.Fouls_C1, Mode=OneWay, 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}">
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="Checked">
+                                    <behaviours:InvokeCommandAction Command="{Binding SetSanctionToCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>1</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                                <behaviours:EventTrigger EventName="Unchecked">
+                                    <behaviours:InvokeCommandAction Command="{Binding RemoveSanctionFromCompetitorCommand}">
+                                        <behaviours:InvokeCommandAction.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                                <Binding Path="CurrentMatch.AO"/>
+                                                <Binding>
+                                                    <Binding.Source>
+                                                        <system:Int32>1</system:Int32>
+                                                    </Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </behaviours:InvokeCommandAction.CommandParameter>
+                                    </behaviours:InvokeCommandAction>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                        </CheckBox>
+                    </Grid>
+
+                    <!--<Grid Grid.Row="2" Grid.ColumnSpan="2" Background="#72000000" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Margin="10,0" Content="H" x:Name="AKA_H2_CB" HorizontalAlignment="Left" Unchecked="AKA_H2_CB_Unchecked" Checked="AKA_H2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="1" Content="HC" x:Name="AKA_HC2_CB" HorizontalAlignment="Left" Checked="AKA_HC2_CB_Checked" Unchecked="AKA_HC2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="2" Content="K" x:Name="AKA_K2_CB" HorizontalAlignment="Left" Checked="AKA_K2_CB_Checked" Unchecked="AKA_K2_CB_Unchecked"/>
+                        <CheckBox Margin="10,0" Grid.Column="3" Content="C" x:Name="AKA_C2_CB" HorizontalAlignment="Left" Checked="AKA_C2_CB_Checked" Unchecked="AKA_C2_CB_Unchecked"/>
+                        <Label FontSize="24" Grid.Column="4" Content="C2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <CheckBox Margin="10,0" Grid.Column="8" Content="H" x:Name="AO_H2_CB" HorizontalAlignment="Left" Unchecked="AO_H2_CB_Unchecked" Checked="AO_H2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="7" Content="HC" x:Name="AO_HC2_CB" HorizontalAlignment="Left" Unchecked="AO_HC2_CB_Unchecked" Checked="AO_HC2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="6" Content="K" x:Name="AO_K2_CB" HorizontalAlignment="Left" Unchecked="AO_K2_CB_Unchecked" Checked="AO_K2_CB_Checked"/>
+                        <CheckBox Margin="10,0" Grid.Column="5" Content="C" x:Name="AO_C2_CB" HorizontalAlignment="Left" Checked="AO_C2_CB_Checked" Unchecked="AO_C2_CB_Unchecked"/>
+                    </Grid>-->
+                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="AKA_WinnerBTN" 
+                                Margin="10,10,10,10" 
+                                Content="{x:Static lang:Resources.WinnerAKA}" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"
+                                Style="{DynamicResource RedButton}"
+                                Command="{Binding SetMatchWinerCommand}"
+                                CommandParameter="{Binding CurrentMatch.AKA}"/>
+                        <Button x:Name="AO_WinnerBTN" 
+                                Margin="10,10,10,10" 
+                                Content="{x:Static lang:Resources.WinnerAO}" 
+                                Grid.Column="1" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"
+                                Style="{DynamicResource BlueButton}"
+                                Command="{Binding SetMatchWinerCommand}"
+                                CommandParameter="{Binding CurrentMatch.AO}"/>
+                        <Button x:Name="TieBTN" 
+                                Margin="10" 
+                                Content="{x:Static lang:Resources.Tie}" 
+                                Grid.Column="2" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"
+                                Visibility="{Binding TieButtonVisibility}"
+                                MinWidth="50"
+                                Style="{DynamicResource BaseButton}"
+                                Command="{Binding SetMatchWinerCommand}"/>
+                    </Grid>
+                    <Grid Grid.Row="6" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Margin="10">
+                            <Label Content="Round" Foreground="White"/>
+                        </Viewbox>
+
+                        <Viewbox Grid.Column="6" Margin="10">
+                            <Label Content="Rounds:" Foreground="White"/>
+                        </Viewbox>
+
+                        <TextBox Grid.Column="7" 
+                                 Margin="10" 
+                                 x:Name="roundTB"/>
+
+                        <Button HorizontalAlignment="Stretch" 
+                                Grid.Column="1" 
+                                Margin="5,2" 
+                                x:Name="roundWinAka">
+                            <TextBlock TextAlignment="Center">Winner<LineBreak/>AKA</TextBlock>
+                        </Button>
+                        <Button Grid.Column="2" 
+                                HorizontalAlignment="Stretch" 
+                                Margin="5,2" 
+                                x:Name="roundWinAo">
+                            <TextBlock TextAlignment="Center">Winner<LineBreak/>AO</TextBlock>
+                        </Button>
+                        <Button Grid.Column="3" 
+                                Margin="5,2" 
+                                Content="Draw" 
+                                x:Name="roundDraw"
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch"/>
+                        <Button Grid.Column="4" 
+                                Margin="5,2" 
+                                HorizontalAlignment="Stretch" 
+                                x:Name="roundPlus" >
+                            <TextBlock TextAlignment="Center">Round<LineBreak/>+</TextBlock>
+                        </Button>
+                        <Button Grid.Column="5" 
+                                Margin="5,2" 
+                                HorizontalAlignment="Stretch" 
+                                x:Name="roundMinus">
+                            <TextBlock TextAlignment="Center">Round<LineBreak/>-</TextBlock>
+                        </Button>
+                    </Grid>
+
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="0,0,0,15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="AKA_curTXT" 
+                                 Margin="10,0"
+                                 Text="{Binding CurrentMatchAkaText}"
+                                 VerticalAlignment="Center"
+                                 Background="#80ffffff"
+                                 BorderThickness="0">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static lang:Resources.kiken}" 
+                                              x:Name="akaKikenBTN"
+                                              Command="{Binding SetCompetitorKIKENCommand}"
+                                              CommandParameter="{Binding CurrentMatch.AKA}"/>
+                                    <MenuItem Header="{x:Static lang:Resources.shikaku}" 
+                                              x:Name="akaShikakuBTN"
+                                              Command="{Binding SetCompetitorSHIKAKUCommand}"
+                                              CommandParameter="{Binding CurrentMatch.AKA}"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                        <TextBox x:Name="AO_curTXT" 
+                                 Margin="10,0" 
+                                 Text="{Binding CurrentMatchAoText}"
+                                 VerticalAlignment="Center"
+                                 Grid.Column="2"
+                                 Background="#80ffffff"
+                                 BorderThickness="0">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static lang:Resources.kiken}" 
+                                              x:Name="aoKikenBTN"
+                                              Command="{Binding SetCompetitorKIKENCommand}"
+                                              CommandParameter="{Binding CurrentMatch.AO}"/>
+                                    <MenuItem Header="{x:Static lang:Resources.shikaku}" 
+                                              x:Name="aoShikakuBTN"
+                                              Command="{Binding SetCompetitorSHIKAKUCommand}"
+                                              CommandParameter="{Binding CurrentMatch.AKA}"/>
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                        <Label FontSize="16" 
+                               Content="{x:Static lang:Resources.CurentMtach}" 
+                               Grid.Column="1" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               FontFamily="Akrobat"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="AKA_nxtTXT" 
+                                 Margin="10,0" 
+                                 Text="{Binding NextMatchAkaText}"
+                                 VerticalAlignment="Center"
+                                 Background="#80ffffff"
+                                 BorderThickness="0"
+                                 IsEnabled="False"/>
+                        <TextBox x:Name="AO_nxtTXT" 
+                                 Margin="10,0" 
+                                 Text="{Binding NextMatchAoText}"
+                                 VerticalAlignment="Center" 
+                                 Grid.Column="2"
+                                 Background="#80ffffff"
+                                 BorderThickness="0"
+                                 IsEnabled="False"/>
+                        <Label FontSize="16" 
+                               Content="{x:Static lang:Resources.NextMatch}" 
+                               Grid.Column="1" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center"
+                               FontFamily="Akrobat"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

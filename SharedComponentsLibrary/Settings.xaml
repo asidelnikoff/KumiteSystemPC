@@ -1,0 +1,118 @@
+﻿<Window x:Class="SharedComponentsLibrary.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SharedComponentsLibrary"
+        mc:Ignorable="d"
+        xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
+        xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="Settings" Height="450" Width="800"
+        Closed="Window_Closed">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Content="{x:Static lang:Resources.Settings}"
+               Style="{DynamicResource Header}"/>
+        <ScrollViewer Grid.Row="1"
+                      Background="{DynamicResource LightGray}">
+            <ItemsControl Margin="40,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemWidth="220"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <TextBox Margin="15,10"
+                         ui:ControlHelper.Header="{x:Static lang:Resources.DataPath}"
+                         Text="{Binding Settings.DataPath, Mode=OneWay}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseDoubleClick">
+                            <behaviors:InvokeCommandAction
+                                Command="{Binding ChooseDataPathCommand}">
+                            </behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </TextBox>
+                <TextBox Margin="15,10"
+                         ui:ControlHelper.Header="{x:Static lang:Resources.DatabasePath}"
+                         Text="{Binding Settings.DatabasePath, Mode=OneWay}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseDoubleClick">
+                            <behaviors:InvokeCommandAction
+                                Command="{Binding ChooseDatabaseCommand}">
+                            </behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </TextBox>
+                <TextBox Margin="15,10"
+                         ui:ControlHelper.Header="{x:Static lang:Resources.EndOfMatchSound}"
+                         Text="{Binding Settings.EndOfMatchSound, Mode=OneWay}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseDoubleClick">
+                            <behaviors:InvokeCommandAction
+                                Command="{Binding ChooseEndOfMatchSoundCommand}">
+                            </behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </TextBox>
+                <TextBox Margin="15,10"
+                         ui:ControlHelper.Header="{x:Static lang:Resources.WarningSound}"
+                         Text="{Binding Settings.WarningSound, Mode=OneWay}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseDoubleClick">
+                            <behaviors:InvokeCommandAction
+                                Command="{Binding ChooseWarningSoundCommand}">
+                            </behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </TextBox>
+                <ComboBox Margin="15,10"
+                          ui:ControlHelper.Header="{x:Static lang:Resources.ExternalScreen}"
+                          ItemsSource="{Binding ExternalScreens}"
+                          SelectedIndex="{Binding Settings.ExternalMonitorIndex}"/>
+                <TextBox Margin="15,10"
+                         ui:ControlHelper.Header="{x:Static lang:Resources.Tatami}">
+                    <TextBox.Text>
+                        <Binding Path="Settings.Tatami" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <local:IsStringIntegerValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <CheckBox Margin="15,10"
+                          Content="{x:Static lang:Resources.AutoLoadNextMatch}"
+                          IsChecked="{Binding Settings.IsAutoLoadNextMatchEnabled}"/>
+                <CheckBox Margin="15,10"
+                          Content="{x:Static lang:Resources.ShowNextMatchOnExternalBoard}"
+                          IsChecked="{Binding Settings.IsNextMatchShownOnExternalBoard}"/>
+                <CheckBox Margin="15,10"
+                          Visibility="Collapsed"
+                          Content="Show competitor's club"
+                          IsEnabled="false"/>
+                <ComboBox Margin="15,10"
+                          ui:ControlHelper.Header="{x:Static lang:Resources.Language}"
+                          ItemsSource="{Binding Languages}"
+                          SelectedItem="{Binding Settings.Language}"/>
+            </ItemsControl>
+        </ScrollViewer>
+        <Button HorizontalAlignment="Right"
+                Margin="40,15"
+                Height="35"
+                Style="{StaticResource AccentButton}"
+                Grid.Row="2"
+                Command="{Binding SaveSettingsCommand}">
+            <Button.Content>
+                <Label Style="{DynamicResource Header}"
+                               Content="{x:Static lang:Resources.Save}"
+                               Margin="15,0"
+                               FontSize="12"
+                               Foreground="White"/>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Window>

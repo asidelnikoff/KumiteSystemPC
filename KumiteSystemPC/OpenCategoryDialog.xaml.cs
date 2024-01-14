@@ -381,7 +381,7 @@ namespace KumiteSystemPC
                             m.SetWinner(0);
                     }
                     int senshu = Convert.ToInt32(reader["Senshu"]);
-                    if (senshu != 0 && m.isAllCompetitors())
+                    if (senshu != 0 && m.IsAllCompetitors())
                     {
                         if (senshu == 1) { m.AKA.Senshu = true; m.AO.Senshu = false; }
                         else if (senshu == 2) { m.AO.Senshu = true; m.AKA.Senshu = false; }

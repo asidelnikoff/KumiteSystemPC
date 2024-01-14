@@ -729,9 +729,9 @@ namespace KumiteSystemPC
             }
 
             if (GlobalCategory.RepechageAKA != null && GlobalCategory.RepechageAKA.Matches.Count > 0) 
-                ExportRepechage(wb,0);
-            if(GlobalCategory.RepechageAO!=null && GlobalCategory.RepechageAO.Matches.Count > 0) 
-                ExportRepechage(wb,1);
+                ExportRepechage(wb, 0);
+            if(GlobalCategory.RepechageAO != null && GlobalCategory.RepechageAO.Matches.Count > 0) 
+                ExportRepechage(wb, 1);
 
             if (GlobalCategory.Winners != null && GlobalCategory.Winners.Count > 0)
                 ExportCategoryResultsToExcel(GlobalCategory.Winners);
