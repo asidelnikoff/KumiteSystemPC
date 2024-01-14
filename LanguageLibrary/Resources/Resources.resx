@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CategoryGenerator" xml:space="preserve">
+    <value>Category Generator</value>
+  </data>
+  <data name="EnterNameToSearch" xml:space="preserve">
+    <value>Enter name to search...</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AddToCategory" xml:space="preserve">
+    <value>Add to category</value>
+  </data>
+  <data name="AddCompetitor" xml:space="preserve">
+    <value>Add competitor</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Add category</value>
+  </data>
+  <data name="CompetitorsInCategory" xml:space="preserve">
+    <value>Competitors in category</value>
+  </data>
+  <data name="ViewCategory" xml:space="preserve">
+    <value>View category</value>
+  </data>
+  <data name="GenerateCategory" xml:space="preserve">
+    <value>Generate category</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Category name</value>
+  </data>
+  <data name="CategoryType" xml:space="preserve">
+    <value>Category type</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="Club" xml:space="preserve">
+    <value>Club</value>
+  </data>
+  <data name="TournamentName" xml:space="preserve">
+    <value>Tournament name</value>
+  </data>
+  <data name="ThisCompetitorIsAlreadyInCategory" xml:space="preserve">
+    <value>This competitor is already in category</value>
+  </data>
+  <data name="YouHaveDataInThisCategory" xml:space="preserve">
+    <value>You have data in this category. Do you want to regenerate category?</value>
+  </data>
+  <data name="Regenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+  <data name="DoYouWantToShuffleCompetitors" xml:space="preserve">
+    <value>Do you want to shuffle competitors?</value>
+  </data>
+  <data name="Shuffle" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="WithoutShuffle" xml:space="preserve">
+    <value>Without shuffle</value>
+  </data>
+  <data name="PleaseEnterANonEmptyString" xml:space="preserve">
+    <value>Please enter a non empty string</value>
+  </data>
+  <data name="CompetitorsSwaped" xml:space="preserve">
+    <value>Competitors swaped</value>
+  </data>
+  <data name="CantSwapCompetitors" xml:space="preserve">
+    <value>Can't swap competitors</value>
+  </data>
+  <data name="HaveCategoryResults" xml:space="preserve">
+    <value>Have category results</value>
+  </data>
+  <data name="ShowExternalResultsBoardMessage" xml:space="preserve">
+    <value>Show external board with results?</value>
+  </data>
+  <data name="ShowResults" xml:space="preserve">
+    <value>Show results</value>
+  </data>
+  <data name="YouHaventFinishCurrentlyLoadedMatch" xml:space="preserve">
+    <value>You haven't finished currently loaded match. Do you want to finish it?</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="LoadWithoutFinishing" xml:space="preserve">
+    <value>Load without finishing</value>
+  </data>
+  <data name="CategoryExportedToFile" xml:space="preserve">
+    <value>Category exproted to file</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>Round</value>
+  </data>
+  <data name="Complited" xml:space="preserve">
+    <value>Complited</value>
+  </data>
+  <data name="NotComplited" xml:space="preserve">
+    <value>Not Complited</value>
+  </data>
+  <data name="SwapCompetitors" xml:space="preserve">
+    <value>Swap competitors</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Rounds" xml:space="preserve">
+    <value>Rounds</value>
+  </data>
+  <data name="Matches" xml:space="preserve">
+    <value>Matches</value>
+  </data>
+  <data name="LoadMatch" xml:space="preserve">
+    <value>Load match</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Export to file</value>
+  </data>
+  <data name="RegerateBronzeStage" xml:space="preserve">
+    <value>Regenerate Bronze stage</value>
+  </data>
+  <data name="Winner" xml:space="preserve">
+    <value>Winner</value>
+  </data>
+  <data name="Swap" xml:space="preserve">
+    <value>Swap</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="SmthWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="ChooseDefaultDataPath" xml:space="preserve">
+    <value>Choose default data path</value>
+  </data>
+  <data name="Tatami" xml:space="preserve">
+    <value>Tatami</value>
+  </data>
+  <data name="OpenCategory" xml:space="preserve">
+    <value>Open category</value>
+  </data>
+  <data name="Resets" xml:space="preserve">
+    <value>Resets</value>
+  </data>
+  <data name="ResetMatch" xml:space="preserve">
+    <value>Reset Match</value>
+  </data>
+  <data name="ResetTimer" xml:space="preserve">
+    <value>Reset Timer</value>
+  </data>
+  <data name="Externals" xml:space="preserve">
+    <value>Externals</value>
+  </data>
+  <data name="ExtTimer" xml:space="preserve">
+    <value>Ext. Timer</value>
+  </data>
+  <data name="SaveLog" xml:space="preserve">
+    <value>Save Log</value>
+  </data>
+  <data name="ClearLog" xml:space="preserve">
+    <value>Clear Log</value>
+  </data>
+  <data name="FinishMatch" xml:space="preserve">
+    <value>Finish match</value>
+  </data>
+  <data name="NextMatch" xml:space="preserve">
+    <value>Next match</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="Knockout" xml:space="preserve">
+    <value>10 sec</value>
+  </data>
+  <data name="Ippon" xml:space="preserve">
+    <value>Ippon</value>
+  </data>
+  <data name="Wazari" xml:space="preserve">
+    <value>Wazari</value>
+  </data>
+  <data name="Yuko" xml:space="preserve">
+    <value>Yuko</value>
+  </data>
+  <data name="Senshu" xml:space="preserve">
+    <value>Senshu</value>
+  </data>
+  <data name="WinnerAKA" xml:space="preserve">
+    <value>Winner AKA</value>
+  </data>
+  <data name="CurentMtach" xml:space="preserve">
+    <value>Curent match</value>
+  </data>
+  <data name="Tie" xml:space="preserve">
+    <value>Tie</value>
+  </data>
+  <data name="Judjes" xml:space="preserve">
+    <value>Judjes</value>
+  </data>
+  <data name="StartTmier" xml:space="preserve">
+    <value>Start timer</value>
+  </data>
+  <data name="StopTmier" xml:space="preserve">
+    <value>Stop timer</value>
+  </data>
+  <data name="Timeleft" xml:space="preserve">
+    <value>Time left</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>add</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>remove</value>
+  </data>
+  <data name="point" xml:space="preserve">
+    <value>point</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="_set" xml:space="preserve">
+    <value>set</value>
+  </data>
+  <data name="sanction" xml:space="preserve">
+    <value>sanction</value>
+  </data>
+  <data name="MatchRested" xml:space="preserve">
+    <value>Match reseted</value>
+  </data>
+  <data name="MatchWinner" xml:space="preserve">
+    <value>Match winner</value>
+  </data>
+  <data name="MatchTie" xml:space="preserve">
+    <value>Match ended with tie</value>
+  </data>
+  <data name="MatchResultsSaved" xml:space="preserve">
+    <value>Match results saved</value>
+  </data>
+  <data name="OpenNewCategory" xml:space="preserve">
+    <value>You have currently loaded category. Do you want to open new?</value>
+  </data>
+  <data name="MatchLodaed" xml:space="preserve">
+    <value>Match loaded</value>
+  </data>
+  <data name="MatchEnded" xml:space="preserve">
+    <value>Match ended</value>
+  </data>
+  <data name="kiken" xml:space="preserve">
+    <value>Kiken</value>
+  </data>
+  <data name="shikaku" xml:space="preserve">
+    <value>Shikaku</value>
+  </data>
+  <data name="_INFO" xml:space="preserve">
+    <value>INFO</value>
+  </data>
+  <data name="PleaseEnterIntgeer" xml:space="preserve">
+    <value>Please enter an integer</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Tournament" xml:space="preserve">
+    <value>Tournament</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="WinnerAO" xml:space="preserve">
+    <value>Winner AO</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="DataPath" xml:space="preserve">
+    <value>Data path</value>
+  </data>
+  <data name="DatabasePath" xml:space="preserve">
+    <value>Database path</value>
+  </data>
+  <data name="EndOfMatchSound" xml:space="preserve">
+    <value>End of match sound</value>
+  </data>
+  <data name="WarningSound" xml:space="preserve">
+    <value>Warning sound</value>
+  </data>
+  <data name="ExternalScreen" xml:space="preserve">
+    <value>External screen</value>
+  </data>
+  <data name="AutoLoadNextMatch" xml:space="preserve">
+    <value>Auto load next match</value>
+  </data>
+  <data name="ShowNextMatchOnExternalBoard" xml:space="preserve">
+    <value>Show next match on external board</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="SettingsSaved" xml:space="preserve">
+    <value>Settings saved</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="ShowExternalBoard" xml:space="preserve">
+    <value>Show external board</value>
+  </data>
+  <data name="CloseExternalBoard" xml:space="preserve">
+    <value>Close external board</value>
+  </data>
+  <data name="ShowExternalResultsBoard" xml:space="preserve">
+    <value>Show external results board</value>
+  </data>
+  <data name="CloseExternalResultsBoard" xml:space="preserve">
+    <value>Close external results board</value>
+  </data>
+  <data name="ShowExt" xml:space="preserve">
+    <value>Show ext.</value>
+  </data>
+  <data name="CloseExt" xml:space="preserve">
+    <value>Close ext.</value>
+  </data>
+  <data name="SingleElimination2" xml:space="preserve">
+    <value>Single Elimination (2 third places)</value>
+  </data>
+  <data name="SingleElimination1" xml:space="preserve">
+    <value>Single Elimination (1 third place)</value>
+  </data>
+  <data name="RoundRobin" xml:space="preserve">
+    <value>Round Robin</value>
+  </data>
+  <data name="AKAShikakau" xml:space="preserve">
+    <value>AKA Shikaku</value>
+  </data>
+  <data name="AOShikaku" xml:space="preserve">
+    <value>AO Shikaku</value>
+  </data>
+  <data name="AKAKiken" xml:space="preserve">
+    <value>AKA Kiken</value>
+  </data>
+  <data name="AOKiken" xml:space="preserve">
+    <value>AO Kiken</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LogFileSaved" xml:space="preserve">
+    <value>Log file saved</value>
+  </data>
+</root>

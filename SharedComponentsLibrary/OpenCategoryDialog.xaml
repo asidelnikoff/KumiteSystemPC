@@ -1,0 +1,28 @@
+﻿<ui:ContentDialog x:Class="SharedComponentsLibrary.OpenCategoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SharedComponentsLibrary"
+        mc:Ignorable="d"
+                  xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+                  Height="Auto" Width="Auto"
+                  PrimaryButtonStyle="{DynamicResource AccentButton}"
+                  SecondaryButtonStyle="{DynamicResource SecondaryButton}"
+                  PrimaryButtonText="{x:Static lang:Resources.Open}"
+                  IsPrimaryButtonEnabled="{Binding IsOpenButtonEnabled}"
+                  SecondaryButtonText="{x:Static lang:Resources.Cancel}">
+    <StackPanel>
+        <ComboBox Margin="0,10"
+                  ui:ControlHelper.Header="{x:Static lang:Resources.Tournament}"
+                  HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Tournaments}"
+                  SelectedItem="{Binding SelectedTournament}"/>
+        <ComboBox Margin="0,10"
+                  ui:ControlHelper.Header="{x:Static lang:Resources.Category}"
+                  HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding CategoriesInTournament}"
+                  SelectedItem="{Binding SelectedCategory}"/>
+    </StackPanel>
+</ui:ContentDialog>

@@ -148,7 +148,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Style="{StaticResource AccentButtonStyle}" x:Name="FinishM" HorizontalAlignment="Stretch" Content="Finish Match" Margin="20,5" Click="FinishMatchBTN_Click" IsEnabled="False"/>
+                    <Button Style="{StaticResource AccentButtonStyle}" x:Name="FinishM" HorizontalAlignment="Stretch" Content="Finish Match" Margin="20,5" Click="FinishMatchBTN_Click" IsEnabled="True"/>
                     <Button Grid.Column="1" x:Name="NextMatchBTN" HorizontalAlignment="Stretch" Content="Next Match" Margin="20,5" Grid.Row="1" Click="NextMatchBTN_Click" IsEnabled="False"/>
                 </Grid>
 

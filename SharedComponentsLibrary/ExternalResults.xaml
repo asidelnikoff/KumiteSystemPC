@@ -1,0 +1,104 @@
+﻿<Window x:Class="SharedComponentsLibrary.ExternalResults"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SharedComponentsLibrary"
+        mc:Ignorable="d"
+        Title="ExternalResults" Height="1080" Width="1920"
+        FontFamily="Arial"
+        FontWeight="Bold"
+        Loaded="Window_Loaded"
+        ShowActivated="False">
+    <Grid Background="#191919">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="45,40,45,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Viewbox HorizontalAlignment="Left" Grid.Row="1" Margin="35,0,0,0" VerticalAlignment="Center">
+                <Label Content="{Binding CategoryName}" Foreground="White" VerticalAlignment="Center" x:Name="CategoryNameEXT" Margin="0,0,0,3"/>
+            </Viewbox>
+        </Grid >
+        <Grid Grid.Row="1" Margin="45,30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="125*"/>
+                    <RowDefinition Height="110*"/>
+                    <RowDefinition Height="90*"/>
+                    <RowDefinition Height="90*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="0,0,0,30" 
+                      Background="#aaffd700" 
+                      x:Name="FirstGrid" 
+                      Visibility="{Binding FirstPlaceVisibility}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Viewbox Grid.Column="1"
+                                 HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Center">
+                            <TextBlock Text="{Binding FirstPlaceName}" Foreground="White" x:Name="firstComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,30" 
+                      Grid.Row="1" 
+                      Background="#aac0c0c0" 
+                      x:Name="SecondGrid" 
+                      Visibility="{Binding SecondPlaceVisibility}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding SecondPlaceName}" Foreground="White" x:Name="secondComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,30" Grid.Row="2" 
+                      Background="#aacd7f32" 
+                      x:Name="ThirdGrid" 
+                      Visibility="{Binding ThirdPlaceVisibility1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding ThirdPlaceName1}" Foreground="White" x:Name="thirdComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+                <Grid Margin="0,0,0,30" Grid.Row="3" 
+                      Background="#aacd7f32" 
+                      x:Name="FourthGrid" 
+                      Visibility="{Binding ThirdPlaceVisibility2}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1">
+                        <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding ThirdPlaceName2}" Foreground="White" x:Name="fourthComp" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Grid>
+
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

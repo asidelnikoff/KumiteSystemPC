@@ -1,0 +1,475 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CategoryGenerator" xml:space="preserve">
+    <value>Генератор Категорий</value>
+  </data>
+  <data name="EnterNameToSearch" xml:space="preserve">
+    <value>Введите имя для поиска…</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="AddToCategory" xml:space="preserve">
+    <value>Добавить в категорию</value>
+  </data>
+  <data name="AddCompetitor" xml:space="preserve">
+    <value>Создать участника</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Создать категорию</value>
+  </data>
+  <data name="CompetitorsInCategory" xml:space="preserve">
+    <value>Участники в категории</value>
+  </data>
+  <data name="ViewCategory" xml:space="preserve">
+    <value>Показать категорию</value>
+  </data>
+  <data name="GenerateCategory" xml:space="preserve">
+    <value>Сгенерировать категорию</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="CategoryName" xml:space="preserve">
+    <value>Название категории</value>
+  </data>
+  <data name="CategoryType" xml:space="preserve">
+    <value>Тип категории</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="Club" xml:space="preserve">
+    <value>Клуб</value>
+  </data>
+  <data name="TournamentName" xml:space="preserve">
+    <value>Название турнира</value>
+  </data>
+  <data name="ThisCompetitorIsAlreadyInCategory" xml:space="preserve">
+    <value>Этот участник уже добавлен в категорию</value>
+  </data>
+  <data name="YouHaveDataInThisCategory" xml:space="preserve">
+    <value>В данной категории есть данные. Хотите перегенерировать ее?</value>
+  </data>
+  <data name="Regenerate" xml:space="preserve">
+    <value>Перегенирировать</value>
+  </data>
+  <data name="DoYouWantToShuffleCompetitors" xml:space="preserve">
+    <value>Хотите перемешать участников?</value>
+  </data>
+  <data name="Shuffle" xml:space="preserve">
+    <value>Перемешать</value>
+  </data>
+  <data name="WithoutShuffle" xml:space="preserve">
+    <value>Не перемешивать</value>
+  </data>
+  <data name="PleaseEnterANonEmptyString" xml:space="preserve">
+    <value>Введите непустую строку</value>
+  </data>
+  <data name="CompetitorsSwaped" xml:space="preserve">
+    <value>Участники поменяны местами</value>
+  </data>
+  <data name="CantSwapCompetitors" xml:space="preserve">
+    <value>Невозможно поменять местами</value>
+  </data>
+  <data name="HaveCategoryResults" xml:space="preserve">
+    <value>Получены результаты в категории</value>
+  </data>
+  <data name="ShowExternalResultsBoardMessage" xml:space="preserve">
+    <value>Показать результаты на внешнем экране?</value>
+  </data>
+  <data name="ShowResults" xml:space="preserve">
+    <value>Показать результаты</value>
+  </data>
+  <data name="YouHaventFinishCurrentlyLoadedMatch" xml:space="preserve">
+    <value>Загруженный матч еще не завершен. Хотите завершить его?</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="LoadWithoutFinishing" xml:space="preserve">
+    <value>Загрузить без завершения</value>
+  </data>
+  <data name="CategoryExportedToFile" xml:space="preserve">
+    <value>Категория экспортирована в файл</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ок</value>
+  </data>
+  <data name="Round" xml:space="preserve">
+    <value>Раунд</value>
+  </data>
+  <data name="Complited" xml:space="preserve">
+    <value>Завершена</value>
+  </data>
+  <data name="NotComplited" xml:space="preserve">
+    <value>Не завершена</value>
+  </data>
+  <data name="SwapCompetitors" xml:space="preserve">
+    <value>Переставить участников</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>Результаты</value>
+  </data>
+  <data name="Rounds" xml:space="preserve">
+    <value>Раунды</value>
+  </data>
+  <data name="Matches" xml:space="preserve">
+    <value>Матчи</value>
+  </data>
+  <data name="LoadMatch" xml:space="preserve">
+    <value>Загрузить матч</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Подождите…</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Экспорт в файл</value>
+  </data>
+  <data name="RegerateBronzeStage" xml:space="preserve">
+    <value>Перегенерировать матчи за бронзу</value>
+  </data>
+  <data name="Winner" xml:space="preserve">
+    <value>Победитель</value>
+  </data>
+  <data name="Swap" xml:space="preserve">
+    <value>Обменять</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Инфо</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="SmthWentWrong" xml:space="preserve">
+    <value>Что-то пошло не так</value>
+  </data>
+  <data name="ChooseDefaultDataPath" xml:space="preserve">
+    <value>Выберете папку для сохранения данных</value>
+  </data>
+  <data name="Tatami" xml:space="preserve">
+    <value>Татами</value>
+  </data>
+  <data name="OpenCategory" xml:space="preserve">
+    <value>Открыть категорию</value>
+  </data>
+  <data name="Resets" xml:space="preserve">
+    <value>Сбросы</value>
+  </data>
+  <data name="ResetMatch" xml:space="preserve">
+    <value>Сброс матча</value>
+  </data>
+  <data name="ResetTimer" xml:space="preserve">
+    <value>Сброс таймера</value>
+  </data>
+  <data name="Externals" xml:space="preserve">
+    <value>Внешние</value>
+  </data>
+  <data name="ExtTimer" xml:space="preserve">
+    <value>Внеш. Таймер</value>
+  </data>
+  <data name="SaveLog" xml:space="preserve">
+    <value>Сохранить файл</value>
+  </data>
+  <data name="ClearLog" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="FinishMatch" xml:space="preserve">
+    <value>Завершить матч</value>
+  </data>
+  <data name="NextMatch" xml:space="preserve">
+    <value>След. матч</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Уст.</value>
+  </data>
+  <data name="Knockout" xml:space="preserve">
+    <value>10 сек</value>
+  </data>
+  <data name="Ippon" xml:space="preserve">
+    <value>Иппон</value>
+  </data>
+  <data name="Wazari" xml:space="preserve">
+    <value>Вазари</value>
+  </data>
+  <data name="Yuko" xml:space="preserve">
+    <value>Юко</value>
+  </data>
+  <data name="Senshu" xml:space="preserve">
+    <value>Сеншу</value>
+  </data>
+  <data name="WinnerAKA" xml:space="preserve">
+    <value>Победитель АКА</value>
+  </data>
+  <data name="CurentMtach" xml:space="preserve">
+    <value>Текущий матч</value>
+  </data>
+  <data name="Tie" xml:space="preserve">
+    <value>Ничья</value>
+  </data>
+  <data name="Judjes" xml:space="preserve">
+    <value>Судьи</value>
+  </data>
+  <data name="StartTmier" xml:space="preserve">
+    <value>Запуск таймера</value>
+  </data>
+  <data name="StopTmier" xml:space="preserve">
+    <value>Остановка таймера</value>
+  </data>
+  <data name="Timeleft" xml:space="preserve">
+    <value>Время</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>добавить</value>
+  </data>
+  <data name="remove" xml:space="preserve">
+    <value>убрать</value>
+  </data>
+  <data name="point" xml:space="preserve">
+    <value>балл</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Баллы</value>
+  </data>
+  <data name="_set" xml:space="preserve">
+    <value>установить</value>
+  </data>
+  <data name="sanction" xml:space="preserve">
+    <value>замечание</value>
+  </data>
+  <data name="MatchRested" xml:space="preserve">
+    <value>Матч сброшен</value>
+  </data>
+  <data name="MatchWinner" xml:space="preserve">
+    <value>Победитель матча</value>
+  </data>
+  <data name="MatchTie" xml:space="preserve">
+    <value>Матч завeршен ничьей</value>
+  </data>
+  <data name="MatchResultsSaved" xml:space="preserve">
+    <value>Результаты матча сохранены</value>
+  </data>
+  <data name="OpenNewCategory" xml:space="preserve">
+    <value>Уже имеется открыткая категория. Хотите открыть новую?</value>
+  </data>
+  <data name="MatchLodaed" xml:space="preserve">
+    <value>Матч загружен</value>
+  </data>
+  <data name="MatchEnded" xml:space="preserve">
+    <value>Матч закончен</value>
+  </data>
+  <data name="kiken" xml:space="preserve">
+    <value>Kикен</value>
+  </data>
+  <data name="shikaku" xml:space="preserve">
+    <value>Шикаку</value>
+  </data>
+  <data name="_INFO" xml:space="preserve">
+    <value>ИНФО</value>
+  </data>
+  <data name="PleaseEnterIntgeer" xml:space="preserve">
+    <value>Введите целое число</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Tournament" xml:space="preserve">
+    <value>Турнир</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="WinnerAO" xml:space="preserve">
+    <value>Победитель AO</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="DataPath" xml:space="preserve">
+    <value>Путь к сохраненным файлам</value>
+  </data>
+  <data name="DatabasePath" xml:space="preserve">
+    <value>Путь к базе данных</value>
+  </data>
+  <data name="EndOfMatchSound" xml:space="preserve">
+    <value>Звук завершения матча</value>
+  </data>
+  <data name="WarningSound" xml:space="preserve">
+    <value>Звук предупреждения</value>
+  </data>
+  <data name="ExternalScreen" xml:space="preserve">
+    <value>Внешний монитор</value>
+  </data>
+  <data name="AutoLoadNextMatch" xml:space="preserve">
+    <value>Авто загрузка след. матча</value>
+  </data>
+  <data name="ShowNextMatchOnExternalBoard" xml:space="preserve">
+    <value>Показать след. матч на внешнем экране </value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Основной</value>
+  </data>
+  <data name="SettingsSaved" xml:space="preserve">
+    <value>Настройки сохранены</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Старт</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="ShowExternalBoard" xml:space="preserve">
+    <value>Показать внешний экран</value>
+  </data>
+  <data name="CloseExternalBoard" xml:space="preserve">
+    <value>Закрыть внешний экран</value>
+  </data>
+  <data name="ShowExternalResultsBoard" xml:space="preserve">
+    <value>Показать внешний экран с результатами</value>
+  </data>
+  <data name="CloseExternalResultsBoard" xml:space="preserve">
+    <value>Закрыть внешний экран с результатами</value>
+  </data>
+  <data name="ShowExt" xml:space="preserve">
+    <value>Показать внеш.</value>
+  </data>
+  <data name="CloseExt" xml:space="preserve">
+    <value>Закрыть внеш.</value>
+  </data>
+  <data name="SingleElimination2" xml:space="preserve">
+    <value>Одиночное выбывание (2 третьих места)</value>
+  </data>
+  <data name="SingleElimination1" xml:space="preserve">
+    <value>Одиночное выбывание (1 третье место)</value>
+  </data>
+  <data name="RoundRobin" xml:space="preserve">
+    <value>Раунд Робин</value>
+  </data>
+  <data name="AKAShikakau" xml:space="preserve">
+    <value>АКА Шикаку</value>
+  </data>
+  <data name="AOShikaku" xml:space="preserve">
+    <value>АО Шикаку</value>
+  </data>
+  <data name="AKAKiken" xml:space="preserve">
+    <value>АКА Кикен</value>
+  </data>
+  <data name="AOKiken" xml:space="preserve">
+    <value>АО Кикен</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="LogFileSaved" xml:space="preserve">
+    <value>Файл сохранен</value>
+  </data>
+</root>

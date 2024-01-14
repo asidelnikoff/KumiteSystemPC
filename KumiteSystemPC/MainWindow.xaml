@@ -216,7 +216,9 @@
                                 <Button x:Name="AKAipponBTN" Margin="10,5,5,10" Content="Ippon" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAipponBTN_Click"/>
                                 <Button x:Name="AKAwazariBTN" Grid.Column="1" Margin="5,5,5,10" Content="Wazari" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAwazariBTN_Click"/>
                                 <Button x:Name="AKAyukoBTN" Grid.Column="2" Margin="5,5,5,10" Content="Yuko" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AKAyukoBTN_Click"/>
-                                <CheckBox x:Name="AKAsenshuCB" Grid.Column="3" Content="Senshu" HorizontalAlignment="Right" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Margin="0,0,5,0" Click="AKAsenshuCB_Click"/>
+                                <CheckBox x:Name="AKAsenshuCB" Grid.Column="3" Content="Senshu" HorizontalAlignment="Right" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Margin="0,0,5,0" Click="AKAsenshuCB_Click"
+                                          Checked="AKAsenshuCB_Checked"
+                                          Unchecked="AKAsenshuCB_Unchecked"/>
                             </Grid>
                         </Grid>
 
@@ -243,7 +245,12 @@
                                 <Button x:Name="AOipponBTN" Grid.Column="3" Margin="5,5,10,10" Content="Ippon" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOipponBTN_Click"/>
                                 <Button x:Name="AOwazariBTN" Grid.Column="2" Margin="5,5,5,10" Content="Wazari" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOwazariBTN_Click"/>
                                 <Button x:Name="AOyukoBTN" Grid.Column="1" Margin="5,5,5,10" Content="Yuko" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AOyukoBTN_Click"/>
-                                <CheckBox x:Name="AOsenshuCB" Grid.Column="0" Content="Senshu" VerticalContentAlignment="Center" Margin="5,0,0,0" Click="AOsenshuCB_Click" />
+                                <CheckBox x:Name="AOsenshuCB" Grid.Column="0" 
+                                          Content="Senshu" 
+                                          VerticalContentAlignment="Center" Margin="5,0,0,0" 
+                                          Click="AOsenshuCB_Click"
+                                          Checked="AOsenshuCB_Checked"
+                                          Unchecked="AOsenshuCB_Unchecked"/>
                             </Grid>
                         </Grid>
                     </Grid>

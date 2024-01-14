@@ -42,7 +42,7 @@ namespace KumiteSystemPC
         }
         public async void controlTime()
         {
-            do
+            while(stopWatch.IsRunning)
             {
                 TimeSpan ts = stopWatch.Elapsed;
                 string remainTimes = String.Format("{0:00}:{1:00}",
@@ -56,7 +56,7 @@ namespace KumiteSystemPC
                 if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
                 await Task.Delay(1000);
-            } while (stopWatch.IsRunning);
+            }
         }
         bool atoshibaraku = false;
         void AtoshiBaraku()
@@ -104,9 +104,11 @@ namespace KumiteSystemPC
             sc.AddRange(Screen.AllScreens);
             timerExt = new TimerExt();
             timerExt.Owner = this;
+            
+            timerExt.Left = (sc[Properties.Settings.Default.ScreenNR].Bounds.Right + sc[Properties.Settings.Default.ScreenNR].Bounds.Left) / 2 - timerExt.Width;
+            timerExt.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Bottom / 2 - timerExt.Height;
+
             timerExt.Show();
-            timerExt.Left = (sc[Properties.Settings.Default.ScreenNR].Bounds.Right + sc[Properties.Settings.Default.ScreenNR].Bounds.Left) / 2 - timerExt.Width / 2;
-            timerExt.Top = sc[Properties.Settings.Default.ScreenNR].Bounds.Bottom / 2 - timerExt.Height / 2;
         }
         private void closeExtBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -152,6 +154,7 @@ namespace KumiteSystemPC
                     sec = Convert.ToInt32(secTXT.Text);
                 time = min * 60 + sec;
                 timerTime = new TimeSpan(0, min, sec);
+                remainTime = timerTime;
             }
             catch 
             { 
@@ -175,12 +178,12 @@ namespace KumiteSystemPC
             if (!stopWatch.IsRunning && timerTime > TimeSpan.Zero)
             {
                 if (timerExt == null || !timerExt.IsLoaded) { showTimerExt(); }
-                remainTime = timerTime;
+                /*remainTime = timerTime;*/
                 startBtn.Content = "Stop";
                 stopWatch.Start();
                 controlTime();
             }
-            else if (stopWatch.IsRunning) { stopWatch.Stop(); timerTime = remainTime; startBtn.Content = "Start"; }
+            else if (stopWatch.IsRunning) { stopWatch.Stop(); /*timerTime = remainTime;*/ startBtn.Content = "Start"; }
         }
     }
 }

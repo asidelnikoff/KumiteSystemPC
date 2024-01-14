@@ -398,6 +398,7 @@ namespace KumiteSystemPC
         }
         void GetMatch(int mID, int rID)
         {
+            GlobalMatchNow.HaveWinner -= Match_HaveWinner;
             ResetMatch();
 
             GlobalMatchNow = GlobalCategory.GetMatch(mID, rID);
@@ -406,6 +407,13 @@ namespace KumiteSystemPC
             AKA_ScoreL.Content = $"{GlobalMatchNow.AKA.ScoreProperty}";
             AO_ScoreL.Content = $"{GlobalMatchNow.AO.ScoreProperty}";
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
+
+            if (CategoryResultsEXT != null)
+            {
+                CategoryResultsEXT.Close();
+                CategoryResultsEXT = null;
+                closeExtRes.Visibility = Visibility.Collapsed;
+            }
 
             if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
             {
@@ -624,7 +632,7 @@ namespace KumiteSystemPC
 
                 if (GlobalCategoryViewer != null) { GlobalCategoryViewer.MatchesGrid.Items.Refresh(); }
                 if (GlobalCategoryViewerRR != null) { GlobalCategoryViewerRR.MatchesGrid.Items.Refresh(); }
-                GlobalMatchNow.HaveWinner -= Match_HaveWinner;
+                
 
                 DisplayMessageDialog("Info", "Match finished");
             }
@@ -690,7 +698,7 @@ namespace KumiteSystemPC
                 }
                 catch
                 {
-                    if (externalBoard != null && externalBoard.IsLoaded && !String.IsNullOrEmpty(CategoryName))
+                    if (externalBoard != null && !String.IsNullOrEmpty(CategoryName))
                         externalBoard.CategoryEXT.Text = CategoryName;
                 }
 

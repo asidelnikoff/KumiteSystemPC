@@ -13,7 +13,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using WpfScreenHelper;
 using System.Data.SQLite;
 using System.Windows.Controls;
-
+using TournamentsBracketsBase;
 
 namespace KumiteSystemPC
 {
@@ -130,6 +130,13 @@ namespace KumiteSystemPC
                     TieBTN.Visibility = Visibility.Visible;
                 }
 
+                if(CategoryResultsEXT != null)
+                {
+                    CategoryResultsEXT.Close();
+                    CategoryResultsEXT = null;
+                    closeExtRes.Visibility = Visibility.Collapsed;
+                }
+
                 AKA_curTXT.IsReadOnly = true;
                 AO_curTXT.IsReadOnly = true;
 
@@ -148,186 +155,6 @@ namespace KumiteSystemPC
 
             }
         }
-
-
-        #region OLD VERSION
-        async void DisplaySaveDialog()
-        {
-            ContentDialog deleteFileDialog = new ContentDialog
-            {
-                Title = "Info",
-                Content = $"Save changes in {CategoryName}",
-                PrimaryButtonText = "Save",
-                DefaultButton = ContentDialogButton.Primary,
-                SecondaryButtonText = "Don't save",
-                CloseButtonText = "Cancel"
-            };
-            await ContentDialogMaker.CreateContentDialogAsync(deleteFileDialog, true);
-            /*ContentDialogResult result = await deleteFileDialog.ShowAsync();*/
-            if (ContentDialogMaker.Result == ContentDialogResult.Primary)
-            {
-                try
-                {
-                    MainExApp.ActiveWorkbook.Save();
-                    MainExApp.Quit();
-                    MainExApp = null;
-                    GlobalCategory = null;
-                    CanOpen = true;
-                    DisplayMessageDialog("Info", "File saved");
-                }
-                catch (Exception ex) { DisplayMessageDialog("Info", ex.Message); }
-            }
-            else if (ContentDialogMaker.Result == ContentDialogResult.Secondary)
-            {
-                MainExApp.Quit();
-                MainExApp = null;
-                GlobalCategory = null;
-                CanOpen = true;
-            }
-            else { CanOpen = false; }
-        }
-
-        private void openCategoryBTN_Click(object sender, RoutedEventArgs e)
-        {
-            OpenCategory();
-        }
-
-        void OpenCategory()
-        {
-            /*Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
-            openFile.Title = "Open Categroy";
-            openFile.Filter = "Excel Files(*.xls;*.xlsx)|*.xls;*.xlsx";
-            if (GlobalCategory != null && MainExApp != null)
-            {
-                DisplaySaveDialog();
-            }
-            TreeTypeDialog treeTypeDialog = new TreeTypeDialog();
-            treeTypeDialog.Owner = this;
-            if (CanOpen && treeTypeDialog.ShowDialog() == true && openFile.ShowDialog() == true)
-            {
-                //Category = new Category();
-                MainExApp = new Excel.Application();
-                string fileName = openFile.FileName;
-
-                MainExApp.Workbooks.Open(fileName,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                  Type.Missing, Type.Missing);
-
-
-
-                GlobalCategory = ReadCategory(MainExApp.ActiveWorkbook);
-                if (Properties.Settings.Default.DefaultTreeType == 0) { GlobalCategory.is1third = false; }
-                else if (Properties.Settings.Default.DefaultTreeType == 1) { GlobalCategory.is1third = true; }
-                GlobalCategory.HaveNxtMatch += GlobalCategory_HaveNxtMatch;
-                GlobalCategory.HaveCategoryResults += GlobalCategory_HaveCategoryResults;
-
-                CategoryName = MainExApp.ActiveWorkbook.Name.Substring(0, MainExApp.ActiveWorkbook.Name.IndexOf('.'));
-
-                CategoryViewer CategoryViewer = new CategoryViewer(GlobalCategory, CategoryName, MainExApp.ActiveWorkbook);
-                CategoryViewer.GetMatchEv += GetMatch;
-                GlobalCategoryViewer = CategoryViewer;
-                GlobalCategoryViewer.Show();
-                MainExApp.DisplayAlerts = false;
-                MainExApp.Visible = true;
-
-                AKA_curTXT.IsReadOnly = true;
-                AO_curTXT.IsReadOnly = true;
-
-                AKA_nxtTXT.IsReadOnly = true;
-                AO_nxtTXT.IsReadOnly = true;
-                try
-                {
-                    string[] worrd = GlobalCategoryViewer.CategoryName.Split(new char[] { ' ' }, 2);
-                    externalBoard.CategoryEXT.Text += $"{worrd[0]} \n{worrd[1]}";
-                }
-                catch 
-                { 
-                    if(externalBoard!= null && externalBoard.IsLoaded)
-                        externalBoard.CategoryEXT.Text = GlobalCategoryViewer.CategoryName; 
-                }
-                CanOpen = false;
-
-            
-            }*/
-        }
-
-        /*Category ReadCategory(Excel.Workbook wb)
-        {
-            
-             * //TODO: Read competitor's club
-            int count = wb.Worksheets.Count - 1;
-            Category category = new Category();
-            Match Bronze = new Match();
-            Repechage repAo = new Repechage();
-            Repechage repAka = new Repechage();
-            for (int i = 1; i <= count; i++)
-            {
-                Excel.Worksheet ws = wb.Worksheets[i];
-                Round round = new Round();
-
-                for (int j = 2; j <= ws.UsedRange.Rows.Count; j++)
-                {
-                    int AkaId = Convert.ToInt32(ws.Cells[j, 1].Value);
-                    string AkaFName = Convert.ToString(ws.Cells[j, 2].Value);
-                    string AkaLName = Convert.ToString(ws.Cells[j, 3].Value);
-                    string AkaClub = Convert.ToString(ws.Cells[j, 4].Value);
-                    int AkaF1 = Convert.ToInt32(ws.Cells[j, 5].Value);
-                    int AkaF2 = Convert.ToInt32(ws.Cells[j, 6].Value);
-                    int Akascore = Convert.ToInt32(ws.Cells[j, 7].Value);
-
-                    int AoId = Convert.ToInt32(ws.Cells[j, 16].Value);
-                    string AoFName = Convert.ToString(ws.Cells[j, 15].Value);
-                    string AoLName = Convert.ToString(ws.Cells[j, 14].Value);
-                    string AoClub = Convert.ToString(ws.Cells[j, 13].Value);
-                    int AoF1 = Convert.ToInt32(ws.Cells[j, 12].Value);
-                    int AoF2 = Convert.ToInt32(ws.Cells[j, 11].Value);
-                    int Aoscore = Convert.ToInt32(ws.Cells[j, 10].Value);
-
-                    Competitor _aka;
-                    if (AkaFName != "BYE") { _aka = new Competitor(false, AkaId, AkaFName, AkaLName, AkaClub,Akascore, AkaF1, AkaF2); }
-                    else { _aka = new Competitor(true); }
-
-                    Competitor _ao;
-                    if (AoFName != "BYE") { _ao = new Competitor(false, AoId, AoFName, AoLName, AoClub,Aoscore, AoF1, AoF2); }
-                    else { _ao = new Competitor(true); }
-                    Match match = new Match(_aka, _ao, j - 1);
-                    //match.HaveWinner += Match_HaveWinner;
-                    if (Convert.ToString(ws.Cells[j, 8].Value) == "X") { match.SetWinner(1); }
-                    else if (Convert.ToString(ws.Cells[j, 9].Value) == "X") { match.SetWinner(2); }
-
-
-                    if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) round.Matches.Add(match);
-                    else if (ws.Name == "Repechage 1") repAka.Matches.Add(match);
-                    else if (ws.Name == "Repechage 2") repAo.Matches.Add(match);
-                    else if (ws.Name == "Bronze match") Bronze = new Match(match);
-                }
-
-                if (!ws.Name.Contains("Repechage") && !ws.Name.Contains("Bronze")) category.Rounds.Add(round);
-                else if (ws.Name == "Repechage 1") category.RepechageAKA = repAka;
-                else if (ws.Name == "Repechage 2") category.RepechageAO = repAo;
-                else if (ws.Name == "Bronze match") category.BronzeMatch = Bronze;
-
-                if (category.Rounds.Count() > 1)
-                {
-                    if (category.Rounds[category.Rounds.Count() - 1].Matches.Count() < (category.Rounds[category.Rounds.Count() - 2].Matches.Count() / 2))
-                    {
-                        int c = (category.Rounds[category.Rounds.Count() - 2].Matches.Count() / 2) - category.Rounds[category.Rounds.Count() - 1].Matches.Count();
-                        for (int k = 0; k < c; k++)
-                        {
-                            Match m = new Match(new Competitor(), new Competitor(), category.Rounds[category.Rounds.Count() - 1].Matches.Count());
-                            category.Rounds[category.Rounds.Count() - 1].Matches.Add(m);
-                        }
-                    }
-                }
-
-            }
-            VisualBracket = (Excel.Worksheet)wb.Worksheets[wb.Worksheets.Count];
-
-            return category;
-        }*/
-        #endregion
         #endregion
 
         #region Category Results
@@ -429,6 +256,9 @@ namespace KumiteSystemPC
             if (GlobalMatchNow.AKA.Senshu) { AKAsenshuCB.IsChecked = true; }
             else if (GlobalMatchNow.AO.Senshu) { AOsenshuCB.IsChecked = true; }
 
+            SetAkaFouls((Competitor.Fouls)GlobalMatchNow.AKA.Fouls_C1);
+            SetAoFouls((Competitor.Fouls)GlobalMatchNow.AO.Fouls_C1);
+
             GlobalMatchNow.HaveWinner += Match_HaveWinner;
 
             if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
@@ -447,21 +277,41 @@ namespace KumiteSystemPC
             DisplayMessageDialog("Info", "Match loaded");
         }
 
+        void SetAkaFouls(Competitor.Fouls fouls)
+        {
+            if (fouls == Competitor.Fouls.Chui1)
+                AKA_C1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui2)
+                AKA_C2_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui3)
+                AKA_C3_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.HansokuChui)
+                AKA_HC1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Hansoku)
+                AKA_H1_CB.IsChecked = true;
+        }
+        void SetAoFouls(Competitor.Fouls fouls)
+        {
+            if (fouls == Competitor.Fouls.Chui1)
+                AO_C1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui2)
+                AO_C2_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Chui3)
+                AO_C3_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.HansokuChui)
+                AO_HC1_CB.IsChecked = true;
+            else if (fouls == Competitor.Fouls.Hansoku)
+                AO_H1_CB.IsChecked = true;
+        }
+
         private void GlobalCategory_HaveNxtMatch(int round, int match, TournamentsBracketsBase.IMatch nxtMatch)
         {
             if (round == -1 && match == -1)
-            {
                 GlobalMatchNxt = new Match(new Competitor(), new Competitor(), 1);
-            }
-            else if (round < GlobalCategory.Rounds.Count())
-            {
+            else if (round <= GlobalCategory.Rounds.Count())
                 GlobalMatchNxt = nxtMatch;
-            }
-            else if (round == GlobalCategory.Rounds.Count())
-            {
-                GlobalMatchNxt = nxtMatch;
-            }
-            AKA_nxtTXT.Text = GetCompetitorString(GlobalMatchNxt.AKA); ;
+
+            AKA_nxtTXT.Text = GetCompetitorString(GlobalMatchNxt.AKA);
             AO_nxtTXT.Text = GetCompetitorString(GlobalMatchNxt.AO); ;
 
 
@@ -475,23 +325,21 @@ namespace KumiteSystemPC
                 if (GlobalCategoryViewer != null)
                 {
                     GlobalCategoryViewer.CompetitorsGrid.Items.Refresh();
-                    if (!GlobalMatchNow.Winner.IsBye) GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
+                    if (!GlobalMatchNow.Winner.IsBye) 
+                        GlobalCategoryViewer.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
                 }
                 else if (GlobalCategoryViewerRR != null)
                 {
                     GlobalCategoryViewerRR.CompetitorsGrid.Items.Refresh();
-                    if(!GlobalMatchNow.Winner.IsBye) GlobalCategoryViewerRR.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
+                    if (!GlobalMatchNow.Winner.IsBye) 
+                        GlobalCategoryViewerRR.MatchWinnerLabel.Content = $"Winner: {GetCompetitorString(GlobalMatchNow.Winner)}";
                 }
                 if (externalBoard != null)
                 {
                     if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AKA))
-                    {
                         externalBoard.ShowWinner(externalBoard.AkaScoreL, externalBoard.AO_Grid);
-                    }
                     else if (GlobalMatchNow.Winner.Equals(GlobalMatchNow.AO))
-                    {
                         externalBoard.ShowWinner(externalBoard.AoScoreL, externalBoard.AKA_Grid);
-                    }
                 }
 
                 try { DisplayMessageDialog("Info", $"Match winner: {GetCompetitorString(GlobalMatchNow.Winner)}"); }
@@ -573,14 +421,27 @@ namespace KumiteSystemPC
 
                 showTime(String.Format("{0:mm}:{0:ss}", remainTime));
                 TimerLms.Content = String.Format(".{0:ff}", remainTime);
+                
                 remainTime = timerTime - ts;
 
-                if (remainTime <= TimeSpan.Zero) { stopWatch.Stop(); TimerFinished(); }
+                if (remainTime <= TimeSpan.Zero)
+                {
+                    stopWatch.Stop();
+                    TimerFinished();
+                }
+
                 if (remainTime <= TimeSpan.FromSeconds(15) && !atoshibaraku) { AtoshiBaraku(); }
+
                 if (!atoshibaraku) await Task.Delay(1000);
                 else await Task.Delay(10);
+
             } while (stopWatch.IsRunning);
 
+            if (remainTime <= TimeSpan.Zero)
+            {
+                showTime(String.Format("{0:mm}:{0:ss}", TimeSpan.Zero));
+                TimerLms.Content = String.Format(".{0:ff}", TimeSpan.Zero);
+            }
         }
         void TimerFinished()
         {
@@ -593,6 +454,7 @@ namespace KumiteSystemPC
         }
         void AtoshiBaraku()
         {
+            showTime(String.Format("{0:mm}:{0:ss}", remainTime));
             atoshibaraku = true;
             try { warn_sound.Play(); } catch { }
             TimerL.Foreground = Brushes.DarkRed;
@@ -643,19 +505,6 @@ namespace KumiteSystemPC
             }
         }
 
-        //extTimerSet extTimerSet;
-
-
-        /*private void extTimer_Click(object sender, RoutedEventArgs e)
-        {
-            if (extTimerSet == null)
-            {
-                extTimerSet = new extTimerSet();
-                extTimerSet.Owner = this;
-                extTimerSet.Show();
-            }
-            else { extTimerSet.Close(); extTimerSet = null; }
-        }*/
 
         private void SetTime_Click(object sender, RoutedEventArgs e)
         {
@@ -802,32 +651,44 @@ namespace KumiteSystemPC
             AO_ScoreL.Content = GlobalMatchNow.AO.ScoreProperty;
             AKA_ScoreL.Content = GlobalMatchNow.AKA.ScoreProperty;
 
-            GlobalMatchNow.CheckWinner();
+            GlobalMatchNow.CheckWinner(remainTime <= TimeSpan.Zero);
         }
 
         private void AOsenshuCB_Click(object sender, RoutedEventArgs e)
         {
             if (AOsenshuCB.IsChecked == true)
             {
-                GlobalMatchNow.AO.Senshu = true;
-                GlobalMatchNow.AKA.Senshu = false;
-                AKAsenshuCB.IsChecked = false;
-                AddInfo("AO senshu");
-                //AO_SenshuL.Visibility = Visibility.Visible;
-                AoSenshuBorder.Visibility = Visibility.Visible;
-                AkaSenshuBorder.Visibility = Visibility.Collapsed;
-                //AKA_SenshuL.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
+                
             }
             else
             {
-                GlobalMatchNow.AO.Senshu = false;
-                AddInfo("AO senshu remove");
-                //AO_SenshuL.Visibility = Visibility.Collapsed;
-                AoSenshuBorder.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+                
             }
         }
+
+        private void AOsenshuCB_Checked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.Senshu = true;
+            GlobalMatchNow.AKA.Senshu = false;
+            AKAsenshuCB.IsChecked = false;
+            AddInfo("AO senshu");
+            //AO_SenshuL.Visibility = Visibility.Visible;
+            AoSenshuBorder.Visibility = Visibility.Visible;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
+            //AKA_SenshuL.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 1); externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
+        }
+
+        private void AOsenshuCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AO.Senshu = false;
+            AddInfo("AO senshu remove");
+            //AO_SenshuL.Visibility = Visibility.Collapsed;
+            AoSenshuBorder.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+        }
+
+       
 
 
         private void AKAipponBTN_Click(object sender, RoutedEventArgs e)
@@ -884,6 +745,15 @@ namespace KumiteSystemPC
         {
             if (AKAsenshuCB.IsChecked == true)
             {
+            }
+            else
+            {
+
+            }
+        }
+
+        private void AKAsenshuCB_Checked(object sender, RoutedEventArgs e)
+        {
                 GlobalMatchNow.AO.Senshu = false;
                 GlobalMatchNow.AKA.Senshu = true;
                 AOsenshuCB.IsChecked = false;
@@ -892,16 +762,17 @@ namespace KumiteSystemPC
                 // AO_SenshuL.Visibility = Visibility.Collapsed;
                 AoSenshuBorder.Visibility = Visibility.Collapsed;
                 AkaSenshuBorder.Visibility = Visibility.Visible;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0); }
+                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 1); externalBoard.ShowSanction(externalBoard.aoSenshu, 0);
             }
-            else
-            {
-                GlobalMatchNow.AKA.Senshu = false;
-                AddInfo("AKA senshu remove");
-                //AKA_SenshuL.Visibility = Visibility.Collapsed;
-                AkaSenshuBorder.Visibility = Visibility.Collapsed;
-                if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
-            }
+        }
+
+        private void AKAsenshuCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            GlobalMatchNow.AKA.Senshu = false;
+            AddInfo("AKA senshu remove");
+            //AKA_SenshuL.Visibility = Visibility.Collapsed;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
+            if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.akaSenshu, 0); }
         }
         #endregion
 
@@ -997,87 +868,6 @@ namespace KumiteSystemPC
         }
 
         #endregion
-
-        //Not used
-        #region FOULS C2 AKA
-        //private void AKA_C2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AKA_K2_CB.IsChecked == true || AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_C2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AKA.SetFoulsC2(0);
-        //        AddInfo("AKA remove sanction C2 C");
-        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.c2AKA, 0); }
-        //    }
-        //}
-        //private void AKA_C2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-
-        //    if (AKA_C2_CB.IsChecked == true)
-        //    {
-        //        GlobalMatchNow.AKA.SetFoulsC2(1); AddInfo("AKA sanction C2 C");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.c2AKA, 1);
-
-        //        }
-        //    }
-
-        //}
-
-        //private void AKA_K2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AKA_HC2_CB.IsChecked == true || AKA_H2_CB.IsChecked == true) { AKA_K2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
-        //        AddInfo("AKA remove sanction C2 K");
-        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 0); }
-        //    }
-        //}
-        //private void AKA_K2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-
-        //    AKA_C2_CB.IsChecked = true;
-        //    GlobalMatchNow.AKA.SetFoulsC2(2);
-        //    AddInfo("AKA sanction C2 K");
-        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.k2AKA, 1); }
-        //}
-
-        //private void AKA_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AKA_H2_CB.IsChecked == true) { AKA_HC2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1);
-        //        AddInfo("AKA remove sanction C2 HC");
-        //        if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 0); }
-        //    }
-        //}
-        //private void AKA_HC2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true;
-        //    GlobalMatchNow.AKA.SetFoulsC2(3);
-        //    AddInfo("AKA sanction C2 HC");
-        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.hc2AKA, 1); }
-        //}
-
-        //private void AKA_H2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    GlobalMatchNow.AKA.SetFoulsC2(GlobalMatchNow.AKA.Fouls_C2 - 1); AddInfo("AKA remove sanction C2 H");
-        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 0); }
-        //}
-        //private void AKA_H2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    AKA_C2_CB.IsChecked = true; AKA_K2_CB.IsChecked = true; AKA_HC2_CB.IsChecked = true;
-        //    GlobalMatchNow.AKA.SetFoulsC2(4);
-        //    AddInfo("AKA sanction C2 H");
-        //    if (externalBoard != null) { externalBoard.ShowSanction(externalBoard.h2AKA, 1); }
-
-
-        //}
-        #endregion
-
 
         #region FOULS C1 AO
         private void AO_C1_CB_Unchecked(object sender, RoutedEventArgs e)
@@ -1182,132 +972,6 @@ namespace KumiteSystemPC
 
         #endregion
 
-        //Not Used
-        #region FOULS C2 AO
-        //private void AO_C2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AO_K2_CB.IsChecked == true || AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_C2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AO.SetFoulsC2(0);
-        //        AddInfo("AO remove sanction C2 C");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.c2AO, 0);
-
-
-        //        }
-        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOC2, 0); }
-        //    }
-        //}
-        //private void AO_C2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    GlobalMatchNow.AO.SetFoulsC2(1); AddInfo("AO sanction C2 C");
-        //    if (externalBoard != null)
-        //    {
-        //        externalBoard.ShowSanction(externalBoard.c2AO, 1);
-
-        //    }
-
-
-        //}
-
-        //private void AO_K2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AO_HC2_CB.IsChecked == true || AO_H2_CB.IsChecked == true) { AO_K2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
-        //        AddInfo("AO remove sanction C2 K");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.k2AO, 0);
-
-        //        }
-        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 0); }
-        //    }
-        //}
-        //private void AO_K2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-
-        //    if (AO_K2_CB.IsChecked == true)
-        //    {
-        //        AO_C2_CB.IsChecked = true;
-        //        GlobalMatchNow.AO.SetFoulsC2(2);
-        //        AddInfo("AO sanction C2 K");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.k2AO, 1);
-
-        //        }
-        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOK2, 1); }
-        //    }
-
-
-
-        //}
-
-        //private void AO_HC2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    if (AO_H2_CB.IsChecked == true) { AO_HC2_CB.IsChecked = true; }
-        //    else
-        //    {
-        //        GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1);
-        //        AddInfo("AO remove sanction C2 HC");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.hc2AO, 0);
-
-        //        }
-        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 0); }
-        //    }
-        //}
-        //private void AO_HC2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-
-        //    if (AO_HC2_CB.IsChecked == true)
-        //    {
-        //        AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true;
-        //        GlobalMatchNow.AO.SetFoulsC2(3);
-        //        AddInfo("AO sanction C2 HC");
-        //        if (externalBoard != null)
-        //        {
-        //            externalBoard.ShowSanction(externalBoard.hc2AO, 1);
-
-        //        }
-        //        //if (externalBoard != null) { externalBoard.SanctionAnimation(externalBoard.AOHC2, 1); }
-        //    }
-
-
-
-        //}
-
-
-        //private void AO_H2_CB_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    GlobalMatchNow.AO.SetFoulsC2(GlobalMatchNow.AO.Fouls_C2 - 1); AddInfo("AO remove sanction C2 H");
-        //    if (externalBoard != null)
-        //    {
-        //        externalBoard.ShowSanction(externalBoard.h2AO, 0);
-
-        //    }
-        //}
-        //private void AO_H2_CB_Checked(object sender, RoutedEventArgs e)
-        //{
-
-        //    AO_C2_CB.IsChecked = true; AO_K2_CB.IsChecked = true; AO_HC2_CB.IsChecked = true;
-        //    GlobalMatchNow.AO.SetFoulsC2(4);
-        //    AddInfo("AO sanction C2 H");
-        //    if (externalBoard != null)
-        //    {
-
-        //        externalBoard.ShowSanction(externalBoard.h2AO, 1);
-
-        //    }
-
-        //}
-        #endregion
-
         #region KIKEN and SHIKAKU set
         private void akaKikenBTN_Click(object sender, RoutedEventArgs e)
         {
@@ -1370,8 +1034,11 @@ namespace KumiteSystemPC
             AOsenshuCB.IsChecked = GlobalMatchNow.AO.Senshu;
             AKAsenshuCB.IsChecked = GlobalMatchNow.AKA.Senshu;
 
-            AO_SenshuL.Visibility = Visibility.Collapsed;
-            AKA_SenshuL.Visibility = Visibility.Collapsed;
+            /*AO_SenshuL.Visibility = Visibility.Collapsed;
+            AKA_SenshuL.Visibility = Visibility.Collapsed;*/
+
+            AoSenshuBorder.Visibility = Visibility.Collapsed;
+            AkaSenshuBorder.Visibility = Visibility.Collapsed;
 
             AKA_ScoreL.Content = GlobalMatchNow.AKA.ScoreProperty;
             AO_ScoreL.Content = GlobalMatchNow.AO.ScoreProperty;
@@ -1410,23 +1077,11 @@ namespace KumiteSystemPC
             AKA_C2_CB.IsChecked = false;
             AKA_C1_CB.IsChecked = false;
 
-            //AKA_H2_CB.IsChecked = false;
-            //AKA_HC2_CB.IsChecked = false;
-            //AKA_K2_CB.IsChecked = false;
-            //AKA_C2_CB.IsChecked = false;
-
             AO_H1_CB.IsChecked = false;
             AO_HC1_CB.IsChecked = false;
             AO_C3_CB.IsChecked = false;
             AO_C2_CB.IsChecked = false;
             AO_C1_CB.IsChecked = false;
-
-            //AO_H2_CB.IsChecked = false;
-            //AO_HC2_CB.IsChecked = false;
-            //AO_K2_CB.IsChecked = false;
-            //AO_C2_CB.IsChecked = false;
-
-            // if (externalBoard != null) { }
         }
 
         private void FinishMatchBTN_Click(object sender, RoutedEventArgs e)
@@ -1445,16 +1100,12 @@ namespace KumiteSystemPC
             if (GlobalCategory.isCurMFinished())
             {
                 if (GlobalCategoryViewer != null && GlobalCategoryViewer.IsLoaded)
-                { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
                     GlobalCategoryViewer.UpdateTree();
-                }
                 else if (GlobalCategoryViewerRR != null && GlobalCategoryViewerRR.IsLoaded)
-                { /*GlobalCategoryViewer.UpdateExcelTree(MainExApp.ActiveWorkbook);*/
                     GlobalCategoryViewerRR.UpdateTree();
-                }
 
                 string fileName = $"{DateTime.Now.ToShortDateString()}-{GlobalMatchNow.AKA}_{GlobalMatchNow.AO}";
-                if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB)) 
+                if (saveLog($"{Properties.Settings.Default.DataPath}\\LOG-{fileName}.txt", LogTB))
                     DisplayMessageDialog("Info", "Log saved");
                 else
                     DisplayMessageDialog("Info", "Can't save log");
@@ -1522,6 +1173,10 @@ namespace KumiteSystemPC
             timerColor.Source = TimerL;
             externalBoard.TimerEXT.SetBinding(Label.ForegroundProperty, timerColor);
 
+            Binding timerMsColor = new Binding("Foreground");
+            timerMsColor.Source = TimerLms;
+            externalBoard.TimerEXTms.SetBinding(Label.ForegroundProperty, timerColor);
+
             Binding timerTxtms = new Binding("Content");
             timerTxtms.Source = TimerLms;
             externalBoard.TimerEXTms.SetBinding(Label.ContentProperty, timerTxtms);
@@ -1547,7 +1202,7 @@ namespace KumiteSystemPC
                 }
                 catch
                 {
-                    if (externalBoard != null && externalBoard.IsLoaded && !String.IsNullOrEmpty(CategoryName))
+                    if (externalBoard != null && !String.IsNullOrEmpty(CategoryName))
                         externalBoard.CategoryEXT.Text = CategoryName;
                 }
 
@@ -1775,6 +1430,8 @@ namespace KumiteSystemPC
                 roundCounter--;
             }*/
         }
+
+        
 
         private void roundTB_KeyDown(object sender, KeyEventArgs e)
         {
