@@ -55,13 +55,21 @@ namespace SharedComponentsLibrary
         [ObservableProperty]
         FlowDocument loggerDocument;
 
+        [ObservableProperty]
+        bool isNameFieldReadOnly;
+
         protected ICategoryViewer categoryViewer;
+
+        protected System.Media.SoundPlayer endOfMatchSound;
 
         public InternalBoardViewModel()
         {
-            
+
+            if (Properties.Settings.Default.EndOfMatchSound != "")
+                endOfMatchSound = new System.Media.SoundPlayer(Properties.Settings.Default.EndOfMatchSound);
 
             IsNextMatchButtonEnabled = Properties.Settings.Default.IsAutoLoadNextMatchEnabled;
+            IsNameFieldReadOnly = false;
 
             LoggerDocument = new FlowDocument();
 
@@ -196,6 +204,7 @@ namespace SharedComponentsLibrary
 
         protected virtual void CategoryViewer_GotMatch(RoundDTO round, IMatch match)
         {
+            IsNameFieldReadOnly = true;
             currentMatchRound = round;
             CurrentMatch = match;
             SetupMatch(CurrentMatch);
@@ -221,10 +230,31 @@ namespace SharedComponentsLibrary
 
         protected async void Match_HaveWinner(ICompetitor winner)
         {
+            endOfMatchSound?.Play();
+
             if (winner == null)
                 await Helpers.DisplayMessageDialog(Resources.MatchEnded, Resources.Info);
             else
                 await Helpers.DisplayMessageDialog($"{Resources.MatchWinner}: {winner}", Resources.Info);
+        }
+
+        [RelayCommand]
+        private void SetupCompetitorName(object[] parameters)
+        {
+            if (currentCategory != null)
+                return;
+
+            ICompetitor competitor = parameters[0] as ICompetitor;
+            string name = (string)parameters[1];
+
+            var splitted = name.Split(' ', 2);
+
+            if (splitted.Length > 0)
+                competitor.FirstName = splitted[0];
+            if (splitted.Length > 1)
+                competitor.LastName = splitted[1];
+
+            OnPropertyChanged(nameof(CurrentMatch));
         }
 
         [RelayCommand]
@@ -295,15 +325,6 @@ namespace SharedComponentsLibrary
         protected void AddInfoToLog(string info)
         {
             LoggerDocument.Blocks.Add(new Paragraph(new Run($"{DateTime.Now}\n[{Resources._INFO}] {info}")));
-        }
-
-        [RelayCommand]
-        private void ChangeCompetitorName()
-        {
-            if (CurrentMatch.ID >= 0)
-                return;
-
-
         }
     }
 }

@@ -22,6 +22,10 @@
                 <ResourceDictionary Source="pack://application:,,,/StylesLibrary;component/StylesDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/BusyIndicator;component/Theme/Default.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            <FontFamily x:Key="Arial">pack://application:,,,/Fonts/#Arial</FontFamily>
+            <FontFamily x:Key="Montserrat">pack://application:,,,/Fonts/#Montserrat</FontFamily>
+            <FontFamily x:Key="Akrobat">pack://application:,,,/Fonts/#Akrobat</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -101,7 +101,18 @@
                              Margin="10,0"  
                              VerticalAlignment="Center" 
                              x:Name="AKA_curTXT"
-                             Text="{Binding CurrentMatchAkaText}">
+                             IsReadOnly="{Binding IsNameFieldReadOnly}"
+                             Text="{Binding CurrentMatchAkaText, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding Path=SetupCompetitorNameCommand}" Key="Enter">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                        <Binding Path="CurrentMatch.AKA"/>
+                                        <Binding Path="CurrentMatchAkaText"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="{x:Static lang:Resources.kiken}" 
@@ -135,7 +146,18 @@
                              Margin="10,0" 
                              VerticalAlignment="Center" 
                              x:Name="AO_curTXT"
-                             Text="{Binding CurrentMatchAoText}">
+                             IsReadOnly="{Binding IsNameFieldReadOnly}"
+                             Text="{Binding CurrentMatchAoText, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding Path=SetupCompetitorNameCommand}" Key="Enter">
+                                <KeyBinding.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                        <Binding Path="CurrentMatch.AO"/>
+                                        <Binding Path="CurrentMatchAoText"/>
+                                    </MultiBinding>
+                                </KeyBinding.CommandParameter>
+                            </KeyBinding>
+                        </TextBox.InputBindings>
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="{x:Static lang:Resources.kiken}"  
@@ -235,7 +257,7 @@
                             Content="{x:Static lang:Resources.NextMatch}" 
                             Margin="20,5,10,5" 
                             Grid.Row="1" 
-                            IsEnabled="{Binding IsAutoLoadNextMatchEnabled}"
+                            IsEnabled="{Binding IsNextMatchButtonEnabled}"
                             Command="{Binding LoadNextMatchCommand}"
                             Style="{DynamicResource BaseButton}"/>
                 </Grid>

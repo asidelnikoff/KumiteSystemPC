@@ -7,28 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Fonts\Akrobat-Regular.otf" />
-    <None Remove="Fonts\Arial-Bold.ttf" />
-    <None Remove="Fonts\Arial.ttf" />
-    <None Remove="Fonts\Montserrat-Regular.ttf" />
-    <None Remove="Fonts\Montserrat-SemiBold.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="BusyIndicators" Version="2.1.2" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LanguageLibrary\LanguageLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Fonts\Akrobat-Regular.otf" />
-    <Resource Include="Fonts\Arial.ttf" />
-    <Resource Include="Fonts\Arial-Bold.ttf" />
-    <Resource Include="Fonts\Montserrat-Regular.ttf" />
-    <Resource Include="Fonts\Montserrat-SemiBold.ttf" />
   </ItemGroup>
 
 </Project>

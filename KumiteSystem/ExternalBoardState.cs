@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TournamentsBracketsBase;
+using static System.Windows.Forms.AxHost;
 
 namespace KumiteSystem
 {
@@ -57,5 +58,28 @@ namespace KumiteSystem
 
         [ObservableProperty]
         bool isAoWinner;
+
+        public ExternalBoardState()
+        {
+            PropertyChanged += ExternalBoardState_PropertyChanged;
+        }
+
+        private void ExternalBoardState_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            try
+            {
+                var splitted = CurrentMatchAka?.Split(' ', 2);
+                if (splitted != null)
+                    CurrentMatchAka = $"{splitted[0]}\n{splitted[1]}";
+            }
+            catch { }
+            try
+            {
+                var splitted = CurrentMatchAo?.Split(' ', 2);
+                if (splitted != null)
+                    CurrentMatchAo = $"{splitted[0]}\n{splitted[1]}";
+            }
+            catch { }
+        }
     }
 }

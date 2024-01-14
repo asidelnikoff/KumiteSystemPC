@@ -49,7 +49,26 @@ namespace KumiteSystem
             catch { }
 
             IsNextMatchVisible = Properties.Settings.Default.IsNextMatchShownOnExternalBoard;
+
+            PropertyChanged += ExternalBoardViewModel_PropertyChanged;
         }
 
+        private void ExternalBoardViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            try
+            {
+                var splitted = State.CurrentMatchAka?.Split(' ', 2);
+                if (splitted != null)
+                    State.CurrentMatchAka = $"{splitted[0]}\n{splitted[1]}";
+            }
+            catch { }
+            try
+            {
+                var splitted = State.CurrentMatchAo?.Split(' ', 2);
+                if (splitted != null)
+                    State.CurrentMatchAo = $"{splitted[0]}\n{splitted[1]}";
+            }
+            catch { }
+        }
     }
 }

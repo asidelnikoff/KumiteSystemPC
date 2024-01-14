@@ -19,9 +19,7 @@
         <ResourceDictionary Source="pack://application:,,,/BusyIndicator;component/Theme/Default.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <FontFamily x:Key="Arial">pack://application:,,,/Fonts/#Arial</FontFamily>
-    <FontFamily x:Key="Montserrat">pack://application:,,,/Fonts/#Montserrat</FontFamily>
-    <FontFamily x:Key="Akrobat">pack://application:,,,/Fonts/#Akrobat</FontFamily>
+    
 
     <SolidColorBrush x:Key="LightGray" Color="#f1f1f1"/>
     <SolidColorBrush x:Key="AccentOrange" Color="#58C2C3"/>
