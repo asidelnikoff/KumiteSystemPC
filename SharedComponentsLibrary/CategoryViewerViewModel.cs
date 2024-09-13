@@ -19,7 +19,7 @@ using LanguageLibrary;
 
 namespace SharedComponentsLibrary
 {
-    public partial class CategoryViewerViewModel : ObservableObject, ICategoryViewer
+    public partial class CategoryViewerViewModel : ObservableObject
     {
         [ObservableProperty]
         bool isBusy;
@@ -77,6 +77,8 @@ namespace SharedComponentsLibrary
         public Action<RoundDTO, IMatch> GotNextMatch { get; set; }
 
         public Action<IList<ICompetitor>> GotCategoryResults { get; set; }
+
+        public Action Closed { get; set; }
 
         ExternalResults externalResultsBoard;
 
@@ -155,6 +157,8 @@ namespace SharedComponentsLibrary
                         Competitors.Add(SelectedMatch.AO);
                     if (SelectedMatch.Winner != null)
                         MatchWinner = $"{Resources.Winner}: {SelectedMatch.Winner}";
+                    else
+                        MatchWinner = "";
                 }
             MatchesContextMenuVisibility = Matches?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -215,7 +219,7 @@ namespace SharedComponentsLibrary
                 var comp2 = swapDialog.Competitor2;
                 try
                 {
-                    dbService.SwapCompetitors(comp1, comp2);
+                    dbService.SwapCompetitors(Category, comp1, comp2);
                     SetupCategory();
                     if(Rounds.Count > 0)
                         BracketsGrid = DrawBrackets(Rounds.ElementAt(0));
@@ -275,9 +279,10 @@ namespace SharedComponentsLibrary
         }
 
         [RelayCommand]
-        private void Close()
+        public void Close()
         {
             externalResultsBoard?.Close();
+            Closed?.Invoke();
         }
 
         [RelayCommand]

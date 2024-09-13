@@ -32,6 +32,8 @@ namespace SharedComponentsLibrary
         [ObservableProperty]
         bool isExternalBoardOpened;
 
+        public Action Closed { get; set; }
+
         public TimerBoardViewModel()
         {
             Timer = new Timer(1, 0);
@@ -40,7 +42,9 @@ namespace SharedComponentsLibrary
             IsTimerRunning = false;
             IsAtoshiBaraku = false;
 
-            externalTimerBoardState = new ExternalTimerBoardState();
+
+            externalTimerBoardState = new ExternalTimerBoardState() { Settings = UserSettings.GetUserSettings() };
+
 
             Timer.OnTimeUpdated += (a) => OnPropertyChanged(nameof(Timer));
             Timer.OnAtoshiBaraku += Timer_OnAtoshiBaraku;
@@ -90,9 +94,10 @@ namespace SharedComponentsLibrary
         }
 
         [RelayCommand]
-        private void Close()
+        public void Close()
         {
             externalBoard?.Close();
+            Closed?.Invoke();
         }
 
         [RelayCommand]

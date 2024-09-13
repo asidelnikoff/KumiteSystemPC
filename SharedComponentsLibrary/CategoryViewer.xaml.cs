@@ -25,8 +25,8 @@ namespace SharedComponentsLibrary
             bool shuffleCompetitors=false, bool isSwapCompetitorsEnabled = false)
         {
             InitializeComponent();
-
             DataContext = new CategoryViewerViewModel(category, dbService, isGenerationNeeded, shuffleCompetitors, isSwapCompetitorsEnabled);
+            (DataContext as CategoryViewerViewModel).Closed += () => Closed?.Invoke();
         }
 
         public Action<RoundDTO, IMatch> GotMatch
@@ -55,6 +55,8 @@ namespace SharedComponentsLibrary
                 (DataContext as CategoryViewerViewModel).GotCategoryResults = value;
             }
         }
+
+        public Action Closed { get; set; }
 
         public void WriteMatchResults(RoundDTO round, IMatch match)
         {

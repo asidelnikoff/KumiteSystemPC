@@ -13,6 +13,8 @@ using WpfScreenHelper;
 using LanguageLibrary;
 using System.Globalization;
 using System.Windows.Markup;
+using System.Text.Json;
+using System.IO;
 
 namespace SharedComponentsLibrary
 {
@@ -59,12 +61,30 @@ namespace SharedComponentsLibrary
         [ObservableProperty]
         ObservableCollection<Language> languages = new ObservableCollection<Language>()
         {
-            new Language() { Name = "Русский", CultureInfo = "ru-RU"},
-            new Language() { Name = "English", CultureInfo = "en-GB"}
+            new Language() { Name = "Русский", CultureInfo = "ru-RU" },
+            new Language() { Name = "English", CultureInfo = "en-GB" }
         };
+
+        [ObservableProperty]
+        ObservableCollection<string> externalBoardDesignVersions;
 
         public Action OnSaveSettings;
         public Action OnClose;
+
+        public SettingsViewModel()
+        {
+            Settings = UserSettings.GetUserSettings();
+            SetExternalScreens();
+        }
+
+        public void SetupWithLanguage()
+        {
+            SetExternalScreens();
+            ExternalBoardDesignVersions = new ObservableCollection<string>()
+            {
+                Resources.Version1, Resources.Version2
+            };
+        }
 
         public SettingsViewModel(UserSettings settings)
         {
@@ -77,17 +97,19 @@ namespace SharedComponentsLibrary
                 ExternalMonitorIndex = Properties.Settings.Default.ExternalScreenIndex,
                 Tatami = Properties.Settings.Default.Tatami,
                 IsAutoLoadNextMatchEnabled = Properties.Settings.Default.IsAutoLoadNextMatchEnabled,
-                IsNextMatchShownOnExternalBoard = Properties.Settings.Default.IsNextMatchShownOnExternalBoard
+                IsNextMatchShownOnExternalBoard = Properties.Settings.Default.IsNextMatchShownOnExternalBoard,
+                ExternaBoardDesign = Properties.Settings.Default.ExternalBoardDesign
             };
+            
 
-            foreach(var lang in Languages)
-                if(lang.CultureInfo == Properties.Settings.Default.Language)
+            foreach (var lang in Languages)
+                if (lang.CultureInfo == Properties.Settings.Default.Language)
                 {
                     Settings.Language = lang;
                     break;
                 }
 
-            if(settings != null)
+            if (settings != null)
             {
                 Settings.DataPath = settings.DataPath;
                 Settings.DatabasePath = settings.DatabasePath;
@@ -100,9 +122,14 @@ namespace SharedComponentsLibrary
                 Settings.Language = settings.Language;
             }
 
+            
+        }
+
+        private void SetExternalScreens()
+        {
             ExternalScreens = new ObservableCollection<ScreenItem>();
             int id = 0;
-            foreach(var screen in Screen.AllScreens)
+            foreach (var screen in Screen.AllScreens)
             {
                 ExternalScreens.Add(new ScreenItem()
                 {
@@ -123,11 +150,14 @@ namespace SharedComponentsLibrary
             Properties.Settings.Default.Tatami = Settings.Tatami;
             Properties.Settings.Default.IsAutoLoadNextMatchEnabled = Settings.IsAutoLoadNextMatchEnabled;
             Properties.Settings.Default.IsNextMatchShownOnExternalBoard = Settings.IsNextMatchShownOnExternalBoard;
-            
+
+            Properties.Settings.Default.ExternalBoardDesign = Settings.ExternaBoardDesign;
 
             Properties.Settings.Default.Language = Settings.Language.CultureInfo;
 
             Properties.Settings.Default.Save();
+            Settings.Save();
+
             OnSaveSettings?.Invoke();
 
             await Helpers.DisplayMessageDialog(Resources.SettingsSaved, Resources.Info);

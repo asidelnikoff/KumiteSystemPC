@@ -26,8 +26,8 @@ namespace KumiteSystem
 
             WindowStyle = WindowStyle.None;
             List<Screen> sc = Screen.AllScreens.ToList();
-            int screenIndex = Properties.Settings.Default.ExternalScreenIndex;
-            if (screenIndex >= sc.Count)
+            int screenIndex = state.Settings.ExternalMonitorIndex;
+            if (screenIndex >= sc.Count || screenIndex < 0)
                 screenIndex = 0;
             Left = sc[screenIndex].Bounds.Left;
             Top = sc[screenIndex].Bounds.Top;

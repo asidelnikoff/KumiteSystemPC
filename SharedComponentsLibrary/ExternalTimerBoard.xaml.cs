@@ -24,13 +24,13 @@ namespace SharedComponentsLibrary
         {
             InitializeComponent();
             List<Screen> sc = Screen.AllScreens.ToList();
-            int screenIndex = Properties.Settings.Default.ExternalScreenIndex;
-            if (screenIndex >= sc.Count)
+            int screenIndex = state.Settings.ExternalMonitorIndex;
+            if (screenIndex >= sc.Count || screenIndex < 0)
                 screenIndex = 0;
             Width /= sc[screenIndex].ScaleFactor;
             Height /= sc[screenIndex].ScaleFactor;
-            Left = (sc[screenIndex].WpfBounds.Left + sc[screenIndex].WpfBounds.Right)/2 - Width / 2;
-            Top = (sc[screenIndex].WpfBounds.Bottom/2 - Height/2);
+            Left = (sc[screenIndex].WpfBounds.Left + sc[screenIndex].WpfBounds.Right) / 2 - Width / 2;
+            Top = (sc[screenIndex].WpfBounds.Bottom / 2 - Height / 2);
 
             DataContext = new ExternalTimerBoardViewModel(state);
         }

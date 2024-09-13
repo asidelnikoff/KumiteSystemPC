@@ -17,22 +17,22 @@ namespace SharedComponentsLibrary
     /// <summary>
     /// Логика взаимодействия для TimerBoard.xaml
     /// </summary>
-    public partial class TimerBoard : Window
+    public partial class TimerBoard : Window, ITimerBoard
     {
-
-
         public TimerBoard()
         {
-            InitializeComponent();
-
             DataContext = new TimerBoardViewModel();
+            (DataContext as TimerBoardViewModel).Closed += () => Closed?.Invoke();
+            InitializeComponent();
         }
 
         public TimerBoard(bool isKnockout)
         {
-            InitializeComponent();
-
             DataContext = new TimerBoardViewModel(isKnockout);
+            (DataContext as TimerBoardViewModel).Closed += () => Closed?.Invoke();
+            InitializeComponent();
         }
+
+        public Action Closed { get; set; }
     }
 }

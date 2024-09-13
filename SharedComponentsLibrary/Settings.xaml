@@ -9,7 +9,8 @@
         xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="Settings" Height="450" Width="800"
-        Closed="Window_Closed">
+        Closed="Window_Closed"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -98,6 +99,11 @@
                           ui:ControlHelper.Header="{x:Static lang:Resources.Language}"
                           ItemsSource="{Binding Languages}"
                           SelectedItem="{Binding Settings.Language}"/>
+                <ComboBox Margin="15,10"
+                          ui:ControlHelper.Header="{x:Static lang:Resources.ExternalBoardDesign}"
+                          ItemsSource="{Binding ExternalBoardDesignVersions}"
+                          SelectedIndex="{Binding Settings.ExternaBoardDesign}"/>
+                
             </ItemsControl>
         </ScrollViewer>
         <Button HorizontalAlignment="Right"

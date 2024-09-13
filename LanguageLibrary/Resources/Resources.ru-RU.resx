@@ -472,4 +472,13 @@
   <data name="LogFileSaved" xml:space="preserve">
     <value>Файл сохранен</value>
   </data>
+  <data name="ExternalBoardDesign" xml:space="preserve">
+    <value>Дизайн внешнего экран</value>
+  </data>
+  <data name="Version1" xml:space="preserve">
+    <value>Версия 1</value>
+  </data>
+  <data name="Version2" xml:space="preserve">
+    <value>Версия 2</value>
+  </data>
 </root>

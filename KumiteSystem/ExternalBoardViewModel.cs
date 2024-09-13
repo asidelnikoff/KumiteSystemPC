@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LanguageLibrary;
+using SharedComponentsLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,19 @@ namespace KumiteSystem
         [ObservableProperty]
         string tatamiText;
 
+        [ObservableProperty]
+        string currentAka;
+
+        [ObservableProperty]
+        string currentAo;
+
         public ExternalBoardViewModel(ExternalBoardState state)
         {
             State = state;
 
-            State.TatamiNumber = Properties.Settings.Default.Tatami;
+            var settings = UserSettings.GetUserSettings();
+            State.TatamiNumber = settings.Tatami;
+            IsNextMatchVisible = settings.IsNextMatchShownOnExternalBoard;
             TatamiText = $"{Resources.Tatami} {State.TatamiNumber}";
 
             try
@@ -37,38 +46,48 @@ namespace KumiteSystem
             {
                 var splitted = State.CurrentMatchAka?.Split(' ', 2);
                 if (splitted != null)
-                    State.CurrentMatchAka = $"{splitted[0]}\n{splitted[1]}";
+                    CurrentAka = $"{splitted[0]}\n{splitted[1]}";
             }
             catch { }
             try
             {
                 var splitted = State.CurrentMatchAo?.Split(' ', 2);
                 if (splitted != null)
-                    State.CurrentMatchAo = $"{splitted[0]}\n{splitted[1]}";
+                    CurrentAo = $"{splitted[0]}\n{splitted[1]}";
             }
             catch { }
 
-            IsNextMatchVisible = Properties.Settings.Default.IsNextMatchShownOnExternalBoard;
-
-            PropertyChanged += ExternalBoardViewModel_PropertyChanged;
+            State.StatePropertyChanged += ExternalBoardViewModel_PropertyChanged;
         }
 
         private void ExternalBoardViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            try
+            if (e.PropertyName == nameof(State.CurrentMatchAka))
+                try
+                {
+                    var splitted = State.CurrentMatchAka?.Split(' ', 2);
+                    if (splitted != null)
+                        CurrentAka = $"{splitted[0]}\n{splitted[1]}";
+                }
+                catch { }
+            if (e.PropertyName == nameof(State.CurrentMatchAo))
+                try
+                {
+                    var splitted = State.CurrentMatchAo?.Split(' ', 2);
+                    if (splitted != null)
+                        CurrentAo = $"{splitted[0]}\n{splitted[1]}";
+                }
+                catch { }
+
+            /*if(e.PropertyName == nameof(State.CurrentMatchAka) || e.PropertyName == nameof(State.CurrentMatchAo))
             {
-                var splitted = State.CurrentMatchAka?.Split(' ', 2);
-                if (splitted != null)
-                    State.CurrentMatchAka = $"{splitted[0]}\n{splitted[1]}";
-            }
-            catch { }
-            try
-            {
-                var splitted = State.CurrentMatchAo?.Split(' ', 2);
-                if (splitted != null)
-                    State.CurrentMatchAo = $"{splitted[0]}\n{splitted[1]}";
-            }
-            catch { }
+                if (CurrentAka.Length > CurrentAo.Length)
+                    for (int i = 0; i < CurrentAka.Length - CurrentAo.Length; i++)
+                        CurrentAo += "|";
+                else if (CurrentAka.Length < CurrentAo.Length)
+                    for (int i = 0; i < CurrentAo.Length - CurrentAka.Length; i++)
+                        CurrentAka += "|";
+            }*/
         }
     }
 }

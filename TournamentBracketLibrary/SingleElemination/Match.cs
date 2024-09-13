@@ -22,18 +22,7 @@ namespace TournamentTree
         {
             AKA = _AKA;
             AO = _AO;
-            if (AKA != null && AKA.IsBye) 
-            { 
-                Winner = new Competitor(AO as Competitor); 
-                isFinished = true; 
-                Looser = new Competitor(AKA as Competitor); 
-            }
-            else if (AO != null && AO.IsBye) 
-            { 
-                Winner = new Competitor(AKA as Competitor); 
-                isFinished = true; 
-                Looser = new Competitor(AO as Competitor); 
-            }
+            CheckWinner();
 
             if (AKA != null) AKA.Check_Winner += CheckWinner;
             if (AO != null) AO.Check_Winner += CheckWinner;
@@ -74,6 +63,9 @@ namespace TournamentTree
         {
             Competitor Aka = AKA as Competitor;
             Competitor Ao = AO as Competitor;
+
+            if (Aka == null || Ao == null)
+                return;
 
             if (Aka.Status == (int)Competitor.Statuses.Kiken || Aka.Status == (int)Competitor.Statuses.Shikaku)
                 SetWinner(2, false);
@@ -144,6 +136,11 @@ namespace TournamentTree
         {
             AKA.ResetCompetitor();
             AO.ResetCompetitor();
+            isFinished = false;
+            Winner = null;
+            Looser = null;
+            CheckWinner();
+
         }
         public override string ToString()
         {

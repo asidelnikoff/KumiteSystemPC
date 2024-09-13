@@ -425,21 +425,20 @@ namespace TournamentTree
                 Competitors.Add(new Competitor(true));
             List<Match> Group1 = new List<Match>();
             List<Match> Group2 = new List<Match>();
-            int id = 1;
             for (int i = 0; i < Competitors.Count() / 2; i++)
             {
                 //Create Match
                 Competitor aka = Competitors[i] as Competitor;
                 Competitor ao = Competitors[Competitors.Count() - 1 - i] as Competitor;
-                if (i % 2 == 0) { Group1.Add(new Match(aka, ao, id)); }
-                else { Group2.Add(new Match(aka, ao, id)); }
-                id++;
+                if (i % 2 == 0) { Group1.Add(new Match(aka, ao, 0)); }
+                else { Group2.Add(new Match(aka, ao, 0)); }
             }
             res.Matches.AddRange(Group1);
             res.Matches.AddRange(Group2);
             res.Matches.Reverse();
+            int id = 1;
             foreach (var match in res.Matches)
-                match.ID = res.Matches.Count - match.ID ;
+                match.ID = id++;
             res.ID = 0;
             Rounds.Add(res);
         }

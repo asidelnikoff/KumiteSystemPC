@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using LanguageLibrary;
+using System.Globalization;
+using System.Threading;
 
 namespace Category_Generator
 {
@@ -70,12 +72,24 @@ namespace Category_Generator
 
         ObservableCollection<CompetitorDTO> competitorsOC;
 
-        public Func<(int width, int height)> GetActualWidthHeight;
+        UserSettings userSettings;
+
+        public Func<Settings> OnOpenSettings;
+        public Func<DBService, CategoryDTO, bool, bool, bool, ICategoryViewer> OnOpenCategoryViewer;
+
 
         public MainViewModel()
         {
             LoadSettings();
             SetupDbService();
+            MainSetup();
+        }
+
+        public MainViewModel(DBService dbService, UserSettings settings)
+        {
+            this.dbService = dbService;
+            this.userSettings = settings;
+
             MainSetup();
         }
 
@@ -122,7 +136,6 @@ namespace Category_Generator
             {
                 IsAddCategoryButtonEnabled = SelectedTournament != null;
                 SetCategories();
-                CategoriesContextMenuVisibility = Categories?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
             }
             if (e.PropertyName == nameof(Filter))
                 Competitors.Refresh();
@@ -130,35 +143,39 @@ namespace Category_Generator
 
         private void LoadSettings()
         {
-            var setup = new Settings(null);
+            userSettings = UserSettings.GetUserSettings();
+
+            var info = new CultureInfo(GetLanguage());
+            Thread.CurrentThread.CurrentUICulture = info;
+            Thread.CurrentThread.CurrentCulture = info;
+            /*var setup = new Settings(null);
             var settings = setup.LoadSettings();
             Settings_SaveSettings(settings);
-            setup.Close();
+            setup.Close();*/
         }
 
         private async void SetupDbService()
         {
-            string database = Properties.Settings.Default.DatabasePath;
-            while (String.IsNullOrEmpty(Properties.Settings.Default.DataPath))
+            string database = userSettings.DatabasePath;
+            while (String.IsNullOrEmpty(userSettings.DataPath))
             {
                 await Helpers.DisplayMessageDialog(Resources.ChooseDefaultDataPath, Resources.Error);
                 OpenSettings();
             }
             if (String.IsNullOrEmpty(database))
             {
-                database = Properties.Settings.Default.DataPath + @"\tournaments.sqlite";
-                Properties.Settings.Default.DatabasePath = database;
-                Properties.Settings.Default.Save();
+                database = userSettings.DataPath + @"\tournaments.sqlite";
+                userSettings.DatabasePath = database;
+                userSettings.Save();
             }
 
             dbService = new DBService(database);
-            MainSetup();
         }
 
         [RelayCommand]
         private void OpenSettings()
         {
-            Settings settings = new Settings(new UserSettings()
+            /*Settings settings = new Settings(new UserSettings()
             {
                 DataPath = Properties.Settings.Default.DataPath,
                 DatabasePath = Properties.Settings.Default.DatabasePath,
@@ -167,24 +184,24 @@ namespace Category_Generator
                 ExternalMonitorIndex = Properties.Settings.Default.ExternalScreenIndex,
                 Tatami = Properties.Settings.Default.Tatami,
                 IsAutoLoadNextMatchEnabled = Properties.Settings.Default.IsAutoLoadNextMatchEnabled,
-                IsNextMatchShownOnExternalBoard = Properties.Settings.Default.IsNextMatchShownOnExternalBoard
-            });
-            settings.SaveSettings += Settings_SaveSettings;
-            settings.ShowDialog();
+                IsNextMatchShownOnExternalBoard = Properties.Settings.Default.IsNextMatchShownOnExternalBoard,
+                Language = new Language() { CultureInfo = Properties.Settings.Default.Language }
+            });*/
+            //var settings = new Settings();
+            var settings = OnOpenSettings?.Invoke();
+            if (settings != null)
+            {
+                settings.SaveSettings += Settings_SaveSettings;
+                settings.ShowDialog();
+            }
+            //settings.ShowDialog();
         }
         private void Settings_SaveSettings(UserSettings settings)
         {
-            Properties.Settings.Default.DataPath = settings.DataPath;
-            Properties.Settings.Default.DatabasePath = settings.DatabasePath;
-            Properties.Settings.Default.EndOfMatchSound = settings.EndOfMatchSound;
-            Properties.Settings.Default.WarningSound = settings.WarningSound;
-            Properties.Settings.Default.ExternalScreenIndex = settings.ExternalMonitorIndex;
-            Properties.Settings.Default.Tatami = settings.Tatami;
-            Properties.Settings.Default.IsAutoLoadNextMatchEnabled = settings.IsAutoLoadNextMatchEnabled;
-            Properties.Settings.Default.IsNextMatchShownOnExternalBoard = settings.IsNextMatchShownOnExternalBoard;
-
-            Properties.Settings.Default.Save();
+            userSettings = settings;
         }
+
+        public string GetLanguage() => userSettings.Language.CultureInfo;
 
         private bool CheckFilter(object obj)
         {
@@ -210,7 +227,8 @@ namespace Category_Generator
 
         private void SetCategories()
         {
-            Categories = new ObservableCollection<CategoryDTO>(dbService.GetCategoriesInTournament(SelectedTournament.Id));
+            Categories = new ObservableCollection<CategoryDTO>(dbService.GetCategoriesInTournament(SelectedTournament));
+            CategoriesContextMenuVisibility = Categories?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void SetCompetitorsInCategory()
@@ -312,15 +330,13 @@ namespace Category_Generator
             else if (dialogResult == ContentDialogResult.None)
                 return;
 
-            CategoryViewer categoryViewer = new CategoryViewer(dbService, SelectedCategory, true, shuffleCompetitors, true);
-            categoryViewer.ShowDialog();
+            OnOpenCategoryViewer?.Invoke(dbService, SelectedCategory, true, shuffleCompetitors, true);
         }
 
         [RelayCommand]
         private void ViewCategory()
         {
-            CategoryViewer categoryViewer = new CategoryViewer(dbService, SelectedCategory, false, false, true);
-            categoryViewer.ShowDialog();
+            OnOpenCategoryViewer?.Invoke(dbService, SelectedCategory, false, false, true);
         }
 
         [RelayCommand]
@@ -385,10 +401,17 @@ namespace Category_Generator
         }
 
         [RelayCommand]
-        private void DeleteCompetitor()
+        private async Task DeleteCompetitor()
         {
-            dbService.RemoveCompetitor(SelectedCompetitor);
-            competitorsOC.Remove(SelectedCompetitor);
+            try
+            {
+                dbService.RemoveCompetitor(SelectedCompetitor);
+                competitorsOC.Remove(SelectedCompetitor);
+            }
+            catch(ArgumentException ex)
+            {
+                Helpers.DisplayMessageDialog($"{ex.Message}", Resources.Error);
+            }
         }
     }
 }

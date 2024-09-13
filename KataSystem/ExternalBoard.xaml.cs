@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedComponentsLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,8 +26,8 @@ namespace KataSystem
             InitializeComponent();
 
             List<Screen> sc = Screen.AllScreens.ToList();
-            int screenIndex = Properties.Settings.Default.ExternalScreenIndex;
-            if (screenIndex >= sc.Count)
+            int screenIndex = state.Settings.ExternalMonitorIndex;
+            if (screenIndex >= sc.Count || screenIndex < 0)
                 screenIndex = 0;
             Left = sc[screenIndex].Bounds.Left;
             Top = sc[screenIndex].Bounds.Top;

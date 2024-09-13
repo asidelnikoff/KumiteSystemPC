@@ -11,6 +11,8 @@ using TournamentsBracketsBase;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using LanguageLibrary;
+using System.Globalization;
+using System.Threading;
 
 namespace SharedComponentsLibrary
 {
@@ -43,7 +45,7 @@ namespace SharedComponentsLibrary
         [ObservableProperty]
         bool isTimerBoardOpened;
 
-        protected TimerBoard timerBoard;
+        protected ITimerBoard timerBoard;
 
         protected CategoryDTO currentCategory;
 
@@ -62,18 +64,51 @@ namespace SharedComponentsLibrary
 
         protected System.Media.SoundPlayer endOfMatchSound;
 
-        public InternalBoardViewModel()
+        protected UserSettings userSettings;
+
+        public Func<Settings> OnOpenSettings;
+        public Func<DBService, CategoryDTO, bool, bool, bool, ICategoryViewer> OnOpenCategoryViewer;
+        public Func<ITimerBoard> OnOpenTimerBoard;
+
+        public InternalBoardViewModel(DBService dbService, UserSettings settings)
         {
+            this.dbService = dbService;
+            this.userSettings = settings;
 
-            if (Properties.Settings.Default.EndOfMatchSound != "")
-                endOfMatchSound = new System.Media.SoundPlayer(Properties.Settings.Default.EndOfMatchSound);
+            if (userSettings.EndOfMatchSound != "")
+                endOfMatchSound = new System.Media.SoundPlayer(userSettings.EndOfMatchSound);
 
-            IsNextMatchButtonEnabled = Properties.Settings.Default.IsAutoLoadNextMatchEnabled;
+            IsNextMatchButtonEnabled = userSettings.IsAutoLoadNextMatchEnabled;
             IsNameFieldReadOnly = false;
 
             LoggerDocument = new FlowDocument();
 
-            CurrentMatch = new TournamentTree.Match(new TournamentTree.Competitor(false, -1, "AKA"), new TournamentTree.Competitor(false, -2, "AO"), -1);
+            CurrentMatch = new TournamentTree.Match(new TournamentTree.Competitor(false, -1, "AKA"),
+                new TournamentTree.Competitor(false, -2, "AO"), -1);
+            CurrentMatchAkaText = CurrentMatch.AKA?.ToString();
+            CurrentMatchAoText = CurrentMatch.AO?.ToString();
+
+            SetupMatch(CurrentMatch);
+        }
+
+        public InternalBoardViewModel()
+        {
+            userSettings = UserSettings.GetUserSettings();
+
+            var info = new CultureInfo(GetLanguage());
+            Thread.CurrentThread.CurrentUICulture = info;
+            Thread.CurrentThread.CurrentCulture = info;
+
+            if (userSettings.EndOfMatchSound != "")
+                endOfMatchSound = new System.Media.SoundPlayer(userSettings.EndOfMatchSound);
+
+            IsNextMatchButtonEnabled = userSettings.IsAutoLoadNextMatchEnabled;
+            IsNameFieldReadOnly = false;
+
+            LoggerDocument = new FlowDocument();
+
+            CurrentMatch = new TournamentTree.Match(new TournamentTree.Competitor(false, -1, "AKA"), 
+                new TournamentTree.Competitor(false, -2, "AO"), -1);
             CurrentMatchAkaText = CurrentMatch.AKA?.ToString();
             CurrentMatchAoText = CurrentMatch.AO?.ToString();
 
@@ -81,30 +116,29 @@ namespace SharedComponentsLibrary
         }
 
 
+
         protected async Task SetupDbService()
         {
-            string database = Properties.Settings.Default.DatabasePath;
-            while (String.IsNullOrEmpty(Properties.Settings.Default.DataPath))
+            string database = userSettings.DatabasePath;
+            while (String.IsNullOrEmpty(userSettings.DataPath))
             {
                 await Helpers.DisplayMessageDialog(Resources.ChooseDefaultDataPath, Resources.Info);
                 OpenSettings();
             }
             if (String.IsNullOrEmpty(database))
             {
-                database = Properties.Settings.Default.DataPath + @"\tournaments.sqlite";
-                Properties.Settings.Default.DatabasePath = database;
-                Properties.Settings.Default.Save();
+                database = userSettings.DataPath + @"\tournaments.sqlite";
+                userSettings.DatabasePath = database;
+                userSettings.Save();
             }
 
             this.dbService = new DBService(database);
         }
 
-        protected abstract void LoadSettings();
-
         [RelayCommand]
         private void OpenSettings()
         {
-            Settings settings = new Settings(new UserSettings()
+            /*Settings settings = new Settings(new UserSettings()
             {
                 DataPath = Properties.Settings.Default.DataPath,
                 DatabasePath = Properties.Settings.Default.DatabasePath,
@@ -115,16 +149,25 @@ namespace SharedComponentsLibrary
                 IsAutoLoadNextMatchEnabled = Properties.Settings.Default.IsAutoLoadNextMatchEnabled,
                 IsNextMatchShownOnExternalBoard = Properties.Settings.Default.IsNextMatchShownOnExternalBoard,
                 Language = new Language() { CultureInfo = Properties.Settings.Default.Language }
-            });
-            settings.SaveSettings += Settings_SaveSettings;
-            settings.ShowDialog();
+            });*/
+            var settings = OnOpenSettings?.Invoke();
+            if (settings != null)
+            {
+                settings.SaveSettings += Settings_SaveSettings;
+                settings.ShowDialog();
+            }
         }
-        protected abstract void Settings_SaveSettings(UserSettings settings);
+        protected void Settings_SaveSettings(UserSettings settings)
+        {
+            userSettings = settings;
+        }
+
+        public string GetLanguage() => userSettings.Language.CultureInfo;
 
         protected void Close()
         {
             timerBoard?.Close();
-            (categoryViewer as CategoryViewer)?.Close();
+            categoryViewer?.Close();
         }
 
         [RelayCommand]
@@ -134,10 +177,13 @@ namespace SharedComponentsLibrary
                 timerBoard?.Close();
             else
             {
-                timerBoard = new TimerBoard();
-                timerBoard.Loaded += (sender, e) => IsTimerBoardOpened = true;
-                timerBoard.Closed += (sender, e) => IsTimerBoardOpened = false;
-                timerBoard.Show();
+                var board = OnOpenTimerBoard?.Invoke();
+                if (board != null)
+                {
+                    timerBoard = board;
+                    IsTimerBoardOpened = true;
+                    timerBoard.Closed += () => IsTimerBoardOpened = false;
+                }
             }
         }
 
@@ -146,8 +192,11 @@ namespace SharedComponentsLibrary
             CurrentMatch.Reset();
             ClearLog();
             OnPropertyChanged(nameof(CurrentMatch));
+            ResetExternalBoardState();
             await Helpers.DisplayMessageDialog(Resources.MatchRested, Resources.Info);
         }
+
+        protected abstract void ResetExternalBoardState();
 
         [RelayCommand]
         private void SetMatchWiner(ICompetitor comp)
@@ -177,28 +226,37 @@ namespace SharedComponentsLibrary
             categoryViewer?.LoadMatch(nextMatchRound, NextMatch);
         }
 
+        protected abstract void ShowCategoryNameOnExternalBoard(string name);
+
         [RelayCommand]
         private async Task OpenCategory()
         {
-            if (categoryViewer != null)
+            if (currentCategory != null)
             {
                 var reopenCategory = await Helpers.DisplayQuestionDialog(Resources.OpenNewCategory, Resources.Open);
                 if (reopenCategory != ModernWpf.Controls.ContentDialogResult.Primary)
                     return;
 
-                (categoryViewer as CategoryViewer)?.Close();
+                categoryViewer?.Close();
             }
             var openCategoryDialog = new OpenCategoryDialog(dbService);
             var result = await openCategoryDialog.ShowAsync();
             if (result == ModernWpf.Controls.ContentDialogResult.Primary)
             {
-                categoryViewer = new CategoryViewer(dbService, openCategoryDialog.ResultCategory, false);
-                categoryViewer.GotMatch += CategoryViewer_GotMatch;
-                categoryViewer.GotNextMatch += CategoryViewer_GotNextMatch;
-                categoryViewer.GotCategoryResults += CategoryViewer_GotCategoryResults;
-                TieButtonVisibility = openCategoryDialog.ResultCategory.Type == 2 ? Visibility.Visible : Visibility.Collapsed;
+                var viewer = OnOpenCategoryViewer?.Invoke(dbService, openCategoryDialog.ResultCategory, false, false, false);
+                if (viewer != null)
+                {
+                    categoryViewer = viewer;
+                    categoryViewer.GotMatch += CategoryViewer_GotMatch;
+                    categoryViewer.GotNextMatch += CategoryViewer_GotNextMatch;
+                    categoryViewer.GotCategoryResults += CategoryViewer_GotCategoryResults;
 
-                (categoryViewer as CategoryViewer).Show();
+                    categoryViewer.Closed += () => { currentCategory = null; ShowCategoryNameOnExternalBoard(""); };
+
+                    TieButtonVisibility = openCategoryDialog.ResultCategory.Type == 2 ? Visibility.Visible : Visibility.Collapsed;
+                    currentCategory = openCategoryDialog.ResultCategory;
+                    ShowCategoryNameOnExternalBoard(currentCategory.Name);
+                }
             }
         }
 
@@ -206,10 +264,13 @@ namespace SharedComponentsLibrary
         {
             IsNameFieldReadOnly = true;
             currentMatchRound = round;
+            CurrentMatch.HaveWinner -= Match_HaveWinner;
             CurrentMatch = match;
             SetupMatch(CurrentMatch);
             CurrentMatchAkaText = CurrentMatch.AKA?.ToString();
             CurrentMatchAoText = CurrentMatch.AO?.ToString();
+
+            ClearLog();
             Helpers.DisplayMessageDialog(Resources.MatchLodaed, Resources.Info);
         }
 
@@ -226,12 +287,17 @@ namespace SharedComponentsLibrary
 
         }
 
-        protected abstract void SetupMatch(IMatch match);
+        protected void SetupMatch(IMatch match)
+        {
+            match.HaveWinner += Match_HaveWinner;
+        }
+
+        protected abstract void ShowWinnerOnExternalBoard(ICompetitor winner);
 
         protected async void Match_HaveWinner(ICompetitor winner)
         {
             endOfMatchSound?.Play();
-
+            ShowWinnerOnExternalBoard(winner);
             if (winner == null)
                 await Helpers.DisplayMessageDialog(Resources.MatchEnded, Resources.Info);
             else
@@ -293,7 +359,7 @@ namespace SharedComponentsLibrary
                 TextRange range;
                 System.IO.FileStream fStream;
                 range = new TextRange(LoggerDocument.ContentStart, LoggerDocument.ContentEnd);
-                if (Properties.Settings.Default.DataPath == "")
+                if (userSettings.DataPath == "")
                 {
                     SaveFileDialog saveFile = new SaveFileDialog();
                     saveFile.Filter = "txt file(*.txt) | *.txt";
@@ -306,7 +372,7 @@ namespace SharedComponentsLibrary
                 }
                 else
                 {
-                    fStream = new System.IO.FileStream($"{Properties.Settings.Default.DataPath}\\{currentMatch}.txt", System.IO.FileMode.Create);
+                    fStream = new System.IO.FileStream($"{userSettings.DataPath}\\{currentMatch}.txt", System.IO.FileMode.Create);
                     range.Save(fStream, DataFormats.Text);
                     fStream.Close();
                 }

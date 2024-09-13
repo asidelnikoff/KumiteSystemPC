@@ -32,9 +32,16 @@ namespace KataSystem
         [ObservableProperty]
         int judjesNumberInput;
 
+        public MainWindowViewModel(DBService dbService, UserSettings setings) : base(dbService, setings)
+        {
+            JudjesCollection = new ObservableCollection<int>() { 3, 5, 7 };
+
+            PropertyChanged += MainWindowViewModel_PropertyChanged;
+        }
+
         public MainWindowViewModel() : base()
         {
-            LoadSettings();
+            //LoadSettings();
             SetupDbService();
 
             JudjesCollection = new ObservableCollection<int>() { 3, 5, 7 };
@@ -59,7 +66,7 @@ namespace KataSystem
                 SelectedJudjesAo = null;
             }
 
-            if(e.PropertyName == nameof(SelectedJudjesAka))
+            if (e.PropertyName == nameof(SelectedJudjesAka))
             {
                 if (SelectedJudjesAka == null)
                     return;
@@ -69,7 +76,7 @@ namespace KataSystem
                 CurrentMatch.CheckWinner(true);
             }
 
-            if(e.PropertyName == nameof(SelectedJudjesAo))
+            if (e.PropertyName == nameof(SelectedJudjesAo))
             {
                 if (SelectedJudjesAo == null)
                     return;
@@ -103,6 +110,7 @@ namespace KataSystem
                     CurrentMatchAo = CurrentMatch?.AO?.ToString(),
                     NextMatchAka = NextMatch?.AKA?.ToString(),
                     NextMatchAo = NextMatch?.AO?.ToString(),
+                    Settings = userSettings
                 };
                 if (CurrentMatch.Winner != null)
                 {
@@ -121,21 +129,39 @@ namespace KataSystem
             }
         }
 
-        protected override void SetupMatch(IMatch match)
-        {
-            match.HaveWinner += Match_HaveWinner;
-        }
-
-        private new async void Match_HaveWinner(ICompetitor winner)
+        protected override void ShowWinnerOnExternalBoard(ICompetitor winner)
         {
             if (externalBoardState != null)
             {
-                externalBoardState.IsAkaWinner = CurrentMatch?.AKA?.Equals(winner) == true;
-                externalBoardState.IsAoWinner = CurrentMatch?.AO?.Equals(winner) == true;
+                if (CurrentMatch?.AKA?.Equals(winner) == true)
+                {
+                    externalBoardState.IsAkaWinner = true;
+                    externalBoardState.IsAoWinner = false;
+                }
+                else if (CurrentMatch?.AO?.Equals(winner) == true)
+                {
+                    externalBoardState.IsAoWinner = true;
+                    externalBoardState.IsAkaWinner = false;
+                }
+                else
+                {
+                    externalBoardState.IsAkaWinner = false;
+                    externalBoardState.IsAoWinner = false;
+                }
+
             }
-            base.Match_HaveWinner(winner);
         }
 
+        protected override void ShowCategoryNameOnExternalBoard(string name)
+        {
+            if (externalBoardState != null)
+                externalBoardState.CategoryName = name;
+        }
+
+        protected override void ResetExternalBoardState()
+        {
+            ShowWinnerOnExternalBoard(CurrentMatch.Winner);
+        }
 
         [RelayCommand]
         private new void ResetMatch()
@@ -152,7 +178,7 @@ namespace KataSystem
             base.CategoryViewer_GotMatch(round, match);
         }
 
-        protected override void LoadSettings()
+        /*protected override void LoadSettings()
         {
             var setup = new Settings(null);
             var settings = setup.LoadSettings();
@@ -170,8 +196,9 @@ namespace KataSystem
             Properties.Settings.Default.IsAutoLoadNextMatchEnabled = settings.IsAutoLoadNextMatchEnabled;
             Properties.Settings.Default.IsNextMatchShownOnExternalBoard = settings.IsNextMatchShownOnExternalBoard;
             Properties.Settings.Default.Language = settings.Language.CultureInfo;
+            Properties.Settings.Default.ExternalBoardDesign = settings.ExternaBoardDesign;
 
             Properties.Settings.Default.Save();
-        }
+        }*/
     }
 }

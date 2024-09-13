@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SharedComponentsLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using TournamentsBracketsBase;
 using static System.Windows.Forms.AxHost;
 
@@ -11,6 +14,8 @@ namespace KumiteSystem
 {
     public partial class ExternalBoardState : ObservableObject
     {
+        public UserSettings Settings { get; set; }
+
         [ObservableProperty]
         string? categoryName;
 
@@ -59,27 +64,11 @@ namespace KumiteSystem
         [ObservableProperty]
         bool isAoWinner;
 
+        public Action<object?, System.ComponentModel.PropertyChangedEventArgs> StatePropertyChanged;
+
         public ExternalBoardState()
         {
-            PropertyChanged += ExternalBoardState_PropertyChanged;
-        }
-
-        private void ExternalBoardState_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            try
-            {
-                var splitted = CurrentMatchAka?.Split(' ', 2);
-                if (splitted != null)
-                    CurrentMatchAka = $"{splitted[0]}\n{splitted[1]}";
-            }
-            catch { }
-            try
-            {
-                var splitted = CurrentMatchAo?.Split(' ', 2);
-                if (splitted != null)
-                    CurrentMatchAo = $"{splitted[0]}\n{splitted[1]}";
-            }
-            catch { }
+            PropertyChanged += (sender, e) => StatePropertyChanged?.Invoke(sender, e);
         }
     }
 }

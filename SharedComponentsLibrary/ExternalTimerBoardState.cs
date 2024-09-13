@@ -9,6 +9,8 @@ namespace SharedComponentsLibrary
 {
     public partial class ExternalTimerBoardState : ObservableObject
     {
+        public UserSettings Settings { get; set; }
+
         [ObservableProperty]
         TimeSpan remainTime;
 

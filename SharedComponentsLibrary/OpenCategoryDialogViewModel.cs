@@ -49,7 +49,7 @@ namespace SharedComponentsLibrary
                 GotResultCategory?.Invoke(SelectedCategory);
             }
             if (e.PropertyName == nameof(SelectedTournament))
-                CategoriesInTournament = new ObservableCollection<CategoryDTO>(dbService.GetGeneratedCategoriesInTournament(SelectedTournament.Id));
+                CategoriesInTournament = new ObservableCollection<CategoryDTO>(dbService.GetGeneratedCategoriesInTournament(SelectedTournament));
         }
 
 

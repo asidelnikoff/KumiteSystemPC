@@ -343,7 +343,11 @@ namespace SharedComponentsLibrary
             if (!dbContext.Competitors.Where(a => a.Id == competitor.Id).Any())
                 throw new ArgumentException("No such competitor");
 
-            dbContext.Competitors.Remove(dbContext.Competitors.Where(a => a.Id == competitor.Id).First());
+            if (dbContext.CompetitorCategories.Where(a => a.Competitor == competitor.Id).Any() ||
+                dbContext.Matches.Where(a => a.Aka == competitor.Id || a.Ao == competitor.Id).Any())
+                throw new ArgumentException("Competitor is participating in some categories. Can't remove him.");
+            
+            dbContext.Competitors.Remove(dbContext.Competitors.Find(competitor.Id));
             dbContext.SaveChanges();
         }
 
@@ -351,6 +355,9 @@ namespace SharedComponentsLibrary
         {
             if (dbContext.Tournaments.Find(tournament.Id) == null)
                 throw new ArgumentException("No such tournament");
+
+            foreach (var category in dbContext.Categories.Where(a => a.Tournament == tournament.Id))
+                RemoveCategory(new CategoryDTO { Id = category.Id, Tournament = category.Tournament, Type = category.Type, Name = category.Name });
 
             dbContext.Tournaments.Remove(tournament);
             dbContext.SaveChanges();
@@ -360,6 +367,11 @@ namespace SharedComponentsLibrary
         {
             if (!dbContext.Categories.Where(a => a.Id == category.Id).Any())
                 throw new ArgumentException("No such category");
+
+            RemoveWinners(category);
+            dbContext.CompetitorCategories.RemoveRange(dbContext.CompetitorCategories.Where(a => a.Category == category.Id));
+            dbContext.Matches.RemoveRange(dbContext.Matches.Where(a => a.Category == category.Id));
+            dbContext.Rounds.RemoveRange(dbContext.Rounds.Where(a => a.Category == category.Id));
 
             dbContext.Categories.Remove(dbContext.Categories.Where(a => a.Id == category.Id).First());
             dbContext.SaveChanges();
@@ -383,17 +395,17 @@ namespace SharedComponentsLibrary
             };
         }
 
-        public void SwapCompetitors(CompetitorDTO competitor1, CompetitorDTO competitor2)
+        public void SwapCompetitors(CategoryDTO category, CompetitorDTO competitor1, CompetitorDTO competitor2)
         {
-            if (dbContext.Matches.Where(a => a.IsFinished == 1 && a.Round > 0
+            if (dbContext.Matches.Where(a => a.Category == category.Id && a.IsFinished == 1 && a.Round > 0
             && (a.Aka == competitor1.Id || a.Aka == competitor2.Id ||
             a.Ao == competitor1.Id || a.Ao == competitor2.Id)).Any() || competitor1.Id == competitor2.Id)
                 throw new InvalidOperationException("Can't swap competitors");
 
-            var matches1Aka = dbContext.Matches.Where(a => a.Aka == competitor1.Id).ToList();
-            var matches1Ao = dbContext.Matches.Where(a => a.Ao == competitor1.Id).ToList();
-            var matches2Aka = dbContext.Matches.Where(a => a.Aka == competitor2.Id).ToList();
-            var matches2Ao = dbContext.Matches.Where(a => a.Ao == competitor2.Id).ToList();
+            var matches1Aka = dbContext.Matches.Where(a => a.Category == category.Id && a.Aka == competitor1.Id).ToList();
+            var matches1Ao = dbContext.Matches.Where(a => a.Category == category.Id && a.Ao == competitor1.Id).ToList();
+            var matches2Aka = dbContext.Matches.Where(a => a.Category == category.Id && a.Aka == competitor2.Id).ToList();
+            var matches2Ao = dbContext.Matches.Where(a => a.Category == category.Id && a.Ao == competitor2.Id).ToList();
             
             foreach(var match in matches1Aka)
             {
@@ -442,9 +454,12 @@ namespace SharedComponentsLibrary
             return dbContext.Tournaments.ToList();
         }
 
-        public List<CategoryDTO> GetCategoriesInTournament(long tournamentId)
+        public List<CategoryDTO> GetCategoriesInTournament(Tournament tournament)
         {
-            var categories = dbContext.Categories.Where(a => a.Tournament == tournamentId)
+            if (tournament == null || !dbContext.Tournaments.Where(a => a.Id == tournament.Id).Any())
+                return new List<CategoryDTO>();
+
+            var categories = dbContext.Categories.Where(a => a.Tournament == tournament.Id)
                 .Select(a => new CategoryDTO()
                 {
                     Name = a.Name,
@@ -455,13 +470,16 @@ namespace SharedComponentsLibrary
             return categories.ToList();
         }
 
-        public List<CategoryDTO> GetGeneratedCategoriesInTournament(long tournamentId)
+        public List<CategoryDTO> GetGeneratedCategoriesInTournament(Tournament tournament)
         {
-            return GetCategoriesInTournament(tournamentId).Where(a => IsCategoryGenerated(a)).ToList();
+            return GetCategoriesInTournament(tournament).Where(a => IsCategoryGenerated(a)).ToList();
         }
 
         public List<CompetitorDTO> GetCompetitorsInCategory(CategoryDTO category)
         {
+            if (category == null || !dbContext.Categories.Where(a => a.Id == category.Id).Any())
+                return new List<CompetitorDTO>();
+
             var competitors = dbContext.CompetitorCategories.Where(a => a.Category == category.Id)
                 .Select(a => new { a.Competitor, a.CompetitorStatus })
                 .Join(dbContext.Competitors,
@@ -656,11 +674,12 @@ namespace SharedComponentsLibrary
             if (match.Aka <= 0)
                 aka = new TournamentTree.Competitor(true);
             else if (match.Aka != null)
-                aka = competitors.Where(c => c.ID == match.Aka).First() as TournamentTree.Competitor;
+                aka = new TournamentTree.Competitor(competitors.Where(c => c.ID == match.Aka).First() as TournamentTree.Competitor);
             else
                 aka = null;
             if (aka != null)
             {
+                aka.Senshu = match.Senshu == 1;
                 aka.SetFoulsC1((int)match.AkaC1);
                 foreach (var c in match.AkaScore)
                     if (Char.IsDigit(c))
@@ -671,11 +690,12 @@ namespace SharedComponentsLibrary
             if (match.Ao <= 0)
                 ao = new TournamentTree.Competitor(true);
             else if (match.Ao != null)
-                ao = competitors.Where(c => c.ID == match.Ao).First() as TournamentTree.Competitor;
+                ao = new TournamentTree.Competitor(competitors.Where(c => c.ID == match.Ao).First() as TournamentTree.Competitor);
             else
                 ao = null;
             if (ao != null)
             {
+                ao.Senshu = match.Senshu == 2;
                 ao.SetFoulsC1((int)match.AoC1);
                 foreach (var c in match.AoScore)
                     if (Char.IsDigit(c))
@@ -683,6 +703,7 @@ namespace SharedComponentsLibrary
             }
 
             var result = new TournamentTree.Match(aka, ao, (int)match.Id);
+            
             result.isFinished = match.IsFinished == 1;
             if (match.Winner != null && match.Winner != 0)
                 result.Winner = competitors.Where(c => c.ID == match.Winner).FirstOrDefault();

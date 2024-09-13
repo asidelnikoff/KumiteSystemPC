@@ -85,7 +85,7 @@ namespace Category_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int Tatami {
             get {
                 return ((int)(this["Tatami"]));
@@ -116,6 +116,30 @@ namespace Category_Generator.Properties {
             }
             set {
                 this["IsNextMatchShownOnExternalBoard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("en-GB")]
+        public string Language {
+            get {
+                return ((string)(this["Language"]));
+            }
+            set {
+                this["Language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ExternalBoardDesign {
+            get {
+                return ((int)(this["ExternalBoardDesign"]));
+            }
+            set {
+                this["ExternalBoardDesign"] = value;
             }
         }
     }

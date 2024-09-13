@@ -46,25 +46,25 @@ namespace SharedComponentsLibrary
             ThirdPlaceVisibility1 = Visibility.Collapsed;
             ThirdPlaceVisibility2 = Visibility.Collapsed;
 
-            if (winners?.Count > 0)
+            if (winners?.Count > 0 && winners[0] != null)
             {
                 FirstPlaceName = winners[0].ToString();
                 FirstPlaceVisibility = Visibility.Visible;
             }
             
-            if(winners?.Count > 1)
+            if(winners?.Count > 1 && winners[1] != null)
             {
                 SecondPlaceName = winners[1].ToString();
                 SecondPlaceVisibility = Visibility.Visible;
             }
 
-            if (winners?.Count > 2)
+            if (winners?.Count > 2 && winners[2] != null)
             {
                 ThirdPlaceName1 = winners[2].ToString();
                 ThirdPlaceVisibility1 = Visibility.Visible;
             }
 
-            if (winners?.Count > 3)
+            if (winners?.Count > 3 && winners[3] != null)
             {
                 ThirdPlaceName2 = winners[3].ToString();
                 ThirdPlaceVisibility2 = Visibility.Visible;

@@ -38,20 +38,34 @@ namespace KumiteSystem
         [ObservableProperty]
         int timerMinutesInput;
 
-        ExternalBoard externalBoard;
+        Window externalBoard;
 
         ExternalBoardState externalBoardState;
 
         
         System.Media.SoundPlayer warningSound;
 
+        public MainWindowViewModel(DBService dbService, UserSettings setings) : base(dbService, setings)
+        {
+            if (userSettings.WarningSound != "")
+                warningSound = new System.Media.SoundPlayer(userSettings.WarningSound);
+
+            MillisecondsVisibility = Visibility.Collapsed;
+
+            Timer = new Timer(0, 0);
+            Timer.OnTimeUpdated += (a) => OnPropertyChanged(nameof(Timer));
+            Timer.OnAtoshiBaraku += Timer_OnAtoshiBaraku;
+            Timer.OnTimerFinished += Timer_OnTimeFinished;
+
+            PropertyChanged += MainWindowViewModel_PropertyChanged;
+        }
+
         public MainWindowViewModel() : base()
         {
-            LoadSettings();
             SetupDbService();
 
-            if (Properties.Settings.Default.WarningSound != "")
-                warningSound = new System.Media.SoundPlayer(Properties.Settings.Default.WarningSound);
+            if (userSettings.WarningSound != "")
+                warningSound = new System.Media.SoundPlayer(userSettings.WarningSound);
 
             MillisecondsVisibility = Visibility.Collapsed;
 
@@ -70,15 +84,21 @@ namespace KumiteSystem
                 {
                     externalBoardState.CurrentMatchAo = CurrentMatch.AO?.ToString();
                     externalBoardState.CurrentMatchAka = CurrentMatch.AKA?.ToString();
-                    externalBoardState.RemainTime = Timer.RemainTime;
                     externalBoardState.ScoreAka = CurrentMatch.AKA?.Score;
                     externalBoardState.ScoreAo = CurrentMatch.AO?.Score;
                     externalBoardState.AkaSenshu = CurrentMatch.AKA?.Senshu;
                     externalBoardState.AoSenshu = CurrentMatch.AO?.Senshu;
                     externalBoardState.FoulsC1Aka = CurrentMatch.AKA?.Fouls_C1;
                     externalBoardState.FoulsC1Ao = CurrentMatch.AO?.Fouls_C1;
+                }
+
+            if (e.PropertyName == nameof(Timer))
+                if (externalBoardState != null)
+                {
+                    externalBoardState.RemainTime = Timer.RemainTime;
                     externalBoardState.IsAtoshiBaraku = IsAtoshiBaraku;
                 }
+
             if (e.PropertyName == nameof(IsTimerRunning))
             {
                 if (IsTimerRunning)
@@ -125,6 +145,7 @@ namespace KumiteSystem
                     RemainTime = Timer.RemainTime,
                     NextMatchAka = NextMatch?.AKA?.ToString(),
                     NextMatchAo = NextMatch?.AO?.ToString(),
+                    Settings = userSettings
                 };
                 if(CurrentMatch.Winner != null)
                 {
@@ -136,11 +157,21 @@ namespace KumiteSystem
                     externalBoardState.IsAkaWinner = false;
                     externalBoardState.IsAoWinner = false;
                 }
-                externalBoard = new ExternalBoard(externalBoardState);
+                externalBoard = SelectExternalBoardVersion(externalBoardState);
                 externalBoard.Loaded += (sender, e) => IsExternalBoardOpened = true;
                 externalBoard.Closed += (sender, e) => IsExternalBoardOpened = false;
                 externalBoard.Show();
             }
+        }
+
+        private Window SelectExternalBoardVersion(ExternalBoardState state)
+        {
+            if (userSettings.ExternaBoardDesign == 0)
+                return new ExternalBoard(state);
+            if (userSettings.ExternaBoardDesign == 1)
+                return new ExternalBoard2(state);
+
+            return new ExternalBoard2(state);
         }
 
         TimerBoard knockoutTimerBoard;
@@ -218,21 +249,36 @@ namespace KumiteSystem
             MillisecondsVisibility = Timer.RemainTime <= TimeSpan.FromSeconds(15) 
                 && Timer.RemainTime > TimeSpan.FromSeconds(0)
                 ? Visibility.Visible : Visibility.Collapsed;
+            IsAtoshiBaraku = Timer.RemainTime <= TimeSpan.FromSeconds(15);
         }
 
-        protected override void SetupMatch(IMatch match)
-        {
-            match.HaveWinner += Match_HaveWinner;
-        }
-
-        private new async void Match_HaveWinner(ICompetitor winner)
+        protected override void ShowWinnerOnExternalBoard(ICompetitor winner)
         {
             if (externalBoardState != null)
             {
-                externalBoardState.IsAkaWinner = CurrentMatch?.AKA?.Equals(winner) == true;
-                externalBoardState.IsAoWinner = CurrentMatch?.AO?.Equals(winner) == true;
+                if (CurrentMatch?.AKA?.Equals(winner) == true)
+                {
+                    externalBoardState.IsAkaWinner = true;
+                    externalBoardState.IsAoWinner = false;
+                }
+                else if (CurrentMatch?.AO?.Equals(winner) == true)
+                {
+                    externalBoardState.IsAoWinner = true;
+                    externalBoardState.IsAkaWinner = false;
+                }
+
             }
-            base.Match_HaveWinner(winner);
+        }
+
+        protected override void ShowCategoryNameOnExternalBoard(string name) 
+        {
+            if (externalBoardState != null)
+                externalBoardState.CategoryName = name;
+        }
+
+        protected override void ResetExternalBoardState()
+        {
+            ShowWinnerOnExternalBoard(CurrentMatch.Winner);
         }
 
         [RelayCommand]
@@ -341,29 +387,6 @@ namespace KumiteSystem
                 AddInfoToLog($"AKA {Resources.remove} {Resources.Senshu}");
             else if (comp.Equals(CurrentMatch.AO))
                 AddInfoToLog($"AO {Resources.remove} {Resources.Senshu}");
-        }
-
-        protected override void LoadSettings()
-        {
-            var setup = new Settings(null);
-            var settings = setup.LoadSettings();
-            Settings_SaveSettings(settings);
-            setup.Close();
-        }
-
-        protected override void Settings_SaveSettings(UserSettings settings)
-        {
-            Properties.Settings.Default.DataPath = settings.DataPath;
-            Properties.Settings.Default.DatabasePath = settings.DatabasePath;
-            Properties.Settings.Default.EndOfMatchSound = settings.EndOfMatchSound;
-            Properties.Settings.Default.WarningSound = settings.WarningSound;
-            Properties.Settings.Default.ExternalScreenIndex = settings.ExternalMonitorIndex;
-            Properties.Settings.Default.Tatami = settings.Tatami;
-            Properties.Settings.Default.IsAutoLoadNextMatchEnabled = settings.IsAutoLoadNextMatchEnabled;
-            Properties.Settings.Default.IsNextMatchShownOnExternalBoard = settings.IsNextMatchShownOnExternalBoard;
-            Properties.Settings.Default.Language = settings.Language.CultureInfo;
-
-            Properties.Settings.Default.Save();
         }
     }
 }

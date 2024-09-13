@@ -13,7 +13,6 @@
         Loaded="Window_Loaded"
         ShowActivated="False">
     <Window.Resources>
-
         <Style x:Key="AKAfoulBorder" TargetType="Border" BasedOn="{StaticResource AnimatedBorder}">
             <Setter Property="Background" Value="{DynamicResource RedBrush}"/>
             <Setter Property="CornerRadius" Value="25"/>
@@ -25,23 +24,23 @@
     </Window.Resources>
     <Grid Margin="40,20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="30*"/>
             <RowDefinition Height="300*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="220*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="200*"/>
+            <RowDefinition Height="30*"/>
             <RowDefinition Height="100*"/>
-            <RowDefinition Height="90*"/>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="30*"/>
         </Grid.RowDefinitions>
         <Grid Margin="7,20"
               Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Border Style="{DynamicResource AKAfoulBorder}"
                     Grid.Column="1"
@@ -72,7 +71,7 @@
 
             <Viewbox HorizontalAlignment="Left" 
                      Margin="20,15" VerticalAlignment="Center">
-                <TextBlock Text="{Binding State.CurrentMatchAka}"
+                <TextBlock Text="{Binding CurrentAka}"
                        VerticalAlignment="Center" 
                        x:Name="AkaNowNameL" 
                        Foreground="White" 
@@ -109,7 +108,7 @@
                      Margin="20,15" 
                      VerticalAlignment="Center"
                      Grid.Column="3">
-                <TextBlock Text="{Binding State.CurrentMatchAo}"
+                <TextBlock Text="{Binding CurrentAo}"
                        VerticalAlignment="Center" 
                        TextAlignment="Right"
                        x:Name="AoNowNameL" 
@@ -263,7 +262,7 @@
               Margin="7,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1" Margin="25"
@@ -293,7 +292,7 @@
                 </Viewbox>
             </Grid>
 
-            <Viewbox Margin="0,20"
+            <Viewbox Margin="0,30"
                      HorizontalAlignment="Left">
                 <TextBlock x:Name="TatamiEXT" 
                        Text="{Binding TatamiText}" 
@@ -309,7 +308,7 @@
                            Text="{Binding State.CategoryName}"
                            Foreground="White" 
                            TextWrapping="Wrap" 
-                           TextAlignment="Center"/>
+                           TextAlignment="Right"/>
             </Viewbox>
         </Grid>
         <Grid Grid.Row="7"

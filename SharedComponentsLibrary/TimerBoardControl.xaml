@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="SharedComponentsLibrary.TimerBoardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SharedComponentsLibrary"
+             mc:Ignorable="d" 
+             xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
+             MinHeight="200" MinWidth="330"
+        d:Height="200" d:Width="330">
+    <Grid Background="{DynamicResource BackgroundLight}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="5,10" 
+                     x:Name="minTXT" 
+                     TextAlignment="Center" 
+                     ui:ControlHelper.PlaceholderText="00" 
+                     FontSize="18" 
+                     VerticalContentAlignment="Center" 
+                     HorizontalContentAlignment="Center" 
+                     >
+                <TextBox.Text>
+                    <Binding Path="TimerMinutesInput" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <local:IsStringIntegerValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding Path=SetTimerCommand}" Key="Enter"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <TextBox ui:ControlHelper.PlaceholderText="00" 
+                     Grid.Column="2" 
+                     Margin="5,10" 
+                     x:Name="secTXT" 
+                     TextAlignment="Center"
+                     FontSize="20"
+                     HorizontalContentAlignment="Center" 
+                     VerticalContentAlignment="Center" 
+                     >
+                <TextBox.Text>
+                    <Binding Path="TimerSecondsInput" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <local:IsStringIntegerValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding Path=SetTimerCommand}" Key="Enter"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Viewbox Grid.Column="1">
+                <Label Content=":"/>
+            </Viewbox>
+            <Button HorizontalAlignment="Stretch" 
+                    Style="{DynamicResource AccentButton}"
+                    Grid.Column="3" 
+                    Margin="5,10" 
+                    Content="{Binding IsTimerRunning, Converter={StaticResource IsTimerRunningToText}}"
+                    x:Name="startBtn" 
+                    VerticalContentAlignment="Center" 
+                    VerticalAlignment="Stretch" 
+                    Command="{Binding StartStopTimerCommand}"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="164*"/>
+                <ColumnDefinition Width="83*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="{x:Static lang:Resources.ResetTimer}" 
+                    Style="{DynamicResource BaseButton}"
+                    HorizontalAlignment="Stretch" 
+                    x:Name="resetBtn"
+                    Margin="5,5,5,10" 
+                    Command="{Binding ResetTimerCommand}"/>
+            <Button HorizontalAlignment="Stretch" 
+                    Grid.Column="1" 
+                    Content="{Binding IsExternalBoardOpened, Converter={StaticResource IsExternalTimerBoardOpenedToText}}" 
+                    Margin="5,5,5,10" 
+                    x:Name="closeExtBtn"
+                    Style="{DynamicResource BaseButton}"
+                    Command="{Binding OpenExternalBoardCommand}"/>
+        </Grid>
+        <TextBlock Grid.Row="2"
+            Text="{Binding Timer.RemainTime, StringFormat={}{0:mm\\:ss}}" 
+                                       x:Name="TimerL" 
+                                       FontSize="30" 
+                                   FontWeight="Regular"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                       Foreground="{Binding IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverter}}"/>
+    </Grid>
+</UserControl>

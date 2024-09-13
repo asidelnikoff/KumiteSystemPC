@@ -22,6 +22,7 @@
     
 
     <SolidColorBrush x:Key="LightGray" Color="#f1f1f1"/>
+    <SolidColorBrush x:Key="BackgroundLight" Color="#fff"/>
     <SolidColorBrush x:Key="AccentOrange" Color="#58C2C3"/>
     <SolidColorBrush x:Key="SecondaryOrange" Color="#5D8E8F"/>
     <SolidColorBrush x:Key="SecondaryOrangeSelect" Color="#dd5D8E8F"/>

@@ -1,4 +1,5 @@
 ﻿using SharedComponentsLibrary;
+using SharedComponentsLibrary.DTO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,12 +27,38 @@ namespace KumiteSystem
         public MainWindow()
         {
             DataContext = new MainWindowViewModel();
-
-            var info = new CultureInfo(Properties.Settings.Default.Language);
-            Thread.CurrentThread.CurrentUICulture = info;
-            Thread.CurrentThread.CurrentCulture = info;
+            (DataContext as MainWindowViewModel).OnOpenTimerBoard += OpenTimerBoard;
+            (DataContext as MainWindowViewModel).OnOpenCategoryViewer += OpenCategoryViewer;
+            (DataContext as MainWindowViewModel).OnOpenSettings += OpenSettings;
 
             InitializeComponent();
+        }
+
+        private ICategoryViewer OpenCategoryViewer(DBService dbService, CategoryDTO category, bool isGenerationNeeded,
+           bool shuffleCompetitors = false, bool isSwapCompetitorsEnabled = false)
+        {
+            var categoryViewer = new CategoryViewer(dbService, category, isGenerationNeeded, shuffleCompetitors, isSwapCompetitorsEnabled);
+            categoryViewer.Owner = this;
+            categoryViewer.Show();
+
+            return categoryViewer;
+        }
+
+        private ITimerBoard OpenTimerBoard()
+        {
+            var board = new TimerBoard();
+            board.Owner = this;
+            board.Show();
+
+            return board;
+        }
+
+        private Settings OpenSettings()
+        {
+            var settings = new Settings();
+            settings.Owner = this;
+
+            return settings;
         }
     }
 }

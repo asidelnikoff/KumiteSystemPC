@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,8 +23,25 @@ namespace SharedComponentsLibrary
     /// </summary>
     public partial class Settings : Window
     {
+
         public UserSettings UserSettings { get; private set; }
         public Action<UserSettings> SaveSettings;
+
+        public Settings()
+        {
+            DataContext = new SettingsViewModel();
+            
+            var info = new CultureInfo((DataContext as SettingsViewModel).Settings.Language.CultureInfo);
+            Thread.CurrentThread.CurrentUICulture = info;
+            Thread.CurrentThread.CurrentCulture = info;
+
+            InitializeComponent();
+
+            (DataContext as SettingsViewModel).SetupWithLanguage();
+            (DataContext as SettingsViewModel).OnSaveSettings += OnSaveSettings;
+            (DataContext as SettingsViewModel).OnClose += () => Close();
+        }
+
         public Settings(UserSettings settings)
         {
             DataContext = new SettingsViewModel(settings);

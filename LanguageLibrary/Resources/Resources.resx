@@ -473,4 +473,13 @@
   <data name="LogFileSaved" xml:space="preserve">
     <value>Log file saved</value>
   </data>
+  <data name="ExternalBoardDesign" xml:space="preserve">
+    <value>External board design</value>
+  </data>
+  <data name="Version1" xml:space="preserve">
+    <value>Version 1</value>
+  </data>
+  <data name="Version2" xml:space="preserve">
+    <value>Version 2</value>
+  </data>
 </root>

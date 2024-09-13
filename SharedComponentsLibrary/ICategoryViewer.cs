@@ -15,5 +15,8 @@ namespace SharedComponentsLibrary
         public Action<IList<ICompetitor>> GotCategoryResults { get; set; }
         public void WriteMatchResults(RoundDTO round, IMatch match);
         public void LoadMatch(RoundDTO round, IMatch match);
+
+        public void Close();
+        public Action Closed { get; set; }
     }
 }

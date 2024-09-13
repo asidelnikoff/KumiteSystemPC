@@ -25,23 +25,11 @@ namespace RoundRobin
             AKA = _AKA;
             AO = _AO;
 
-            if (AKA != null && AKA.IsBye) 
-            {
-                Winner = new Competitor(AO as Competitor);
-                (AO as Competitor).TotalScore += 3;
-                isFinished = true; 
-                Looser = new Competitor(AKA as Competitor); 
+            CheckWinner();
 
-            }
-            else if (AO != null && AO.IsBye) 
-            {
-                Winner = new Competitor(AKA as Competitor);
-                (AKA as Competitor).TotalScore += 3;
-                isFinished = true; 
-                Looser = new Competitor(AO as Competitor); 
-            }
             if (AKA != null) AKA.Check_Winner += CheckWinner;
             if (AO != null) AO.Check_Winner += CheckWinner;
+
             ID = id;
         }
         public bool IsAllCompetitors()
@@ -148,6 +136,10 @@ namespace RoundRobin
         {
             AKA.ResetCompetitor();
             AO.ResetCompetitor();
+            isFinished = false;
+            Winner = null;
+            Looser = null;
+            CheckWinner();
         }
 
         public override string ToString()

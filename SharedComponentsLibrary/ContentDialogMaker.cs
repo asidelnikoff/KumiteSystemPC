@@ -28,7 +28,6 @@ namespace SharedComponentsLibrary
             ActiveDialog = Dialog;
             ActiveDialog.Closed += ActiveDialog_Closed;
             Result = await ActiveDialog.ShowAsync();
-            //ActiveDialog.Closed -= ActiveDialog_Closed;
         }
 
         public static ContentDialog ActiveDialog;

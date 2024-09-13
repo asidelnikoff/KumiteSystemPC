@@ -394,6 +394,15 @@ namespace LanguageLibrary {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на External board design.
+        /// </summary>
+        public static string ExternalBoardDesign {
+            get {
+                return ResourceManager.GetString("ExternalBoardDesign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Externals.
         /// </summary>
         public static string Externals {
@@ -1092,6 +1101,24 @@ namespace LanguageLibrary {
         public static string TournamentName {
             get {
                 return ResourceManager.GetString("TournamentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Version 1.
+        /// </summary>
+        public static string Version1 {
+            get {
+                return ResourceManager.GetString("Version1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Version 2.
+        /// </summary>
+        public static string Version2 {
+            get {
+                return ResourceManager.GetString("Version2", resourceCulture);
             }
         }
         

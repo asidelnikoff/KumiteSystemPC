@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LanguageLibrary;
+using SharedComponentsLibrary;
 
 namespace KataSystem
 {
@@ -23,8 +24,9 @@ namespace KataSystem
         {
             State = state;
 
-            State.TatamiNumber = Properties.Settings.Default.Tatami;
-            IsNextMatchVisible = Properties.Settings.Default.IsNextMatchShownOnExternalBoard;
+            var settings = UserSettings.GetUserSettings();
+            State.TatamiNumber = settings.Tatami;
+            IsNextMatchVisible = settings.IsNextMatchShownOnExternalBoard;
 
             TatamiText = $"{Resources.Tatami} {State.TatamiNumber}";
         }
