@@ -436,7 +436,7 @@ namespace TournamentTree
             res.Matches.AddRange(Group1);
             res.Matches.AddRange(Group2);
             res.Matches.Reverse();
-            int id = 1;
+            int id = 0;
             foreach (var match in res.Matches)
                 match.ID = id++;
             res.ID = 0;
