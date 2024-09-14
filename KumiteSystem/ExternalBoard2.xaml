@@ -10,117 +10,119 @@
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AKAfoulBorder" TargetType="Border" BasedOn="{StaticResource AnimatedBorder}">
-                <Setter Property="Background" Value="{DynamicResource RedBrush}"/>
-                <Setter Property="CornerRadius" Value="25"/>
-                <Setter Property="Margin" Value="10,5"/>
+                <Setter Property="Background" Value="{DynamicResource RedBrush}" />
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="Margin" Value="10,5" />
             </Style>
             <Style x:Key="AOfoulBorder" TargetType="Border" BasedOn="{StaticResource AKAfoulBorder}">
-                <Setter Property="Background" Value="{DynamicResource BlueBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource BlueBrush}" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="#191919">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.5*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2.5*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2.5*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2.5*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="roundsExt">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Viewbox}">
-                    <Setter Property="Margin" Value="0,0,10,0"/>
+                    <Setter Property="Margin" Value="0,0,10,0" />
                 </Style>
             </StackPanel.Resources>
         </StackPanel>
 
         <Grid Margin="0,20,0,5" x:Name="AKA_Grid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="45*" />
+                <ColumnDefinition Width="8*" />
             </Grid.ColumnDefinitions>
-            <Border Background="{DynamicResource RedBrush}" 
-                    CornerRadius="0" 
+            <Border Background="{DynamicResource RedBrush}"
+                    CornerRadius="0"
                     Margin="10,4"
                     Opacity="0.1">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="40" Direction="360" Color="#FF363B46"/>
+                    <DropShadowEffect BlurRadius="40" Direction="360" Color="#FF363B46" />
                 </Border.Effect>
             </Border>
             <Viewbox HorizontalAlignment="Left" Margin="10,15" VerticalAlignment="Center">
-                <Label Content="{Binding State.CurrentMatchAka}" VerticalAlignment="Center" x:Name="AkaNowNameL" Foreground="White" FontSize="35" Margin="20,0,0,0"/>
+                <Label Content="{Binding State.CurrentMatchAka}" VerticalAlignment="Center" x:Name="AkaNowNameL"
+                       Foreground="White" FontSize="35" Margin="20,0,0,0" />
             </Viewbox>
 
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.ColumnSpan="2" Margin="5,0,10,0" Style="{DynamicResource AKAfoulBorder}"
                         CornerRadius="0">
                 </Border>
 
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
-                    <Label Content="{Binding State.ScoreAka}" 
-                       Style="{DynamicResource AnimatedLabel}"
-                       IsEnabled="{Binding State.IsAkaWinner}" x:Name="AkaScoreL" FontSize="150" Foreground="White"/>
+                    <Label Content="{Binding State.ScoreAka}"
+                           Style="{DynamicResource AnimatedLabel}"
+                           IsEnabled="{Binding State.IsAkaWinner}" x:Name="AkaScoreL" FontSize="150" Foreground="White" />
                 </Viewbox>
-                <Border BorderBrush="White" 
-                        BorderThickness="6" 
-                        Margin="5,0,10,0" 
+                <Border BorderBrush="White"
+                        BorderThickness="6"
+                        Margin="5,0,10,0"
                         IsEnabled="{Binding State.AkaSenshu}"
                         Style="{DynamicResource AnimatedBorder}"
-                        x:Name="akaSenshu"/>
+                        x:Name="akaSenshu" />
             </Grid>
         </Grid>
 
 
-        <Grid Grid.Row="2" Margin="0,20,0,5" x:Name="AO_Grid" >
+        <Grid Grid.Row="2" Margin="0,20,0,5" x:Name="AO_Grid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="45*" />
+                <ColumnDefinition Width="8*" />
             </Grid.ColumnDefinitions>
             <Border Background="{DynamicResource BlueBrush}" CornerRadius="0"
                     Margin="10,4"
                     Opacity="0.1">
             </Border>
             <Viewbox HorizontalAlignment="Left" Margin="10,15" VerticalAlignment="Center">
-                <Label Content="{Binding State.CurrentMatchAo}" VerticalAlignment="Center" x:Name="AoNowNameL" Foreground="White" FontSize="35" Margin="20,0,0,0"/>
+                <Label Content="{Binding State.CurrentMatchAo}" VerticalAlignment="Center" x:Name="AoNowNameL"
+                       Foreground="White" FontSize="35" Margin="20,0,0,0" />
             </Viewbox>
 
 
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.ColumnSpan="2" Margin="5,0,10,0" Style="{DynamicResource AOfoulBorder}"
                         CornerRadius="0">
                 </Border>
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
-                    <Label Content="{Binding State.ScoreAo}" 
-                       Style="{DynamicResource AnimatedLabel}"
-                       IsEnabled="{Binding State.IsAoWinner}" x:Name="AoScoreL" FontSize="150" Foreground="White"/>
+                    <Label Content="{Binding State.ScoreAo}"
+                           Style="{DynamicResource AnimatedLabel}"
+                           IsEnabled="{Binding State.IsAoWinner}" x:Name="AoScoreL" FontSize="150" Foreground="White" />
                 </Viewbox>
-                <Border BorderBrush="White" 
-                        BorderThickness="6" 
-                        Margin="5,0,10,0" 
+                <Border BorderBrush="White"
+                        BorderThickness="6"
+                        Margin="5,0,10,0"
                         IsEnabled="{Binding State.AoSenshu}"
                         Style="{DynamicResource AnimatedBorder}"
-                        x:Name="aoSenshu"/>
+                        x:Name="aoSenshu" />
             </Grid>
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,0,20,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
                 <!--<ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -130,45 +132,45 @@
             </Grid.ColumnDefinitions>
 
             <Viewbox>
-                <Label Content="PENALTY" 
-                       Margin="3" 
-                       Foreground="{DynamicResource RedBrush}" FontSize="12"/>
+                <Label Content="PENALTY"
+                       Margin="3"
+                       Foreground="{DynamicResource RedBrush}" FontSize="12" />
             </Viewbox>
-            <Border Grid.Column="1" 
+            <Border Grid.Column="1"
                     Style="{StaticResource AKAfoulBorder}" x:Name="c1AKA"
                     IsEnabled="{Binding State.FoulsC1Aka, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}" />
             <Border Grid.Column="2" Style="{StaticResource AKAfoulBorder}" x:Name="c2AKA"
                     IsEnabled="{Binding State.FoulsC1Aka, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}" />
             <Border Grid.Column="3" Style="{StaticResource AKAfoulBorder}" x:Name="c3AKA"
                     IsEnabled="{Binding State.FoulsC1Aka, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}" />
             <Border Grid.Column="4" Style="{StaticResource AKAfoulBorder}" x:Name="hc1AKA"
                     IsEnabled="{Binding State.FoulsC1Aka, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}" />
             <Border Grid.Column="5" Style="{StaticResource AKAfoulBorder}" x:Name="h1AKA"
                     IsEnabled="{Binding State.FoulsC1Aka, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}" />
 
             <Viewbox Grid.Column="1" Margin="7">
-                <Label Content="C1" Foreground="White" FontSize="18"/>
+                <Label Content="C1" Foreground="White" FontSize="18" />
             </Viewbox>
 
 
             <Viewbox Grid.Column="2" Margin="7">
-                <Label Content="C2" Foreground="White" FontSize="18"/>
+                <Label Content="C2" Foreground="White" FontSize="18" />
             </Viewbox>
             <Viewbox Grid.Column="3" Margin="7">
-                <Label Content="C3" Foreground="White" FontSize="18"/>
+                <Label Content="C3" Foreground="White" FontSize="18" />
             </Viewbox>
 
             <Viewbox Grid.Column="4" Margin="7">
-                <Label Content="HC" Foreground="White" FontSize="18"/>
+                <Label Content="HC" Foreground="White" FontSize="18" />
             </Viewbox>
 
             <Viewbox Grid.Column="5" Margin="7">
-                <Label Content="H" Foreground="White" FontSize="18"/>
+                <Label Content="H" Foreground="White" FontSize="18" />
             </Viewbox>
 
 
@@ -201,12 +203,12 @@
 
         <Grid Grid.Row="3" Margin="0,0,20,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
                 <!--<ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -216,48 +218,48 @@
             </Grid.ColumnDefinitions>
 
             <Viewbox>
-                <Label Margin="3" Content="PENALTY" Foreground="{DynamicResource BlueBrush}" FontSize="12"/>
+                <Label Margin="3" Content="PENALTY" Foreground="{DynamicResource BlueBrush}" FontSize="12" />
             </Viewbox>
-            
-            <Border Grid.Column="1" Style="{StaticResource AOfoulBorder}"  x:Name="c1AO"
+
+            <Border Grid.Column="1" Style="{StaticResource AOfoulBorder}" x:Name="c1AO"
                     IsEnabled="{Binding State.FoulsC1Ao, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=1}" />
             <Border Grid.Column="2" Style="{StaticResource AOfoulBorder}" x:Name="c2AO"
                     IsEnabled="{Binding State.FoulsC1Ao, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=2}" />
             <Border Grid.Column="3" Style="{StaticResource AOfoulBorder}" x:Name="c3AO"
                     IsEnabled="{Binding State.FoulsC1Ao, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}"/>
-            <Border Grid.Column="4" 
-                    Style="{StaticResource AOfoulBorder}" 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=3}" />
+            <Border Grid.Column="4"
+                    Style="{StaticResource AOfoulBorder}"
                     x:Name="hc1AO"
                     IsEnabled="{Binding State.FoulsC1Ao, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}"/>
-            <Border Grid.Column="5" 
-                    Style="{StaticResource AOfoulBorder}" 
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=4}" />
+            <Border Grid.Column="5"
+                    Style="{StaticResource AOfoulBorder}"
                     x:Name="h1AO"
                     IsEnabled="{Binding State.FoulsC1Ao, Mode=OneWay, 
-                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}"/>
+                            Converter={StaticResource SanctionToBoolConverter},ConverterParameter=5}" />
             <Viewbox Grid.Column="1" Margin="7">
-                <Label Content="C1" Foreground="White" FontSize="18"/>
+                <Label Content="C1" Foreground="White" FontSize="18" />
             </Viewbox>
 
 
             <Viewbox Grid.Column="2" Margin="7">
-                <Label Content="C2" Foreground="White" FontSize="18"/>
+                <Label Content="C2" Foreground="White" FontSize="18" />
             </Viewbox>
 
             <Viewbox Grid.Column="3" Margin="7">
-                <Label Content="C3" Foreground="White" FontSize="18"/>
+                <Label Content="C3" Foreground="White" FontSize="18" />
             </Viewbox>
 
 
             <Viewbox Grid.Column="4" Margin="7">
-                <Label Content="HC" Foreground="White" FontSize="18"/>
+                <Label Content="HC" Foreground="White" FontSize="18" />
             </Viewbox>
 
             <Viewbox Grid.Column="5" Margin="7">
-                <Label Content="H" Foreground="White" FontSize="18"/>
+                <Label Content="H" Foreground="White" FontSize="18" />
             </Viewbox>
 
 
@@ -289,93 +291,90 @@
         </Grid>
 
 
-
-
-
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Viewbox>
                         <TextBlock x:Name="TimerEXT"
-                           Text="{Binding State.RemainTime, StringFormat={}{0:mm\\:ss}}" 
-                           Foreground="{Binding State.IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverterWhite}}"
-                           FontSize="50"/>
+                                   Text="{Binding State.RemainTime, StringFormat={}{0:mm\\:ss}}"
+                                   Foreground="{Binding State.IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverterWhite}}"
+                                   FontSize="50" />
                     </Viewbox>
                     <Viewbox Margin="20,25,0,25" x:Name="TimerEXTms_ViewBox" Visibility="Visible">
                         <TextBlock x:Name="TimerEXTms"
                                    FontWeight="Bold"
-                           Text="{Binding State.RemainTime, StringFormat={}{0:\\.ff}}"
-                           Foreground="{Binding State.IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverterWhite}}"
-                           Visibility="{Binding State.IsAtoshiBaraku, Converter={StaticResource BoolToVisibilityConverter}}"
-                           FontSize="48"/>
+                                   Text="{Binding State.RemainTime, StringFormat={}{0:\\.ff}}"
+                                   Foreground="{Binding State.IsAtoshiBaraku, Converter={StaticResource IsAtoshiBarakuToColorConverterWhite}}"
+                                   Visibility="{Binding State.IsAtoshiBaraku, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   FontSize="48" />
                     </Viewbox>
                 </StackPanel>
             </Grid>
 
             <Viewbox Margin="0,20">
-                <TextBlock x:Name="TatamiEXT" 
-                       Text="{Binding TatamiText}"
+                <TextBlock x:Name="TatamiEXT"
+                           Text="{Binding TatamiText}"
                            Margin="0,6"
-                       Foreground="White" 
-                       FontSize="12"/>
+                           Foreground="White"
+                           FontSize="12" />
             </Viewbox>
 
             <Viewbox Grid.Column="2">
-                <TextBlock FontSize="12" 
-                           x:Name="CategoryEXT" 
-                           Margin="6" 
+                <TextBlock FontSize="12"
+                           x:Name="CategoryEXT"
+                           Margin="6"
                            Text="{Binding State.CategoryName}"
-                           Foreground="White" 
-                           TextWrapping="Wrap" 
-                           TextAlignment="Right"/>
+                           Foreground="White"
+                           TextWrapping="Wrap"
+                           TextAlignment="Right" />
             </Viewbox>
         </Grid>
 
 
-        <Grid Grid.Row="6" Margin="0,15,0,25" 
+        <Grid Grid.Row="6" Margin="0,15,0,25"
               x:Name="nextMGrid"
               Visibility="{Binding IsNextMatchVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!--<Rectangle Fill="{DynamicResource GridBrush}"/>-->
             <!--<Rectangle Grid.Column="1" Fill="{DynamicResource GridBrush}"/>-->
             <Grid Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="6*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="2" Background="{DynamicResource GridBrush}" CornerRadius="10"/>
+                <Border Grid.ColumnSpan="2" Background="{DynamicResource GridBrush}" CornerRadius="10" />
                 <Border Style="{DynamicResource AKAfoulBorder}"
-                        CornerRadius="0"/>
+                        CornerRadius="0" />
 
                 <Viewbox Margin="0,8" Grid.Column="1">
-                    <Label Foreground="White" 
-                           x:Name="AkaNextNameL" 
-                           Content="{Binding State.NextMatchAka}"/>
+                    <Label Foreground="White"
+                           x:Name="AkaNextNameL"
+                           Content="{Binding State.NextMatchAka}" />
                 </Viewbox>
-            </Grid >
-            <Grid Grid.Column="1" Margin="10,0,0,0" >
+            </Grid>
+            <Grid Grid.Column="1" Margin="10,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="2" Background="{DynamicResource GridBrush}" CornerRadius="10"/>
+                <Border Grid.ColumnSpan="2" Background="{DynamicResource GridBrush}" CornerRadius="10" />
                 <Border Grid.Column="1" Style="{DynamicResource AOfoulBorder}"
-                        CornerRadius="0"/>
+                        CornerRadius="0" />
 
-                <Viewbox  Margin="0,8">
-                    <Label Foreground="White" x:Name="AoNextNameL" Content="{Binding State.NextMatchAo}"/>
+                <Viewbox Margin="0,8">
+                    <Label Foreground="White" x:Name="AoNextNameL" Content="{Binding State.NextMatchAo}" />
                 </Viewbox>
             </Grid>
         </Grid>

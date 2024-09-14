@@ -8,6 +8,7 @@
         xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
         xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
         Title="Settings" Height="450" Width="800"
         Closed="Window_Closed"
         WindowStartupLocation="CenterOwner">

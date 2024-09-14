@@ -9,15 +9,17 @@
         xmlns:busyIndicator="https://github.com/moh3ngolshani/BusyIndicator"
         xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
         Title="CategoryViewer" Height="800" Width="800">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Closed">
             <behaviors:InvokeCommandAction
-                                Command="{Binding CloseCommand}">
+                Command="{Binding CloseCommand}">
             </behaviors:InvokeCommandAction>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
-        <local:CategoryViewerControl DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}"/>
+        <local:CategoryViewerControl
+            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}" />
     </Grid>
 </Window>

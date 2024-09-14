@@ -4,22 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompetitionSystem"
-        xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock" 
-        xmlns:kata="clr-namespace:KataSystem;assembly=KataSystem" 
-        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
+        xmlns:kata="clr-namespace:KataSystem;assembly=KataSystem"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:kumite="clr-namespace:KumiteSystem;assembly=KumiteSystem"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
         xmlns:category="clr-namespace:Category_Generator;assembly=CategoryGenerator"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="800" 
+        Title="MainWindow"
+        Height="800"
         Width="1000">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Closed">
             <behaviors:InvokeCommandAction
-                                Command="{Binding CloseCommand}">
+                Command="{Binding CloseCommand}">
             </behaviors:InvokeCommandAction>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
@@ -33,41 +34,41 @@
                       Margin="10,0,0,0">
                 <MenuItem Header="Category Generator"
                           Command="{Binding LoadLayoutCommand}"
-                          CommandParameter="categoryGenerator"/>
+                          CommandParameter="categoryGenerator" />
                 <MenuItem Header="Kata System"
                           Command="{Binding LoadLayoutCommand}"
-                          CommandParameter="kataSystem"/>
+                          CommandParameter="kataSystem" />
                 <MenuItem Header="Kumite System"
                           Command="{Binding LoadLayoutCommand}"
-                          CommandParameter="kumiteSystem"/>
+                          CommandParameter="kumiteSystem" />
             </MenuItem>
             <MenuItem Header="View">
             </MenuItem>
             <MenuItem Header="Save layout"
-                      Click="MenuItem_Click"/>
+                      Click="MenuItem_Click" />
         </Menu>
-        <Button     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Height="35"
-                    Width="35"
-                    Padding="5"
-                    Margin="10,2"
-                    Grid.Column="1"
-                    Background="Transparent"
-                    ui:ControlHelper.CornerRadius="25"
-                    Command="{Binding OpenSettingsCommand}">
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Height="35"
+                Width="35"
+                Padding="5"
+                Margin="10,2"
+                Grid.Column="1"
+                Background="Transparent"
+                ui:ControlHelper.CornerRadius="25"
+                Command="{Binding OpenSettingsCommand}">
             <Button.Content>
                 <Viewbox>
-                    <Image Source="Images/settings.png"/>
+                    <Image Source="Images/settings.png" />
                 </Viewbox>
             </Button.Content>
         </Button>
         <DockingManager x:Name="dockManager"
-            Grid.Row="1"
-            AllowMixedOrientation="True"
-            AutoWindowSizeWhenOpened="True"
-            IsVirtualizingAnchorable="True"
-            IsVirtualizingDocument="True">
+                        Grid.Row="1"
+                        AllowMixedOrientation="True"
+                        AutoWindowSizeWhenOpened="True"
+                        IsVirtualizingAnchorable="True"
+                        IsVirtualizingDocument="True">
             <DockingManager.DocumentHeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

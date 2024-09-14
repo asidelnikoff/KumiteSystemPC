@@ -8,38 +8,40 @@
         mc:Ignorable="d"
         xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:shared="clr-namespace:SharedComponentsLibrary;assembly=SharedComponentsLibrary" xmlns:system="clr-namespace:System;assembly=System.Runtime" xmlns:bracketsBase="clr-namespace:TournamentsBracketsBase;assembly=TournamentBracketLibrary"
+        xmlns:shared="clr-namespace:SharedComponentsLibrary;assembly=SharedComponentsLibrary"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        xmlns:bracketsBase="clr-namespace:TournamentsBracketsBase;assembly=TournamentBracketLibrary"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
         Height="580" Width="900"
-        Title="MainWindow"
-        >
+        Title="MainWindow">
     <behaviours:Interaction.Triggers>
         <behaviours:EventTrigger EventName="Closed">
             <behaviours:InvokeCommandAction
-                                Command="{Binding CloseCommand}">
+                Command="{Binding CloseCommand}">
             </behaviours:InvokeCommandAction>
         </behaviours:EventTrigger>
     </behaviours:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="395*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="395*" />
         </Grid.RowDefinitions>
         <local:KumiteSystemControl Grid.RowSpan="2"
-            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}"/>
-        <Button     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Height="35"
-                    Width="35"
-                    Padding="5"
-                    Margin="10,2"
-                    Grid.Column="1"
-                    Background="Transparent"
-                    ui:ControlHelper.CornerRadius="25"
-                    Command="{Binding OpenSettingsCommand}">
+                                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}" />
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Height="35"
+                Width="35"
+                Padding="5"
+                Margin="10,2"
+                Grid.Column="1"
+                Background="Transparent"
+                ui:ControlHelper.CornerRadius="25"
+                Command="{Binding OpenSettingsCommand}">
             <Button.Content>
                 <Viewbox>
-                    <Image Source="Images/settings.png"/>
+                    <Image Source="Images/settings.png" />
                 </Viewbox>
             </Button.Content>
         </Button>
@@ -49,6 +51,6 @@
                       Margin="0,0,10,0"
                       Command="{Binding OpenSettingsCommand}"/>
         </Menu>-->
-        
+
     </Grid>
 </Window>

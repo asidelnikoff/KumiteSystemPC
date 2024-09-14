@@ -5,45 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KataSystem"
         mc:Ignorable="d"
-        xmlns:ui="http://schemas.modernwpf.com/2019" 
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
         Title="MainWindow" Height="540" Width="400">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Closed">
             <behaviors:InvokeCommandAction
-                                Command="{Binding CloseCommand}">
+                Command="{Binding CloseCommand}">
             </behaviors:InvokeCommandAction>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <local:KataSystemControl
             Grid.RowSpan="2"
-            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}"/>
-        <Border Grid.ColumnSpan="2" 
-                Background="{DynamicResource LigtGray}" 
-                Margin="0,0,-0.4,0.2"/>
-        <Button     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Height="35"
-                    Width="35"
-                    Margin="10,2"
-                    Padding="5"
-                    Grid.Column="1"
-                    Background="Transparent"
-                    ui:ControlHelper.CornerRadius="25"
-                    Command="{Binding OpenSettingsCommand}">
+            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}" />
+        <Border Grid.ColumnSpan="2"
+                Background="{DynamicResource LigtGray}"
+                Margin="0,0,-0.4,0.2" />
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Height="35"
+                Width="35"
+                Margin="10,2"
+                Padding="5"
+                Grid.Column="1"
+                Background="Transparent"
+                ui:ControlHelper.CornerRadius="25"
+                Command="{Binding OpenSettingsCommand}">
             <Button.Content>
                 <Viewbox>
-                    <Image Source="Images/settings.png"/>
+                    <Image Source="Images/settings.png" />
                 </Viewbox>
             </Button.Content>
         </Button>
-        
+
     </Grid>
 </Window>

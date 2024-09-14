@@ -5,39 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Category_Generator"
         xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="800"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Closed">
             <behaviors:InvokeCommandAction
-                                Command="{Binding CloseCommand}">
+                Command="{Binding CloseCommand}">
             </behaviors:InvokeCommandAction>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.14*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.14*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Label Content="{x:Static lang:Resources.CategoryGenerator}"
-               Style="{DynamicResource Header}"/>
-        <Button     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Height="40"
-                    Width="40"
-                    Margin="10,0"
-                    Background="#dcdcdc"
-                    ui:ControlHelper.CornerRadius="25"
-                    Command="{Binding OpenSettingsCommand}">
+               Style="{DynamicResource Header}" />
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Height="40"
+                Width="40"
+                Margin="10,0"
+                Background="#dcdcdc"
+                ui:ControlHelper.CornerRadius="25"
+                Command="{Binding OpenSettingsCommand}">
             <Button.Content>
                 <Viewbox>
-                    <Image Source="Images/settings.png"/>
+                    <Image Source="Images/settings.png" />
                 </Viewbox>
             </Button.Content>
         </Button>
-        <local:CategoryGeneratorControl Grid.Row="1" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}"/>
+        <local:CategoryGeneratorControl Grid.Row="1"
+                                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Path=DataContext}" />
     </Grid>
 </Window>

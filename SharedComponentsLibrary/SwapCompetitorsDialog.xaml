@@ -1,11 +1,11 @@
 ﻿<ui:ContentDialog x:Class="SharedComponentsLibrary.SwapCompetitorsDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SharedComponentsLibrary"
-        mc:Ignorable="d"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:SharedComponentsLibrary"
+                  mc:Ignorable="d"
+                  xmlns:ui="http://schemas.modernwpf.com/2019"
                   Height="Auto" Width="Auto"
                   xmlns:lang="clr-namespace:LanguageLibrary;assembly=LanguageLibrary"
                   PrimaryButtonStyle="{DynamicResource AccentButton}"
@@ -15,21 +15,21 @@
                   SecondaryButtonText="{x:Static lang:Resources.Cancel}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-            <ListView ItemsSource="{Binding CompetitorsInCategory}"
+        <ListView ItemsSource="{Binding CompetitorsInCategory}"
                   Background="{DynamicResource LightGray}"
                   SelectionMode="Single"
                   Margin="0,0,10,0"
-                      MaxHeight="250"
-                  SelectedItem="{Binding SelectedCompetitor1}"/>
+                  MaxHeight="250"
+                  SelectedItem="{Binding SelectedCompetitor1}" />
         <ListView Grid.Column="1"
-            ItemsSource="{Binding CompetitorsInCategory}"
+                  ItemsSource="{Binding CompetitorsInCategory}"
                   Background="{DynamicResource LightGray}"
                   SelectionMode="Single"
                   Margin="10,0,0,0"
                   MaxHeight="250"
-                  SelectedItem="{Binding SelectedCompetitor2}"/>
+                  SelectedItem="{Binding SelectedCompetitor2}" />
     </Grid>
 </ui:ContentDialog>

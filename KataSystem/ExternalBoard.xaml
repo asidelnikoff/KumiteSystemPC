@@ -20,8 +20,8 @@
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF009FFD" Offset="0"/>
-                            <GradientStop Color="#FF363685" Offset="1"/>
+                            <GradientStop Color="#FF009FFD" Offset="0" />
+                            <GradientStop Color="#FF363685" Offset="1" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
@@ -30,134 +30,133 @@
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="Red" Offset="0"/>
-                            <GradientStop Color="#FF990000" Offset="1"/>
+                            <GradientStop Color="Red" Offset="0" />
+                            <GradientStop Color="#FF990000" Offset="1" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
             </Style>
             <Style x:Key="AKAfoulBorder" TargetType="Border" BasedOn="{StaticResource AKAborder}">
-                <Setter Property="CornerRadius" Value="30"/>
-                <Setter Property="Margin" Value="5,2"/>
-                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="Margin" Value="5,2" />
+                <Setter Property="Opacity" Value="0" />
             </Style>
             <Style x:Key="AOfoulBorder" TargetType="Border" BasedOn="{StaticResource AOborder}">
-                <Setter Property="CornerRadius" Value="30"/>
-                <Setter Property="Margin" Value="5,2"/>
-                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="Margin" Value="5,2" />
+                <Setter Property="Opacity" Value="0" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2.2*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="2.2*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="1.5*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2.2*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="2.2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Margin="0,20,0,5" x:Name="AKA_Grid" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="45*" />
+                <ColumnDefinition Width="8*" />
             </Grid.ColumnDefinitions>
             <Border Background="{DynamicResource GridBrush}" CornerRadius="10" Margin="10,4">
             </Border>
             <Viewbox HorizontalAlignment="Left" Margin="10,25" VerticalAlignment="Center">
                 <Label Content="{Binding State.CurrentMatchAka}"
-                       VerticalAlignment="Center" 
-                       x:Name="AkaNowNameL" 
-                       Foreground="White" 
-                       FontSize="35" 
-                       Margin="20,0,0,0"/>
+                       VerticalAlignment="Center"
+                       x:Name="AkaNowNameL"
+                       Foreground="White"
+                       FontSize="35"
+                       Margin="20,0,0,0" />
             </Viewbox>
 
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="2" 
-                        Margin="5,0,10,0" 
+                <Border Grid.ColumnSpan="2"
+                        Margin="5,0,10,0"
                         Background="{DynamicResource RedBrush}">
                 </Border>
 
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
-                    <Label Content="{Binding State.ScoreAka}" 
-                            Style="{DynamicResource AnimatedLabel}"
-                            IsEnabled="{Binding State.IsAkaWinner}"
-                           Foreground="White"/>
+                    <Label Content="{Binding State.ScoreAka}"
+                           Style="{DynamicResource AnimatedLabel}"
+                           IsEnabled="{Binding State.IsAkaWinner}"
+                           Foreground="White" />
                 </Viewbox>
-                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="akaSenshu"/>
+                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="akaSenshu" />
             </Grid>
         </Grid>
 
 
-        <Grid Grid.Row="3" Margin="0,20,0,5" x:Name="AO_Grid" >
+        <Grid Grid.Row="3" Margin="0,20,0,5" x:Name="AO_Grid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="45*" />
+                <ColumnDefinition Width="8*" />
             </Grid.ColumnDefinitions>
             <Border Background="{DynamicResource GridBrush}" CornerRadius="10" Margin="10,4">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="40" Direction="360" Color="#FF363B46"/>
+                    <DropShadowEffect BlurRadius="40" Direction="360" Color="#FF363B46" />
                 </Border.Effect>
             </Border>
             <Viewbox HorizontalAlignment="Left" Margin="10,25" VerticalAlignment="Center">
-                <Label Content="{Binding State.CurrentMatchAo}" 
-                       VerticalAlignment="Center" 
-                       x:Name="AoNowNameL" 
-                       Foreground="White" 
-                       FontSize="35" 
-                       Margin="20,0,0,0"/>
+                <Label Content="{Binding State.CurrentMatchAo}"
+                       VerticalAlignment="Center"
+                       x:Name="AoNowNameL"
+                       Foreground="White"
+                       FontSize="35"
+                       Margin="20,0,0,0" />
             </Viewbox>
 
 
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*" />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.ColumnSpan="2" 
-                        Margin="5,0,10,0" 
+                <Border Grid.ColumnSpan="2"
+                        Margin="5,0,10,0"
                         Background="{DynamicResource BlueBrush}">
                 </Border>
                 <Viewbox Grid.Column="1" Margin="0,0,0,8">
                     <Label Content="{Binding State.ScoreAo}"
-                       Foreground="White"
-                       Style="{DynamicResource AnimatedLabel}"
-                       IsEnabled="{Binding State.IsAoWinner}"
-                           x:Name="AoScoreL"/>
+                           Foreground="White"
+                           Style="{DynamicResource AnimatedLabel}"
+                           IsEnabled="{Binding State.IsAoWinner}"
+                           x:Name="AoScoreL" />
                 </Viewbox>
-                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="aoSenshu"/>
+                <Border BorderBrush="White" BorderThickness="6" Margin="5,0,10,0" Opacity="0" x:Name="aoSenshu" />
             </Grid>
         </Grid>
 
 
         <Grid Margin="0,5,0,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Viewbox Margin="10">
-                <TextBlock x:Name="TatamiEXT" 
-                       Text="{Binding TatamiText}"
-                       Margin="6" 
-                       Foreground="White" 
-                       FontSize="12"/>
+                <TextBlock x:Name="TatamiEXT"
+                           Text="{Binding TatamiText}"
+                           Margin="6"
+                           Foreground="White"
+                           FontSize="12" />
             </Viewbox>
 
             <Viewbox Grid.Column="2">
-                <TextBlock FontSize="12" 
-                           x:Name="CategoryEXT" 
+                <TextBlock FontSize="12"
+                           x:Name="CategoryEXT"
                            Margin="6"
                            Text="{Binding State.CategoryName}"
-                           Foreground="White" 
-                           TextWrapping="Wrap" 
-                           TextAlignment="Center"
-                           />
+                           Foreground="White"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center" />
             </Viewbox>
         </Grid>
 
@@ -165,40 +164,39 @@
         <Grid Grid.Row="5" Margin="0,25,0,10" x:Name="nextMGrid"
               Visibility="{Binding IsNextMatchVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!--<Rectangle Fill="{DynamicResource GridBrush}"/>-->
             <!--<Rectangle Grid.Column="1" Fill="{DynamicResource GridBrush}"/>-->
             <Grid Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="6*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="2"/>
-                <Border Background="{DynamicResource RedBrush}"/>
+                <Border Grid.ColumnSpan="2" />
+                <Border Background="{DynamicResource RedBrush}" />
 
                 <Viewbox Margin="0,8" Grid.Column="1">
-                    <Label Foreground="White" 
-                           x:Name="AkaNextNameL" 
-                           Content="{Binding State.NextMatchAka}"/>
+                    <Label Foreground="White"
+                           x:Name="AkaNextNameL"
+                           Content="{Binding State.NextMatchAka}" />
                 </Viewbox>
-            </Grid >
-            <Grid Grid.Column="1" Margin="10,0,0,0"
-                  >
+            </Grid>
+            <Grid Grid.Column="1" Margin="10,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.ColumnSpan="2" 
-                        Background="{DynamicResource GridBrush}"/>
+                <Border Grid.ColumnSpan="2"
+                        Background="{DynamicResource GridBrush}" />
                 <Border Grid.Column="1"
-                        Background="{DynamicResource BlueBrush}"/>
+                        Background="{DynamicResource BlueBrush}" />
 
-                <Viewbox  Margin="0,8">
-                    <Label Foreground="White" 
-                           x:Name="AoNextNameL" 
-                           Content="{Binding State.NextMatchAo}"/>
+                <Viewbox Margin="0,8">
+                    <Label Foreground="White"
+                           x:Name="AoNextNameL"
+                           Content="{Binding State.NextMatchAo}" />
                 </Viewbox>
             </Grid>
         </Grid>
